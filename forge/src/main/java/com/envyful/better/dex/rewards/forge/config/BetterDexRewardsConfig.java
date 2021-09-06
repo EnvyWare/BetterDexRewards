@@ -2,6 +2,7 @@ package com.envyful.better.dex.rewards.forge.config;
 
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigItem;
+import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -15,6 +16,9 @@ import java.util.Map;
 @ConfigSerializable
 public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
+    private SQLDatabaseDetails database = new SQLDatabaseDetails("BetterDexRewards", "0.0.0.0", 3306,
+            "admin", "password", "BetterDexRewards");
+
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
             "one", new DexCompletion(1, 1, new ConfigItem(), 1.0,
                     Lists.newArrayList("give %player% minecraft:diamond 1"),
@@ -22,6 +26,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     ));
 
     public BetterDexRewardsConfig() {
+    }
+
+    public SQLDatabaseDetails getDatabase() {
+        return this.database;
     }
 
     public Map<String, DexCompletion> getRewardStages() {
