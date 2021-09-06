@@ -4,9 +4,12 @@ import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
 import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.reforged.pixelmon.storage.UtilPixelmonPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
 import com.google.common.collect.Sets;
+import com.pixelmonmod.pixelmon.pokedex.Pokedex;
+import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,6 +43,11 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
 
     public boolean hasClaimed(String id) {
         return this.claimedRewards.contains(id);
+    }
+
+    public double getPokeDexPercentage() {
+        PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(this.parent.getParent());
+        return (storage.pokedex.countCaught() / (double) Pokedex.fullPokedex.size()) * 100.0;
     }
 
     @Override
