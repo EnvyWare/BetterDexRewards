@@ -20,9 +20,26 @@ import java.util.Set;
 public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards> {
 
     private Set<String> claimedRewards = Sets.newHashSet();
+    private int page = 0;
 
     public DexRewardsAttribute(BetterDexRewards manager, EnvyPlayer<?> parent) {
         super(manager, (ForgeEnvyPlayer) parent);
+    }
+
+    public Set<String> getClaimedRewards() {
+        return this.claimedRewards;
+    }
+
+    public void setClaimedRewards(Set<String> claimedRewards) {
+        this.claimedRewards = claimedRewards;
+    }
+
+    public int getPage() {
+        return this.page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
     public void claimReward(String id) {
@@ -47,7 +64,7 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
 
     public double getPokeDexPercentage() {
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(this.parent.getParent());
-        return (storage.pokedex.countCaught() / (double) Pokedex.fullPokedex.size()) * 100.0;
+        return (storage.pokedex.countCaught() / (double) Pokedex.pokedexSize) * 100.0;
     }
 
     @Override

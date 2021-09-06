@@ -76,7 +76,7 @@ public class DexRewardsMainUI {
                         .lore()
                         .nbt("ndex", new NBTTagShort((short) EnumSpecies.Unown.getNationalPokedexInteger()))
                         .build())
-                .clickHandler((envyPlayer, clickType) -> {}) //TODO
+                .clickHandler((envyPlayer, clickType) -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
                 .build());
 
         GuiFactory.guiBuilder()
