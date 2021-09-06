@@ -65,6 +65,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         private int xPos;
         private int yPos;
         private ConfigItem displayItem;
+        private ConfigItem completeItem;
+        private ConfigItem toClaimItem;
         private double requiredPercentage;
         private List<String> rewardCommands;
         private List<String> rewardMessages;
@@ -91,6 +93,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
         public ConfigItem getDisplayItem() {
             return this.displayItem;
+        }
+
+        public ConfigItem getCompleteItem() {
+            return this.completeItem;
         }
 
         public double getRequiredPercentage() {
