@@ -25,6 +25,14 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                     Lists.newArrayList("&e&l(!) &eYou have completed 1% of the dex!"))
     ));
 
+    private List<String> claimReminderMessage = Lists.newArrayList(
+            "&e&l(!) &eYou have a PokeDex reward level you can claim!"
+    );
+
+    private List<String> claimUpdateMessage = Lists.newArrayList(
+            "&e&l(!) &eYou have a new PokeDex reward level you can claim!"
+    );
+
     public BetterDexRewardsConfig() {
     }
 
@@ -34,6 +42,14 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public Map<String, DexCompletion> getRewardStages() {
         return this.rewardStages;
+    }
+
+    public List<String> getClaimReminderMessage() {
+        return this.claimReminderMessage;
+    }
+
+    public List<String> getClaimUpdateMessage() {
+        return this.claimUpdateMessage;
     }
 
     @ConfigSerializable
