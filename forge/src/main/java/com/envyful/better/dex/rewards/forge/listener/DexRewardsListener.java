@@ -2,8 +2,7 @@ package com.envyful.better.dex.rewards.forge.listener;
 
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.api.events.CaptureEvent;
-import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class DexRewardsListener {
@@ -17,8 +16,8 @@ public class DexRewardsListener {
     }
 
     @SubscribeEvent
-    public void onPokemonCatch(CaptureEvent.SuccessfulCapture event) {
-        if (event.)
+    public void onPokemonCatch(PokedexEvent event) {
+
     }
 
 }
