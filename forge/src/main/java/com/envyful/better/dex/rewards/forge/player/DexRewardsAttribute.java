@@ -10,6 +10,7 @@ import com.google.common.collect.Sets;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 
@@ -43,7 +44,18 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
 
     @Override
     public void load() {
+        try (Connection connection = this.manager.getDatabase().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.LOAD_USER_CLAIMED)) {
+            preparedStatement.setString(1, this.parent.getUuid().toString());
 
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                this.claimedRewards.add(resultSet.getString("claimed_rank"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
