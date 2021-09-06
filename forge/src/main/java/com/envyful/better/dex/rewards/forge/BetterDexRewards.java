@@ -8,6 +8,7 @@ import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
+import com.envyful.better.dex.rewards.forge.listener.DexRewardsListener;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -66,6 +67,7 @@ public class BetterDexRewards {
 
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event) {
+        new DexRewardsListener(this);
     }
 
     public static BetterDexRewards getInstance() {
@@ -78,5 +80,9 @@ public class BetterDexRewards {
 
     public Database getDatabase() {
         return this.database;
+    }
+
+    public BetterDexRewardsConfig getConfig() {
+        return this.config;
     }
 }
