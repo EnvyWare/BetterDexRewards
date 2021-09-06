@@ -13,7 +13,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
         aliases = {
                 "dexrewards",
                 "drewards",
-                "dexr"
+                "dexr",
+                "dex",
+                "pokedex"
         }
 )
 public class BetterDexRewardsCommand {

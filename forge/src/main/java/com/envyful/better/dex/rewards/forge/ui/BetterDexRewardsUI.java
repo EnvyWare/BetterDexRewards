@@ -82,7 +82,6 @@ public class BetterDexRewardsUI {
                                 }
                             })
                     .build());
-
         }
 
         GuiFactory.guiBuilder()
@@ -90,6 +89,7 @@ public class BetterDexRewardsUI {
                 .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
                 .height(config.getHeight())
+                .title(UtilChatColour.translateColourCodes('&', config.getTitle()))
                 .build().open(player);
     }
 }
