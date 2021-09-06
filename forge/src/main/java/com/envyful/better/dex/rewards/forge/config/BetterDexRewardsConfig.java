@@ -23,7 +23,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     private ConfigInterface configInterface = new ConfigInterface();
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
-            "one", new DexCompletion(1, 1, new ConfigItem(), 1.0,
+            "one", new DexCompletion(1, 1, new ConfigItem(), new ConfigItem(), new ConfigItem(), 1.0,
                     Lists.newArrayList("give %player% minecraft:diamond 1"),
                     Lists.newArrayList("&e&l(!) &eYou have completed 1% of the dex!"))
     ));
@@ -71,11 +71,14 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         private List<String> rewardCommands;
         private List<String> rewardMessages;
 
-        public DexCompletion(int xPos, int yPos, ConfigItem displayItem, double requiredPercentage,
-                             List<String> rewardCommands, List<String> rewardMessages) {
+        protected DexCompletion(int xPos, int yPos, ConfigItem displayItem, ConfigItem completeItem,
+                                ConfigItem toClaimItem, double requiredPercentage,
+                                List<String> rewardCommands, List<String> rewardMessages) {
             this.xPos = xPos;
             this.yPos = yPos;
             this.displayItem = displayItem;
+            this.completeItem = completeItem;
+            this.toClaimItem = toClaimItem;
             this.requiredPercentage = requiredPercentage;
             this.rewardCommands = rewardCommands;
             this.rewardMessages = rewardMessages;
