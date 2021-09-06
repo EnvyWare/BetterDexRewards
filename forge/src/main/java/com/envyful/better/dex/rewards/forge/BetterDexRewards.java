@@ -6,6 +6,7 @@ import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
+import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
 import com.envyful.better.dex.rewards.forge.listener.DexRewardsListener;
@@ -68,6 +69,8 @@ public class BetterDexRewards {
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event) {
         new DexRewardsListener(this);
+
+        this.commandFactory.registerCommand(event.getServer(), new BetterDexRewardsCommand());
     }
 
     public static BetterDexRewards getInstance() {
