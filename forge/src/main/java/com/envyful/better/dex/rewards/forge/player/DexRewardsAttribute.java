@@ -21,9 +21,18 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
 
     private Set<String> claimedRewards = Sets.newHashSet();
     private int page = 0;
+    private long lastReminder = System.currentTimeMillis();
 
     public DexRewardsAttribute(BetterDexRewards manager, EnvyPlayer<?> parent) {
         super(manager, (ForgeEnvyPlayer) parent);
+    }
+
+    public long getLastReminder() {
+        return this.lastReminder;
+    }
+
+    public void setLastReminder(long lastReminder) {
+        this.lastReminder = lastReminder;
     }
 
     public Set<String> getClaimedRewards() {

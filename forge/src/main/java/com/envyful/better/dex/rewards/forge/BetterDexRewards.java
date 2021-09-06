@@ -5,6 +5,7 @@ import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
+import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
@@ -13,6 +14,7 @@ import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
 import com.envyful.better.dex.rewards.forge.listener.DexRewardsListener;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
+import com.envyful.better.dex.rewards.forge.task.ReminderTask;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -59,6 +61,13 @@ public class BetterDexRewards {
                 e.printStackTrace();
             }
         });
+
+        new ForgeTaskBuilder()
+                .async(true)
+                .delay(10L)
+                .interval(10L)
+                .task(new ReminderTask(this))
+                .start();
     }
 
     public void reloadConfig() {
