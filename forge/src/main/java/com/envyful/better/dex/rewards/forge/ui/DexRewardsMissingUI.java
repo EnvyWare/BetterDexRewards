@@ -60,9 +60,14 @@ public class DexRewardsMissingUI {
 
         for (int i = page * 36; i < Math.min((page + 1) * 36, Pokedex.pokedexSize); i++) {
             PokedexEntry pokedexEntry = values.get(i);
+            EnumSpecies species = EnumSpecies.getFromDex(pokedexEntry.natPokedexNum);
+            int pos = i % 36;
 
-            pane.add(GuiFactory.displayableBuilder(ItemStack.class)
-                    .itemStack(UtilSprite.getPixelmonSprite(EnumSpecies.getFromDex(pokedexEntry.natPokedexNum)))
+            pane.set(pos % 9, pos / 9, GuiFactory.displayableBuilder(ItemStack.class)
+                    .itemStack(
+                            new ItemBuilder(UtilSprite.getPixelmonSprite(species))
+                                    .name("§b" + species.getLocalizedName())
+                                    .build())
                     .build());
         }
 
@@ -76,7 +81,7 @@ public class DexRewardsMissingUI {
 
         pane.set(8, 5, GuiFactory.displayableBuilder(ItemStack.class)
                 .itemStack(new ItemBuilder()
-                        .type(PixelmonItems.LtradeHolderLeft)
+                        .type(PixelmonItems.tradeHolderRight)
                         .name(UtilChatColour.translateColourCodes('&', "&eForward"))
                         .build())
                 .clickHandler((envyPlayer, clickType) -> movePage(envyPlayer, +1))
