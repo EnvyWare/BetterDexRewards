@@ -1,6 +1,7 @@
 package com.envyful.better.dex.rewards.forge.config;
 
 import com.envyful.api.config.data.ConfigPath;
+import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
@@ -18,6 +19,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     private SQLDatabaseDetails database = new SQLDatabaseDetails("BetterDexRewards", "0.0.0.0", 3306,
             "admin", "password", "BetterDexRewards");
+
+    private ConfigInterface configInterface = new ConfigInterface();
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
             "one", new DexCompletion(1, 1, new ConfigItem(), 1.0,
@@ -50,6 +53,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public List<String> getClaimUpdateMessage() {
         return this.claimUpdateMessage;
+    }
+
+    public ConfigInterface getConfigInterface() {
+        return this.configInterface;
     }
 
     @ConfigSerializable
