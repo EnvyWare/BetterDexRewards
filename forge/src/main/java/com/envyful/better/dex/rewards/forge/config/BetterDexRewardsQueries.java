@@ -2,7 +2,7 @@ package com.envyful.better.dex.rewards.forge.config;
 
 public class BetterDexRewardsQueries {
 
-    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `better_dex_rewards_player_claims(" +
+    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS `better_dex_rewards_player_claims` (" +
             "id             INT             UNSIGNED        NOT NULL        AUTO_INCREMENT, " +
             "uuid           VARCHAR(64)     NOT NULL, " +
             "claimed_rank   VARCHAR(200)    NOT NULL, " +

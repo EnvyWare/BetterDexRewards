@@ -5,7 +5,9 @@ import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
+import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
+import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
@@ -43,6 +45,7 @@ public class BetterDexRewards {
         instance = this;
 
         this.reloadConfig();
+        GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
         this.playerManager.registerAttribute(this, DexRewardsAttribute.class);
 
