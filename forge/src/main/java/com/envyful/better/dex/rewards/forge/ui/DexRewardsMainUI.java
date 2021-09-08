@@ -11,9 +11,11 @@ import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.config.PixelmonItems;
 import com.pixelmonmod.pixelmon.config.PixelmonItemsPokeballs;
+import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
 
 public class DexRewardsMainUI {
@@ -64,6 +66,17 @@ public class DexRewardsMainUI {
                         .lore()
                         .build())
                 .clickHandler((envyPlayer, clickType) -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
+                .build());
+
+        pane.set(5, 1, GuiFactory.displayableBuilder(ItemStack.class)
+                .itemStack(new ItemBuilder()
+                        .type(PixelmonItems.itemPixelmonSprite)
+                        .amount(1)
+                        .name(UtilChatColour.translateColourCodes('&', "&eMissing Pokemon"))
+                        .lore()
+                        .nbt("ndex", new NBTTagShort((short) EnumSpecies.Unown.getNationalPokedexInteger()))
+                        .build())
+                .clickHandler((envyPlayer, clickType) -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
                 .build());
 
         ConfigItem infoItem = BetterDexRewards.getInstance().getConfig().getInfoItem();
