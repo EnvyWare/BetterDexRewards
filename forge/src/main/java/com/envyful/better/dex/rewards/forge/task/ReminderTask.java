@@ -28,6 +28,8 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
+            attribute.setLastReminder(System.currentTimeMillis());
+
             for (String s : this.mod.getConfig().getClaimReminderMessage()) {
                 onlinePlayer.message(UtilChatColour.translateColourCodes('&', s));
             }
