@@ -1,6 +1,7 @@
 package com.envyful.better.dex.rewards.forge.command;
 
 import com.envyful.api.command.annotate.Command;
+import com.envyful.api.command.annotate.SubCommands;
 import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Sender;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
                 "pokedex"
         }
 )
+@SubCommands(ConvertCommand.class)
 public class BetterDexRewardsCommand {
 
     @CommandProcessor
