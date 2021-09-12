@@ -17,10 +17,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class DexRewardsMainUI {
 
     public static void open(EnvyPlayer<EntityPlayerMP> player) {
+        if (BetterDexRewards.getInstance().getConfig() == null) {
+            FMLCommonHandler.instance().getFMLLogger().error("CONFIG DID NOT LOAD CORRECTLY");
+            return;
+        }
+
         ConfigInterface config = BetterDexRewards.getInstance().getConfig().getConfigInterface();
         Pane pane = GuiFactory.paneBuilder()
                 .topLeftX(0)
