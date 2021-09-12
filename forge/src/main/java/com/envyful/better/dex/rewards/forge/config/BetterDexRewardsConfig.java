@@ -24,6 +24,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     private ConfigItem infoItem = new ConfigItem();
 
+    private int messageDelaySeconds = 60;
+
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
             "one", new DexCompletion(1, 1, new ConfigItem(), new ConfigItem(), new ConfigItem(), 1.0,
                     Lists.newArrayList("give %player% minecraft:diamond 1"),
@@ -63,6 +65,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public ConfigInterface getConfigInterface() {
         return this.configInterface;
+    }
+
+    public int getMessageDelaySeconds() {
+        return this.messageDelaySeconds;
     }
 
     @ConfigSerializable

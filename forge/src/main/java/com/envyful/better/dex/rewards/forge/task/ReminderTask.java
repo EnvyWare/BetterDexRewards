@@ -24,7 +24,8 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
-            if ((System.currentTimeMillis() - attribute.getLastReminder()) <= TimeUnit.MINUTES.toMillis(1)) {
+            if ((System.currentTimeMillis() - attribute.getLastReminder()) <=
+                    TimeUnit.SECONDS.toMillis(this.mod.getConfig().getMessageDelaySeconds())) {
                 continue;
             }
 
