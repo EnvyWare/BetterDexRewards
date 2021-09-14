@@ -7,12 +7,14 @@ import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
 import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
 import com.envyful.api.reforged.pixelmon.storage.UtilPixelmonPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.config.PixelmonItems;
+import com.pixelmonmod.pixelmon.entities.pixelmon.stats.BaseStats;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.pokedex.PokedexEntry;
@@ -62,11 +64,19 @@ public class DexRewardsMissingUI {
             PokedexEntry pokedexEntry = values.get(i);
             EnumSpecies species = EnumSpecies.getFromDex(pokedexEntry.natPokedexNum);
             int pos = i % 36;
+            BaseStats baseStats = species.getBaseStats();
 
             pane.set(pos % 9, pos / 9, GuiFactory.displayableBuilder(ItemStack.class)
                     .itemStack(
                             new ItemBuilder(UtilSprite.getPixelmonSprite(species))
-                                    .name("§b" + species.getLocalizedName())
+                                    .name("§b" + species.getLocalizedName() + " §f- " + species.getNationalPokedexNumber())
+                                    .lore(
+                                            "§bBiomes",
+                                            String.join(", ", UtilPokemonInfo.getSpawnBiomes(baseStats)),
+                                            " ",
+                                            "§bTimes: " + String.join(", ", UtilPokemonInfo.getSpawnTimes(baseStats)),
+                                            "§bCatch Rate: " + UtilPokemonInfo.getCatchRate(baseStats)
+                                    )
                                     .build())
                     .build());
         }
