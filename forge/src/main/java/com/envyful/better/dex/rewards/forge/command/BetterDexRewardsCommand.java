@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
                 "pokedex"
         }
 )
-@SubCommands(ConvertCommand.class)
+@SubCommands({ConvertCommand.class, ReloadCommand.class})
 public class BetterDexRewardsCommand {
 
     @CommandProcessor
