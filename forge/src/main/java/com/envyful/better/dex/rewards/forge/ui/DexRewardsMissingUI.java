@@ -54,7 +54,6 @@ public class DexRewardsMissingUI {
         }
 
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
-        PlayerPartyStorage party = UtilPixelmonPlayer.getParty(player.getParent());
 
         attribute.setPage(page);
 
@@ -69,13 +68,15 @@ public class DexRewardsMissingUI {
             pane.set(pos % 9, pos / 9, GuiFactory.displayableBuilder(ItemStack.class)
                     .itemStack(
                             new ItemBuilder(UtilSprite.getPixelmonSprite(species))
-                                    .name("§b" + species.getLocalizedName() + " §f- " + species.getNationalPokedexNumber())
+                                    .name("§e" + species.getLocalizedName() + " §f- " + species.getNationalPokedexNumber())
                                     .lore(
-                                            "§bBiomes",
+                                            "§eBiomes",
                                             String.join(", ", UtilPokemonInfo.getSpawnBiomes(baseStats)),
                                             " ",
-                                            "§bTimes: " + String.join(", ", UtilPokemonInfo.getSpawnTimes(baseStats)),
-                                            "§bCatch Rate: " + UtilPokemonInfo.getCatchRate(baseStats)
+                                            "§eTimes: " + String.join(", ", UtilPokemonInfo.getSpawnTimes(baseStats)),
+                                            "§eCatch Rate: ",
+                                            String.join("\n", UtilPokemonInfo.getCatchRate(baseStats)
+                                            )
                                     )
                                     .build())
                     .build());
