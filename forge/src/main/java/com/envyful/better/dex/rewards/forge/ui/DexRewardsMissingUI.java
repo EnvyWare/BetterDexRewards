@@ -71,7 +71,7 @@ public class DexRewardsMissingUI {
                                     .name("§e" + species.getLocalizedName() + " §f- " + species.getNationalPokedexNumber())
                                     .lore(
                                             "§eBiomes",
-                                            String.join(", ", UtilPokemonInfo.getSpawnBiomes(baseStats)),
+                                            "§f" + String.join("§7,§f ", UtilPokemonInfo.getSpawnBiomes(baseStats)),
                                             " ",
                                             "§eTimes: " + String.join(", ", UtilPokemonInfo.getSpawnTimes(baseStats)),
                                             "§eCatch Rate: ",
