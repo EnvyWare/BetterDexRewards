@@ -49,6 +49,11 @@ public class DexRewardsMainUI {
         }
 
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
+
+        if (attribute == null) {
+            return;
+        }
+
         double percentage = attribute.getPokeDexPercentage();
 
         pane.set(1, 1, GuiFactory.displayableBuilder(ItemStack.class)
