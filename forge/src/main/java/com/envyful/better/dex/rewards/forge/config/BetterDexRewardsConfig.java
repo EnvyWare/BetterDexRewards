@@ -40,7 +40,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     );
 
     private PositionableConfigItem missingItem = new PositionableConfigItem(
-            Item.getIdFromItem(PixelmonItems.itemPixelmonSprite) + "",
+            "4601",
             1, (byte) 0, "&eMissing Pokemon",
             Lists.newArrayList(""),
             5, 1,
@@ -49,7 +49,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     );
 
     private PositionableConfigItem ranksItem = new PositionableConfigItem(
-            Item.getIdFromItem(PixelmonItems.itemFinder) + "",
+            "4414",
             1, (byte) 0, "&ePokeDex Ranks",
             Lists.newArrayList(""),
             3, 1,
