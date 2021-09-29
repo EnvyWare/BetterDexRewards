@@ -44,7 +44,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             1, (byte) 0, "&eMissing Pokemon",
             Lists.newArrayList(""),
             5, 1,
-            ImmutableMap.of("ndex", new ConfigItem.NBTValue("byte", EnumSpecies.Unown.getNationalPokedexInteger() + ""))
+            ImmutableMap.of("ndex", new ConfigItem.NBTValue("short", EnumSpecies.Unown.getNationalPokedexInteger() +
+                    ""))
     );
 
     private PositionableConfigItem ranksItem = new PositionableConfigItem(
