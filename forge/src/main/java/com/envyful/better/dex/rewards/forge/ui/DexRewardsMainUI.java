@@ -58,29 +58,40 @@ public class DexRewardsMainUI {
         double percentage = attribute.getPokeDexPercentage();
         BetterDexRewardsConfig actualConfig = BetterDexRewards.getInstance().getConfig();
 
-        pane.set(actualConfig.getPercentageItem().getXPos(), actualConfig.getPercentageItem().getYPos(),
-                 GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(new ItemBuilder(UtilConfigItem.fromConfigItem(actualConfig.getPercentageItem()))
-                        .lore(getLore(percentage, actualConfig.getPercentageItem())).build())
-                .build());
+        if (actualConfig.getPercentageItem().isEnabled()) {
+            pane.set(actualConfig.getPercentageItem().getXPos(), actualConfig.getPercentageItem().getYPos(),
+                     GuiFactory.displayableBuilder(ItemStack.class)
+                             .itemStack(new ItemBuilder(UtilConfigItem.fromConfigItem(actualConfig.getPercentageItem()))
+                                                .lore(getLore(percentage, actualConfig.getPercentageItem())).build())
+                             .build()
+            );
+        }
 
-        pane.set(actualConfig.getRanksItem().getXPos(), actualConfig.getRanksItem().getYPos(),
-                 GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(UtilConfigItem.fromConfigItem(actualConfig.getRanksItem()))
-                .clickHandler((envyPlayer, clickType) -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
-                .build());
+        if (actualConfig.getRanksItem().isEnabled()) {
+            pane.set(actualConfig.getRanksItem().getXPos(), actualConfig.getRanksItem().getYPos(),
+                     GuiFactory.displayableBuilder(ItemStack.class)
+                             .itemStack(UtilConfigItem.fromConfigItem(actualConfig.getRanksItem()))
+                             .clickHandler((envyPlayer, clickType) -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
+                             .build()
+            );
+        }
 
-        pane.set(actualConfig.getMissingItem().getXPos(), actualConfig.getMissingItem().getYPos(),
-                 GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(UtilConfigItem.fromConfigItem(actualConfig.getMissingItem()))
-                .clickHandler((envyPlayer, clickType) -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
-                .build());
+        if (actualConfig.getMissingItem().isEnabled()) {
+            pane.set(actualConfig.getMissingItem().getXPos(), actualConfig.getMissingItem().getYPos(),
+                     GuiFactory.displayableBuilder(ItemStack.class)
+                             .itemStack(UtilConfigItem.fromConfigItem(actualConfig.getMissingItem()))
+                             .clickHandler((envyPlayer, clickType) -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
+                             .build()
+            );
+        }
 
         PositionableConfigItem infoItem = BetterDexRewards.getInstance().getConfig().getInfoItem();
 
-        pane.set(infoItem.getXPos(), infoItem.getYPos(), GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(UtilConfigItem.fromConfigItem(infoItem))
-                .build());
+        if (infoItem.isEnabled()) {
+            pane.set(infoItem.getXPos(), infoItem.getYPos(), GuiFactory.displayableBuilder(ItemStack.class)
+                    .itemStack(UtilConfigItem.fromConfigItem(infoItem))
+                    .build());
+        }
 
         GuiFactory.guiBuilder()
                 .addPane(pane)
