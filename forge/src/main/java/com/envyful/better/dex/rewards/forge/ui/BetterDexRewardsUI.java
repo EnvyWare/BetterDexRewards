@@ -4,6 +4,7 @@ import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
+import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.gui.factory.GuiFactory;
@@ -57,17 +58,18 @@ public class BetterDexRewardsUI {
                 configItem = entry.getValue().getCompleteItem();
             }
 
+            final String finalId = entry.getKey();
+
             pane.set(entry.getValue().getxPos(), entry.getValue().getyPos(),
                     GuiFactory.displayableBuilder(ItemStack.class)
-                            .itemStack(new ItemBuilder()
-                                    .type(Item.getByNameOrId(configItem.getType()))
-                                    .amount(configItem.getAmount())
-                                    .damage(configItem.getDamage())
-                                    .name(configItem.getName())
-                                    .lore(configItem.getLore())
-                                    .build())
+                            .itemStack(UtilConfigItem.fromConfigItem(configItem))
                             .clickHandler((envyPlayer, clickType) -> {
+                                if (attribute.hasClaimed(finalId)) {
+                                    return;
+                                }
+
                                 if (percentage >= entry.getValue().getRequiredPercentage()) {
+                                    attribute.claimReward(finalId);
                                     for (String rewardMessage : entry.getValue().getRewardMessages()) {
                                         envyPlayer.message(UtilChatColour.translateColourCodes('&', rewardMessage));
                                     }
@@ -78,6 +80,8 @@ public class BetterDexRewardsUI {
                                                     .replace("%player%",
                                                             ((EntityPlayerMP) envyPlayer.getParent()).getName()));
                                         }
+
+                                        ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
                                     });
                                 }
                             })
