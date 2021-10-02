@@ -68,7 +68,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             Item.getIdFromItem(PixelmonItems.LtradeHolderLeft) + "",
             1, (byte) 0, "&eBack",
             Lists.newArrayList(),
-            0, 5, Collections.emptyMap()
+            4, 5, Collections.emptyMap()
     );
 
     private int messageDelaySeconds = 60;

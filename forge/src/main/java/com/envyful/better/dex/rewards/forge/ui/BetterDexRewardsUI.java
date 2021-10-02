@@ -43,6 +43,23 @@ public class BetterDexRewardsUI {
                     .build());
         }
 
+        if (BetterDexRewards.getInstance().getConfig().getBackButton().isEnabled()) {
+            pane.set(
+                    BetterDexRewards.getInstance().getConfig().getBackButton().getXPos(),
+                    BetterDexRewards.getInstance().getConfig().getBackButton().getYPos(),
+                    GuiFactory.displayableBuilder(ItemStack.class)
+                            .itemStack(
+                                    UtilConfigItem.fromConfigItem(BetterDexRewards.getInstance().getConfig().getBackButton()))
+                            .clickHandler((envyPlayer, clickType) -> {
+                                ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
+
+                                UtilForgeConcurrency.runSync(() -> {
+                                    DexRewardsMainUI.open(player);
+                                });
+                            }).build()
+            );
+        }
+
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
         double percentage = attribute.getPokeDexPercentage();
 
