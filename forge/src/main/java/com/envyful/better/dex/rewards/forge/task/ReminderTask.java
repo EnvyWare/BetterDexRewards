@@ -3,8 +3,10 @@ package com.envyful.better.dex.rewards.forge.task;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
+import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ReminderTask implements Runnable {
@@ -29,11 +31,28 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
+            if (!this.canClaimReward(attribute)) {
+                continue;
+            }
+
             attribute.setLastReminder(System.currentTimeMillis());
 
             for (String s : this.mod.getConfig().getClaimReminderMessage()) {
                 onlinePlayer.message(UtilChatColour.translateColourCodes('&', s));
             }
         }
+    }
+
+    private boolean canClaimReward(DexRewardsAttribute attribute) {
+        double pokeDexPercentage = attribute.getPokeDexPercentage();
+
+        for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry :
+                this.mod.getConfig().getRewardStages().entrySet()) {
+            if (pokeDexPercentage >= entry.getValue().getRequiredPercentage() && !attribute.hasClaimed(entry.getKey())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
