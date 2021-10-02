@@ -64,6 +64,13 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             ImmutableMap.of("tooltip", new ConfigItem.NBTValue("string", ""))
     );
 
+    private PositionableConfigItem backButton = new PositionableConfigItem(
+            Item.getIdFromItem(PixelmonItems.LtradeHolderLeft) + "",
+            1, (byte) 0, "&eBack",
+            Lists.newArrayList(),
+            0, 5, Collections.emptyMap()
+    );
+
     private int messageDelaySeconds = 60;
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
@@ -82,6 +89,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     );
 
     public BetterDexRewardsConfig() {
+    }
+
+    public PositionableConfigItem getBackButton() {
+        return this.backButton;
     }
 
     public PositionableConfigItem getInfoItem() {

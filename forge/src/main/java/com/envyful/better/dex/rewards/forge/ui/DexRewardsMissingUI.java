@@ -3,6 +3,8 @@ package com.envyful.better.dex.rewards.forge.ui;
 import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
+import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
+import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
@@ -51,6 +53,23 @@ public class DexRewardsMissingUI {
                             .amount(fillerItem.getAmount())
                             .build())
                     .build());
+        }
+
+        if (BetterDexRewards.getInstance().getConfig().getBackButton().isEnabled()) {
+            pane.set(
+                    BetterDexRewards.getInstance().getConfig().getBackButton().getXPos(),
+                    BetterDexRewards.getInstance().getConfig().getBackButton().getYPos(),
+                    GuiFactory.displayableBuilder(ItemStack.class)
+                            .itemStack(
+                                    UtilConfigItem.fromConfigItem(BetterDexRewards.getInstance().getConfig().getBackButton()))
+                            .clickHandler((envyPlayer, clickType) -> {
+                                ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
+
+                                UtilForgeConcurrency.runSync(() -> {
+                                    DexRewardsMainUI.open(player);
+                                });
+                            }).build()
+            );
         }
 
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
