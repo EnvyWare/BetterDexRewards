@@ -178,6 +178,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             return this.completeItem;
         }
 
+        public ConfigItem getToClaimItem() {
+            return this.toClaimItem;
+        }
+
         public double getRequiredPercentage() {
             return this.requiredPercentage;
         }

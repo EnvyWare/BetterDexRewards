@@ -72,7 +72,7 @@ public class BetterDexRewardsUI {
             } else if (percentage < entry.getValue().getRequiredPercentage()) {
                 configItem = entry.getValue().getDisplayItem();
             } else {
-                configItem = entry.getValue().getCompleteItem();
+                configItem = entry.getValue().getToClaimItem();
             }
 
             final String finalId = entry.getKey();
