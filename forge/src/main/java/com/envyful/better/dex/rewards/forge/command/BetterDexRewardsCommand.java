@@ -25,9 +25,6 @@ public class BetterDexRewardsCommand {
 
     @CommandProcessor
     public void onCommand(@Sender EntityPlayerMP player, String[] args) {
-        UtilForgeConcurrency.runSync(() -> {
-            DexRewardsMainUI.open(BetterDexRewards.getInstance().getPlayerManager().getPlayer(player));
-        });
-
+        DexRewardsMainUI.open(BetterDexRewards.getInstance().getPlayerManager().getPlayer(player));
     }
 }
