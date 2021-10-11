@@ -61,6 +61,13 @@ public class BetterDexRewards {
                 e.printStackTrace();
             }
         });
+
+        new ForgeTaskBuilder()
+                .async(true)
+                .delay(10L)
+                .interval(10L)
+                .task(new ReminderTask(this))
+                .start();
     }
 
     public void reloadConfig() {
