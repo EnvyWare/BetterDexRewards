@@ -73,6 +73,7 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
 
     public double getPokeDexPercentage() {
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(this.parent.getParent());
+
         return (storage.pokedex.countCaught() / (double) Pokedex.pokedexSize) * 100.0;
     }
 

@@ -9,18 +9,20 @@ import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.player.EnvyPlayer;
-import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
-import com.envyful.api.reforged.pixelmon.sprite.UtilSprite;
-import com.envyful.api.reforged.pixelmon.storage.UtilPixelmonPlayer;
+import com.envyful.api.reforged.pixelmon.transformer.PokemonDexFormattedTransformer;
+import com.envyful.api.reforged.pixelmon.transformer.PokemonDexTransformer;
+import com.envyful.api.reforged.pixelmon.transformer.PokemonNameTransformer;
+import com.envyful.api.reforged.pixelmon.transformer.PokemonSpriteTransformer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
+import com.envyful.better.dex.rewards.forge.transformer.BiomesTransformer;
+import com.envyful.better.dex.rewards.forge.transformer.CatchRateTransformer;
+import com.envyful.better.dex.rewards.forge.transformer.SpawnTimesTransformer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.config.PixelmonItems;
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.BaseStats;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.pokedex.PokedexEntry;
-import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -82,22 +84,20 @@ public class DexRewardsMissingUI {
             PokedexEntry pokedexEntry = values.get(i);
             EnumSpecies species = EnumSpecies.getFromDex(pokedexEntry.natPokedexNum);
             int pos = i % 36;
-            BaseStats baseStats = species.getBaseStats();
 
             pane.set(pos % 9, pos / 9, GuiFactory.displayableBuilder(ItemStack.class)
-                    .itemStack(
-                            new ItemBuilder(UtilSprite.getPixelmonSprite(species))
-                                    .name("§e" + species.getLocalizedName() + " §f- " + species.getNationalPokedexNumber())
-                                    .lore(
-                                            "§eBiomes",
-                                            "§f" + String.join("§7,§f ", UtilPokemonInfo.getSpawnBiomes(baseStats)),
-                                            " ",
-                                            "§eTimes: " + String.join(", ", UtilPokemonInfo.getSpawnTimes(baseStats)),
-                                            "§eCatch Rate: ",
-                                            String.join("\n", UtilPokemonInfo.getCatchRate(baseStats)
-                                            )
-                                    )
-                                    .build())
+                    .itemStack(UtilConfigItem.fromConfigItem(
+                            BetterDexRewards.getInstance().getConfig().getMissingPokemonItem(),
+                            Lists.newArrayList(
+                                    PokemonDexTransformer.of(species),
+                                    PokemonNameTransformer.of(species),
+                                    PokemonDexFormattedTransformer.of(species),
+                                    PokemonSpriteTransformer.of(species),
+                                    BiomesTransformer.of(species),
+                                    CatchRateTransformer.of(species),
+                                    SpawnTimesTransformer.of(species)
+                            )
+                    ))
                     .build());
         }
 

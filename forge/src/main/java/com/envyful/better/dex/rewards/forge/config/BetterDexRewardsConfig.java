@@ -16,7 +16,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-import javax.swing.text.Position;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +87,25 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             "&e&l(!) &eYou have a new PokeDex reward level you can claim!"
     );
 
+    private ConfigItem missingPokemonItem = new ConfigItem(
+            "pixelmon:ui_element", 1, (byte) 0, "&e%species% §f- %pokedex%",
+            Lists.newArrayList(
+                    "&eBiomes",
+                    "&f%biomes%",
+                    " ",
+                    "&eTimes: %spawn_times%",
+                    "&eCatch Rate: ",
+                    "%catch_rate%"
+            ),
+            ImmutableMap.of(
+                    "UIImage", new ConfigItem.NBTValue("string", "%sprite%"),
+                    "UIImageR", new ConfigItem.NBTValue("float", "0"),
+                    "UIImageG", new ConfigItem.NBTValue("float", "0"),
+                    "UIImageB", new ConfigItem.NBTValue("float", "0"),
+                    "UIImageA", new ConfigItem.NBTValue("float", "1")
+            )
+    );
+
     public BetterDexRewardsConfig() {
     }
 
@@ -133,6 +151,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public PositionableConfigItem getPercentageItem() {
         return this.percentageItem;
+    }
+
+    public ConfigItem getMissingPokemonItem() {
+        return this.missingPokemonItem;
     }
 
     @ConfigSerializable
