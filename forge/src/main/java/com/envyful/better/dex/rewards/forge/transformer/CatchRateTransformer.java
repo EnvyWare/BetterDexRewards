@@ -18,7 +18,7 @@ public class CatchRateTransformer implements Transformer {
 
     @Override
     public String transformName(String name) {
-        return name.replace("%catch_rate%", String.join("\n",
+        return name.replace("%catch_rate%", String.join(System.lineSeparator(),
                                                        UtilPokemonInfo.getCatchRate(this.pokemon.getBaseStats())));
     }
 }

@@ -88,7 +88,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     );
 
     private ConfigItem missingPokemonItem = new ConfigItem(
-            "pixelmon:ui_element", 1, (byte) 0, "&e%species% §f- %pokedex%",
+            "pixelmon:ui_element", 1, (byte) 0, "&e%pokemon% §f- %pokedex%",
             Lists.newArrayList(
                     "&eBiomes",
                     "&f%biomes%",
