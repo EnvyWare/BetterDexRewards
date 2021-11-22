@@ -28,11 +28,12 @@ import java.sql.SQLException;
         modid = "betterdexrewards",
         name = "BetterDexRewards Forge",
         version = BetterDexRewards.VERSION,
-        acceptableRemoteVersions = "*"
+        acceptableRemoteVersions = "*",
+        updateJSON = "https://ogn.pixelmonmod.com/update/sm-dr/update.json"
 )
 public class BetterDexRewards {
 
-    protected static final String VERSION = "1.6.0";
+    protected static final String VERSION = "1.6.1";
 
     private static BetterDexRewards instance;
 
