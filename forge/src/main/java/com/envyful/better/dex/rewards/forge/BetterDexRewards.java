@@ -113,4 +113,8 @@ public class BetterDexRewards {
     public BetterDexRewardsConfig getConfig() {
         return this.config;
     }
+
+    public boolean isPlaceholders() {
+        return this.placeholders;
+    }
 }
