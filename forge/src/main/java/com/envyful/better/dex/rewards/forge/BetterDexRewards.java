@@ -42,6 +42,7 @@ public class BetterDexRewards {
 
     private Database database;
     private BetterDexRewardsConfig config;
+    private boolean placeholders;
 
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
@@ -81,9 +82,20 @@ public class BetterDexRewards {
 
     @Mod.EventHandler
     public void onServerStart(FMLServerStartingEvent event) {
+        this.checkForPlaceholders();
+
         new DexRewardsListener(this);
 
         this.commandFactory.registerCommand(event.getServer(), new BetterDexRewardsCommand());
+    }
+
+    private void checkForPlaceholders() {
+        try {
+            Class.forName("com.envyful.papi.forge.ForgePlaceholderAPI");
+            this.placeholders = true;
+        } catch (ClassNotFoundException e) {
+            this.placeholders = false;
+        }
     }
 
     public static BetterDexRewards getInstance() {
