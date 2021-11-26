@@ -39,6 +39,8 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
     compileOnly ('com.pixelmonmod.pixelmon:Pixelmon-1.12.2-8.3.0-server:1.0')
 
+    compileOnly 'com.github.Pixelmon-Development.ForgePlaceholderAPI:api:0.0.1'
+
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 
     shadow group: 'com.github.Daniel-Forge-Development.API', name: 'commons', version: '1.2.3'
