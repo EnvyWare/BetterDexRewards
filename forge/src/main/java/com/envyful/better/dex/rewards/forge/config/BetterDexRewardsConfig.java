@@ -70,6 +70,20 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             4, 5, Collections.emptyMap()
     );
 
+    private PositionableConfigItem previousPageButton = new PositionableConfigItem(
+            Item.getIdFromItem(PixelmonItems.LtradeHolderLeft) + "",
+            1, (byte) 0, "&ePrevious Page",
+            Lists.newArrayList(),
+            0, 5, Collections.emptyMap()
+    );
+
+    private PositionableConfigItem nextPageButton = new PositionableConfigItem(
+            Item.getIdFromItem(PixelmonItems.tradeHolderRight) + "",
+            1, (byte) 0, "&eNext Page",
+            Lists.newArrayList(),
+            8, 5, Collections.emptyMap()
+    );
+
     private int messageDelaySeconds = 60;
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
@@ -155,6 +169,14 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public ConfigItem getMissingPokemonItem() {
         return this.missingPokemonItem;
+    }
+
+    public PositionableConfigItem getPreviousPageButton() {
+        return this.previousPageButton;
+    }
+
+    public PositionableConfigItem getNextPageButton() {
+        return this.nextPageButton;
     }
 
     @ConfigSerializable

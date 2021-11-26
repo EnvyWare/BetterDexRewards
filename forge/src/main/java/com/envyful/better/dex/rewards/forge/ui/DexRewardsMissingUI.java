@@ -20,7 +20,6 @@ import com.envyful.better.dex.rewards.forge.transformer.BiomesTransformer;
 import com.envyful.better.dex.rewards.forge.transformer.CatchRateTransformer;
 import com.envyful.better.dex.rewards.forge.transformer.SpawnTimesTransformer;
 import com.google.common.collect.Lists;
-import com.pixelmonmod.pixelmon.config.PixelmonItems;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.pokedex.PokedexEntry;
@@ -49,32 +48,25 @@ public class DexRewardsMissingUI {
 
         for (ConfigItem fillerItem : config.getFillerItems()) {
             pane.add(GuiFactory.displayableBuilder(ItemStack.class)
-                    .itemStack(new ItemBuilder()
-                            .type(Item.getByNameOrId(fillerItem.getType()))
-                            .name(fillerItem.getName())
-                            .lore(fillerItem.getLore())
-                            .damage(fillerItem.getDamage())
-                            .amount(fillerItem.getAmount())
-                            .build())
-                    .build());
+                             .itemStack(new ItemBuilder()
+                                                .type(Item.getByNameOrId(fillerItem.getType()))
+                                                .name(fillerItem.getName())
+                                                .lore(fillerItem.getLore())
+                                                .damage(fillerItem.getDamage())
+                                                .amount(fillerItem.getAmount())
+                                                .build())
+                             .build());
         }
 
-        if (BetterDexRewards.getInstance().getConfig().getBackButton().isEnabled()) {
-            pane.set(
-                    BetterDexRewards.getInstance().getConfig().getBackButton().getXPos(),
-                    BetterDexRewards.getInstance().getConfig().getBackButton().getYPos(),
-                    GuiFactory.displayableBuilder(ItemStack.class)
-                            .itemStack(
-                                    UtilConfigItem.fromConfigItem(BetterDexRewards.getInstance().getConfig().getBackButton()))
-                            .clickHandler((envyPlayer, clickType) -> {
-                                ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
+        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getBackButton(),
+                                     (envyPlayer, clickType) -> {
+                                         ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
 
-                                UtilForgeConcurrency.runSync(() -> {
-                                    DexRewardsMainUI.open(player);
-                                });
-                            }).build()
-            );
-        }
+                                         UtilForgeConcurrency.runSync(() -> {
+                                             DexRewardsMainUI.open(player);
+                                         });
+                                     }
+        );
 
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
 
@@ -111,28 +103,19 @@ public class DexRewardsMissingUI {
                     .build());
         }
 
-        pane.set(0, 5, GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(new ItemBuilder()
-                        .type(PixelmonItems.LtradeHolderLeft)
-                        .name(UtilChatColour.translateColourCodes('&', "&eBack"))
-                        .build())
-                .clickHandler((envyPlayer, clickType) -> movePage(envyPlayer, -1))
-                .build());
+        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
+                                     (envyPlayer, clickType) -> movePage(envyPlayer, -1)
+        );
 
-        pane.set(8, 5, GuiFactory.displayableBuilder(ItemStack.class)
-                .itemStack(new ItemBuilder()
-                        .type(PixelmonItems.tradeHolderRight)
-                        .name(UtilChatColour.translateColourCodes('&', "&eForward"))
-                        .build())
-                .clickHandler((envyPlayer, clickType) -> movePage(envyPlayer, +1))
-                .build());
+        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getNextPageButton(),
+                                     (envyPlayer, clickType) -> movePage(envyPlayer, +1)
+        );
 
         GuiFactory.guiBuilder()
                 .addPane(pane)
-                .setCloseConsumer(envyPlayer -> {
-                })
+                .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
-                .height(6)
+                .height(config.getHeight())
                 .title(UtilChatColour.translateColourCodes('&', config.getTitle()))
                 .build().open(player);
     }
@@ -141,8 +124,8 @@ public class DexRewardsMissingUI {
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty((EntityPlayerMP) player.getParent());
 
-        if (attribute.getPage() >= ((Pokedex.pokedexSize - storage.pokedex.countCaught()) / 36) && direction > 1) {
-            open((EnvyPlayer<EntityPlayerMP>) player, 0);
+        if ((attribute.getPage() >= ((Pokedex.pokedexSize - storage.pokedex.countCaught()) / 36)) && direction > 0) {
+            open((EnvyPlayer<EntityPlayerMP>) player);
         } else if (attribute.getPage() == 0 && direction < 0) {
             open((EnvyPlayer<EntityPlayerMP>) player, ((Pokedex.pokedexSize - storage.pokedex.countCaught()) / 36));
         } else {
