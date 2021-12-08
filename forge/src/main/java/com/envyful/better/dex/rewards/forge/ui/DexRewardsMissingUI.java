@@ -87,8 +87,7 @@ public class DexRewardsMissingUI {
             int pos = counter;
             ++counter;
 
-            pane.set(pos % 9, pos / 9, GuiFactory.displayableBuilder(ItemStack.class)
-                    .itemStack(UtilConfigItem.fromConfigItem(
+            pane.set(pos % 9, pos / 9, GuiFactory.displayable((UtilConfigItem.fromConfigItem(
                             BetterDexRewards.getInstance().getConfig().getMissingPokemonItem(),
                             Lists.newArrayList(
                                     PokemonDexTransformer.of(species),
@@ -99,8 +98,7 @@ public class DexRewardsMissingUI {
                                     CatchRateTransformer.of(species),
                                     SpawnTimesTransformer.of(species)
                             )
-                    ))
-                    .build());
+                    ))));
         }
 
         UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
