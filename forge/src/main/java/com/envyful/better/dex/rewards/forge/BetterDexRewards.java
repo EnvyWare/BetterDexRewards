@@ -7,8 +7,10 @@ import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
+import com.envyful.api.player.attribute.PlayerAttribute;
 import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
@@ -18,6 +20,7 @@ import com.envyful.better.dex.rewards.forge.task.ReminderTask;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -95,6 +98,17 @@ public class BetterDexRewards {
             this.placeholders = true;
         } catch (ClassNotFoundException e) {
             this.placeholders = false;
+        }
+    }
+
+    @Mod.EventHandler
+    public void onServerShutdown(FMLServerStoppingEvent event) {
+        for (ForgeEnvyPlayer onlinePlayer : this.playerManager.getOnlinePlayers()) {
+            PlayerAttribute<BetterDexRewards> attribute = onlinePlayer.getAttribute(BetterDexRewards.class);
+
+            if (attribute != null) {
+                attribute.save();
+            }
         }
     }
 
