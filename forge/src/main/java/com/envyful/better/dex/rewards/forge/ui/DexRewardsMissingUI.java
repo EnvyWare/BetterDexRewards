@@ -21,7 +21,6 @@ import com.envyful.better.dex.rewards.forge.transformer.SpawnTimesTransformer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import com.pixelmonmod.pixelmon.pokedex.Pokedex;
-import com.pixelmonmod.pixelmon.pokedex.PokedexEntry;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -61,33 +60,31 @@ public class DexRewardsMissingUI {
 
         attribute.setPage(page);
 
-        List<PokedexEntry> values = Lists.newArrayList(Pokedex.fullPokedex.values());
-        int counter = 0;
+        List<EnumSpecies> values = Lists.newArrayList(EnumSpecies.values());
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(player.getParent());
+        int counter = 0;
 
-        for (int i = page * 36; counter < 36 && i < Pokedex.pokedexSize; i++) {
-            PokedexEntry pokedexEntry = values.get(i);
-            EnumSpecies species = EnumSpecies.getFromDex(pokedexEntry.natPokedexNum);
+        for (int i = page * 36; counter < 36 || values.size() <= i; i++) {
+            EnumSpecies species = values.get(i);
 
-            if (storage.pokedex.hasCaught(species)) {
+            if (species == EnumSpecies.MissingNo || storage.pokedex.hasCaught(species)) {
                 continue;
             }
 
-            int pos = counter;
-            ++counter;
+            pane.set(counter % 9, counter / 9, GuiFactory.displayable((UtilConfigItem.fromConfigItem(
+                    BetterDexRewards.getInstance().getConfig().getMissingPokemonItem(),
+                    Lists.newArrayList(
+                            PokemonDexTransformer.of(species),
+                            PokemonNameTransformer.of(species),
+                            PokemonDexFormattedTransformer.of(species),
+                            PokemonSpriteTransformer.of(species),
+                            BiomesTransformer.of(species),
+                            CatchRateTransformer.of(species),
+                            SpawnTimesTransformer.of(species)
+                    )
+            ))));
 
-            pane.set(pos % 9, pos / 9, GuiFactory.displayable((UtilConfigItem.fromConfigItem(
-                            BetterDexRewards.getInstance().getConfig().getMissingPokemonItem(),
-                            Lists.newArrayList(
-                                    PokemonDexTransformer.of(species),
-                                    PokemonNameTransformer.of(species),
-                                    PokemonDexFormattedTransformer.of(species),
-                                    PokemonSpriteTransformer.of(species),
-                                    BiomesTransformer.of(species),
-                                    CatchRateTransformer.of(species),
-                                    SpawnTimesTransformer.of(species)
-                            )
-                    ))));
+            ++counter;
         }
 
         UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
