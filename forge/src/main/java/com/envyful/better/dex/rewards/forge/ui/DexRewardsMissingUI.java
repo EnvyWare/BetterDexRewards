@@ -5,7 +5,6 @@ import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigItem;
-import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.player.EnvyPlayer;
@@ -25,8 +24,6 @@ import com.pixelmonmod.pixelmon.pokedex.Pokedex;
 import com.pixelmonmod.pixelmon.pokedex.PokedexEntry;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
@@ -47,15 +44,7 @@ public class DexRewardsMissingUI {
 
 
         for (ConfigItem fillerItem : config.getFillerItems()) {
-            pane.add(GuiFactory.displayableBuilder(ItemStack.class)
-                             .itemStack(new ItemBuilder()
-                                                .type(Item.getByNameOrId(fillerItem.getType()))
-                                                .name(fillerItem.getName())
-                                                .lore(fillerItem.getLore())
-                                                .damage(fillerItem.getDamage())
-                                                .amount(fillerItem.getAmount())
-                                                .build())
-                             .build());
+            pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(fillerItem)));
         }
 
         UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getBackButton(),
@@ -76,7 +65,7 @@ public class DexRewardsMissingUI {
         int counter = 0;
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(player.getParent());
 
-        for (int i = page * 36; counter < 36 && i < (Pokedex.pokedexSize - storage.pokedex.countCaught()); i++) {
+        for (int i = page * 36; counter < 36 && i < Pokedex.pokedexSize; i++) {
             PokedexEntry pokedexEntry = values.get(i);
             EnumSpecies species = EnumSpecies.getFromDex(pokedexEntry.natPokedexNum);
 
