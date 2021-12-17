@@ -55,8 +55,6 @@ public class DexRewardsMainUI {
         UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute),
                                      actualConfig.getPercentageItem());
 
-        System.out.println("HELLO :)");
-
         UtilConfigItem.addConfigItem(pane, actualConfig.getRanksItem(), getTransformers(player.getParent(), attribute),
                                      (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
         );
