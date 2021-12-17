@@ -14,7 +14,6 @@ import com.envyful.api.reforged.pixelmon.transformer.PokemonDexTransformer;
 import com.envyful.api.reforged.pixelmon.transformer.PokemonNameTransformer;
 import com.envyful.api.reforged.pixelmon.transformer.PokemonSpriteTransformer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
-import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.envyful.better.dex.rewards.forge.transformer.BiomesTransformer;
 import com.envyful.better.dex.rewards.forge.transformer.CatchRateTransformer;
 import com.envyful.better.dex.rewards.forge.transformer.SpawnTimesTransformer;
@@ -54,8 +53,6 @@ public class DexRewardsMissingUI {
                                          });
                                      }
         );
-
-        DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
 
         List<EnumSpecies> values = Lists.newArrayList(EnumSpecies.values());
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(player.getParent());
