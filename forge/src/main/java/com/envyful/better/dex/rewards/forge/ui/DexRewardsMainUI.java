@@ -2,8 +2,8 @@ package com.envyful.better.dex.rewards.forge.ui;
 
 import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
-import com.envyful.api.config.type.PositionableConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
+import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.gui.Transformer;
 import com.envyful.api.gui.factory.GuiFactory;
@@ -16,7 +16,6 @@ import com.envyful.better.dex.rewards.forge.transformer.CompletionTransformer;
 import com.envyful.better.dex.rewards.forge.transformer.PlaceholderAPITransformer;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class DexRewardsMainUI {
 
     public static void open(EnvyPlayer<EntityPlayerMP> player) {
         if (BetterDexRewards.getInstance().getConfig() == null) {
-            FMLCommonHandler.instance().getFMLLogger().error("CONFIG DID NOT LOAD CORRECTLY");
             return;
         }
 
@@ -54,53 +52,21 @@ public class DexRewardsMainUI {
 
         BetterDexRewardsConfig actualConfig = BetterDexRewards.getInstance().getConfig();
 
-        if (actualConfig.getPercentageItem().isEnabled()) {
-            pane.set(actualConfig.getPercentageItem().getXPos(), actualConfig.getPercentageItem().getYPos(),
-                     GuiFactory.displayable(UtilConfigItem.fromConfigItem(
-                             actualConfig.getPercentageItem(),
-                             getTransformers(
-                                     player.getParent(),
-                                     attribute
-                             )
-                     ))
-            );
-        }
+        UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute),
+                                     actualConfig.getPercentageItem());
 
-        if (actualConfig.getRanksItem().isEnabled()) {
-            pane.set(actualConfig.getRanksItem().getXPos(), actualConfig.getRanksItem().getYPos(),
-                     GuiFactory.displayableBuilder(UtilConfigItem.fromConfigItem(
-                             actualConfig.getRanksItem(),
-                             getTransformers(
-                                     player.getParent(),
-                                     attribute
-                             )
-                     ))
-                             .clickHandler((envyPlayer, clickType) -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
-                             .build()
-            );
-        }
+        System.out.println("HELLO :)");
 
-        if (actualConfig.getMissingItem().isEnabled()) {
-            pane.set(actualConfig.getMissingItem().getXPos(), actualConfig.getMissingItem().getYPos(),
-                     GuiFactory.displayableBuilder(UtilConfigItem.fromConfigItem(
-                             actualConfig.getMissingItem(),
-                             getTransformers(
-                                     player.getParent(),
-                                     attribute
-                             )
-                     ))
-                             .clickHandler((envyPlayer, clickType) -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
-                             .build()
-            );
-        }
+        UtilConfigItem.addConfigItem(pane, actualConfig.getRanksItem(), getTransformers(player.getParent(), attribute),
+                                     (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
+        );
 
-        PositionableConfigItem infoItem = BetterDexRewards.getInstance().getConfig().getInfoItem();
+        UtilConfigItem.addConfigItem(pane, actualConfig.getMissingItem(), getTransformers(player.getParent(),
+                                                                                     attribute),
+                                     (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
+        );
 
-        if (infoItem.isEnabled()) {
-            pane.set(infoItem.getXPos(), infoItem.getYPos(),
-                     GuiFactory.displayable(UtilConfigItem.fromConfigItem(infoItem))
-            );
-        }
+        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getInfoItem());
 
         GuiFactory.guiBuilder()
                 .addPane(pane)

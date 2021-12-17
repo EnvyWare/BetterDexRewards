@@ -51,8 +51,6 @@ public class BetterDexRewardsUI {
                             .itemStack(
                                     UtilConfigItem.fromConfigItem(BetterDexRewards.getInstance().getConfig().getBackButton()))
                             .clickHandler((envyPlayer, clickType) -> {
-                                ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
-
                                 UtilForgeConcurrency.runSync(() -> {
                                     DexRewardsMainUI.open(player);
                                 });
