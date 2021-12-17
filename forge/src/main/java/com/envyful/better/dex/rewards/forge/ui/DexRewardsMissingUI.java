@@ -58,7 +58,6 @@ public class DexRewardsMissingUI {
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(player.getParent());
         int counter = 0;
         int pos;
-        int lastDex;
 
         if (backwards) {
             counter = 35;
@@ -84,6 +83,18 @@ public class DexRewardsMissingUI {
 
                 --counter;
             }
+
+            int finalCounter = counter;
+            int finalPos = pos;
+            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
+                                         (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
+                                                                         startPos == 35 ? values.size() - 1 : finalPos, true)
+            );
+
+            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getNextPageButton(),
+                                         (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
+                                                                         finalCounter < -1 || values.size() <= finalPos ? 0 : startPos + 1, false)
+            );
         } else {
             for (pos = startPos; counter < 36 && values.size() > pos; pos++) {
                 EnumSpecies species = values.get(pos);
@@ -107,20 +118,20 @@ public class DexRewardsMissingUI {
 
                 ++counter;
             }
+
+            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
+                                         (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
+                                                                         startPos == 0 ? values.size() - 1 : startPos - 1,
+                                                                         true)
+            );
+
+            int finalPos = pos;
+            int finalCounter = counter;
+            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getNextPageButton(),
+                                         (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
+                                                                         finalCounter < 36 || values.size() <= finalPos ? 0 : finalPos, false)
+            );
         }
-
-        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
-                                     (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
-                                                                     startPos == 0 ? values.size() - 1 : startPos - 1,
-                                                                     true)
-        );
-
-        int finalPos = pos;
-        int finalCounter = counter;
-        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getNextPageButton(),
-                                     (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
-                                                                     finalCounter < 36 || values.size() <= finalPos ? 0 : finalPos, false)
-        );
 
         GuiFactory.guiBuilder()
                 .addPane(pane)
