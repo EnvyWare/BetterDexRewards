@@ -80,12 +80,12 @@ public class DexRewardsMissingUI {
             int finalPos = pos;
             UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
                                          (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
-                                                                         startPos == 35 ? values.size() - 1 : finalPos, true)
+                                                                         finalPos == 0 ? values.size() - 1 : finalPos, true)
             );
 
             UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getNextPageButton(),
                                          (envyPlayer, clickType) -> open((EnvyPlayer<EntityPlayerMP>) envyPlayer,
-                                                                         finalCounter < -1 || values.size() <= finalPos ? 0 : startPos + 1, false)
+                                                                         finalCounter > -1 || values.size() <= finalPos ? 0 : startPos + 1, false)
             );
         } else {
             for (pos = startPos; counter < 36 && values.size() > pos; pos++) {
