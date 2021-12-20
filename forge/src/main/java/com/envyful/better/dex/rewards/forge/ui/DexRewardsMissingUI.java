@@ -3,7 +3,6 @@ package com.envyful.better.dex.rewards.forge.ui;
 import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
-import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
@@ -45,14 +44,7 @@ public class DexRewardsMissingUI {
         }
 
         UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getBackButton(),
-                                     (envyPlayer, clickType) -> {
-                                         ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
-
-                                         UtilForgeConcurrency.runSync(() -> {
-                                             DexRewardsMainUI.open(player);
-                                         });
-                                     }
-        );
+                                     (envyPlayer, clickType) -> DexRewardsMainUI.open(player));
 
         List<EnumSpecies> values = Lists.newArrayList(EnumSpecies.values());
         PlayerPartyStorage storage = UtilPixelmonPlayer.getParty(player.getParent());
