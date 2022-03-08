@@ -31,7 +31,7 @@ public class DexRewardsMainUI {
                 .topLeftX(0)
                 .topLeftY(0)
                 .width(9)
-                .height(3)
+                .height(config.getHeight())
                 .build();
 
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
@@ -52,27 +52,22 @@ public class DexRewardsMainUI {
 
         BetterDexRewardsConfig actualConfig = BetterDexRewards.getInstance().getConfig();
 
-        UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute),
-                                     actualConfig.getPercentageItem());
+        UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute), actualConfig.getPercentageItem());
 
         UtilConfigItem.addConfigItem(pane, actualConfig.getRanksItem(), getTransformers(player.getParent(), attribute),
-                                     (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
-        );
-
-        UtilConfigItem.addConfigItem(pane, actualConfig.getMissingItem(), getTransformers(player.getParent(),
-                                                                                     attribute),
-                                     (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer))
-        );
-
+                                     (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> BetterDexRewardsUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer)));
+        UtilConfigItem.addConfigItem(pane, actualConfig.getMissingItem(), getTransformers(player.getParent(), attribute),
+                                     (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> DexRewardsMissingUI.open((EnvyPlayer<EntityPlayerMP>) envyPlayer)));
         UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getInfoItem());
 
         GuiFactory.guiBuilder()
                 .addPane(pane)
                 .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
-                .height(3)
+                .height(config.getHeight())
                 .title(UtilChatColour.translateColourCodes('&', config.getTitle()))
-                .build().open(player);
+                .build()
+                .open(player);
     }
 
     private static List<Transformer> getTransformers(EntityPlayerMP player, DexRewardsAttribute attribute) {
