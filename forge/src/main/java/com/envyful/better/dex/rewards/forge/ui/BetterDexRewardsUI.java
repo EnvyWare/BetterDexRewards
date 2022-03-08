@@ -5,7 +5,6 @@ import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigItem;
-import com.envyful.api.forge.items.ItemBuilder;
 import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
@@ -14,7 +13,6 @@ import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
@@ -22,7 +20,15 @@ import java.util.Map;
 public class BetterDexRewardsUI {
 
     public static void open(EnvyPlayer<EntityPlayerMP> player) {
-        ConfigInterface config = BetterDexRewards.getInstance().getConfig().getConfigInterface();
+        DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
+
+        if (attribute == null) {
+            System.out.println("Error loading " + player.getName() + "'s attribute - failed to open UI (database issue?)");
+            return;
+        }
+
+        BetterDexRewardsConfig dexRewardsConfig = BetterDexRewards.getInstance().getConfig();
+        ConfigInterface config = dexRewardsConfig.getConfigInterface();
         Pane pane = GuiFactory.paneBuilder()
                 .topLeftX(0)
                 .topLeftY(0)
@@ -32,37 +38,13 @@ public class BetterDexRewardsUI {
 
 
         for (ConfigItem fillerItem : config.getFillerItems()) {
-            pane.add(GuiFactory.displayableBuilder(ItemStack.class)
-                            .itemStack(new ItemBuilder()
-                                    .type(Item.getByNameOrId(fillerItem.getType()))
-                                    .name(fillerItem.getName())
-                                    .lore(fillerItem.getLore())
-                                    .damage(fillerItem.getDamage())
-                                    .amount(fillerItem.getAmount())
-                                    .build())
-                    .build());
+            pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(fillerItem)));
         }
 
-        if (BetterDexRewards.getInstance().getConfig().getBackButton().isEnabled()) {
-            pane.set(
-                    BetterDexRewards.getInstance().getConfig().getBackButton().getXPos(),
-                    BetterDexRewards.getInstance().getConfig().getBackButton().getYPos(),
-                    GuiFactory.displayableBuilder(ItemStack.class)
-                            .itemStack(
-                                    UtilConfigItem.fromConfigItem(BetterDexRewards.getInstance().getConfig().getBackButton()))
-                            .clickHandler((envyPlayer, clickType) -> {
-                                UtilForgeConcurrency.runSync(() -> {
-                                    DexRewardsMainUI.open(player);
-                                });
-                            }).build()
-            );
-        }
-
-        DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
+        UtilConfigItem.addConfigItem(pane, dexRewardsConfig.getBackButton());
         double percentage = attribute.getPokeDexPercentage();
 
-        for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : BetterDexRewards.getInstance()
-                .getConfig().getRewardStages().entrySet()) {
+        for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : dexRewardsConfig.getRewardStages().entrySet()) {
             ConfigItem configItem = null;
 
             if (attribute.hasClaimed(entry.getKey())) {
@@ -76,31 +58,34 @@ public class BetterDexRewardsUI {
             final String finalId = entry.getKey();
 
             pane.set(entry.getValue().getxPos(), entry.getValue().getyPos(),
-                    GuiFactory.displayableBuilder(ItemStack.class)
-                            .itemStack(UtilConfigItem.fromConfigItem(configItem))
-                            .clickHandler((envyPlayer, clickType) -> {
-                                if (attribute.hasClaimed(finalId)) {
-                                    return;
-                                }
+                     GuiFactory.displayableBuilder(ItemStack.class)
+                             .itemStack(UtilConfigItem.fromConfigItem(configItem))
+                             .clickHandler((envyPlayer, clickType) -> {
+                                 if (attribute.hasClaimed(finalId)) {
+                                     return;
+                                 }
 
-                                if (percentage >= entry.getValue().getRequiredPercentage()) {
-                                    attribute.claimReward(finalId);
-                                    for (String rewardMessage : entry.getValue().getRewardMessages()) {
-                                        envyPlayer.message(UtilChatColour.translateColourCodes('&', rewardMessage));
-                                    }
+                                 if (percentage >= entry.getValue().getRequiredPercentage()) {
+                                     attribute.claimReward(finalId);
+                                     for (String rewardMessage : entry.getValue().getRewardMessages()) {
+                                         envyPlayer.message(UtilChatColour.translateColourCodes('&', rewardMessage));
+                                     }
 
-                                    UtilForgeConcurrency.runSync(() -> {
-                                        for (String rewardCommand : entry.getValue().getRewardCommands()) {
-                                            UtilForgeServer.executeCommand(rewardCommand
-                                                    .replace("%player%",
-                                                            ((EntityPlayerMP) envyPlayer.getParent()).getName()));
-                                        }
+                                     UtilForgeConcurrency.runSync(() -> {
+                                         for (String rewardCommand : entry.getValue().getRewardCommands()) {
+                                             UtilForgeServer.executeCommand(rewardCommand
+                                                                                    .replace(
+                                                                                            "%player%",
+                                                                                            ((EntityPlayerMP) envyPlayer.getParent()).getName()
+                                                                                    ));
+                                         }
 
-                                        ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
-                                    });
-                                }
-                            })
-                    .build());
+                                         ((EntityPlayerMP) envyPlayer.getParent()).closeScreen();
+                                     });
+                                 }
+                             })
+                             .build()
+            );
         }
 
         GuiFactory.guiBuilder()
