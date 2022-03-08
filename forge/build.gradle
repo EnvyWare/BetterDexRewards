@@ -30,37 +30,42 @@ repositories {
 
     maven { url 'https://jitpack.io' }
 
-    flatDir {
-        dirs '../Libraries/'
+    ivy {
+        setUrl('https://download.nodecdn.net/containers/reforged/server/release')
+        metadataSources {
+            artifact()
+        }
+        patternLayout {
+            artifact('[revision]/[artifact].[ext]')
+        }
     }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
-    compileOnly ('com.pixelmonmod.pixelmon:Pixelmon-1.12.2-8.3.0-server:1.0')
+    compileOnly fg.deobf('pixelmon:Pixelmon-1.12.2-8.3.6-server:8.3.6')
 
-    compileOnly 'com.github.Pixelmon-Development.ForgePlaceholderAPI:api:0.0.1'
+    compileOnly 'com.github.EnvyWare.ForgePlaceholderAPI:api:2.0.4'
 
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 
-    shadow group: 'com.github.Daniel-Forge-Development.API', name: 'commons', version: '1.5.0'
-    shadow group: 'com.github.Daniel-Forge-Development.API', name: 'forge', version: '1.5.0'
-    shadow group: 'com.github.Daniel-Forge-Development.API', name: 'reforged', version: '1.5.0'
+    shadow group: 'com.github.EnvyWare.API', name: 'commons', version: '2.0.0'
+    shadow group: 'com.github.EnvyWare.API', name: 'forge', version: '2.0.0'
+    shadow group: 'com.github.EnvyWare.API', name: 'reforged', version: '2.0.0'
 }
 
 shadowJar {
     configurations = [project.configurations.shadow]
     archiveName = rootProject.name + '-Forge.jar'
 
-    relocate('org.spongepowered.configurate', 'com.envyful.better.dex.rewards.forge.shade.configurate')
-    relocate('org.yaml.snakeyaml', 'com.envyful.better.dex.rewards.forge.shade.snakeyaml')
-    relocate('io.leangen.geantyref', 'com.envyful.better.dex.rewards.forge.shade.geantyref')
-    relocate('com.google.gson', 'com.envyful.better.dex.rewards.forge.shade.gson')
-    relocate('com.zaxxer', 'com.envyful.better.dex.rewards.forge.shade.hikari')
-    relocate('org.slf4j', 'com.envyful.better.dex.rewards.forge.shade.slf4j')
-    relocate('com.envyful.api', 'com.envyful.better.dex.rewards.forge.shade.envy.api')
-    relocate('org.bstats', 'com.envyful.better.dex.rewards.forge.shade.bstats')
-
+    relocate('org.spongepowered.configurate', 'com.envyful.npc.storage.forge.shade.configurate')
+    relocate('org.yaml.snakeyaml', 'com.envyful.npc.storage.forge.shade.snakeyaml')
+    relocate('io.leangen.geantyref', 'com.envyful.npc.storage.forge.shade.geantyref')
+    relocate('com.google.gson', 'com.envyful.npc.storage.forge.shade.gson')
+    relocate('com.zaxxer', 'com.envyful.npc.storage.forge.shade.hikari')
+    relocate('org.slf4j', 'com.envyful.npc.storage.forge.shade.slf4j')
+    relocate('com.envyful.api', 'com.envyful.npc.storage.forge.shade.envy.api')
+    relocate('org.bstats', 'com.envyful.npc.storage.forge.shade.bstats')
 
     exclude "**/module-info.class"
 }
