@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
+import java.util.UUID;
 
 public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards> {
 
@@ -24,6 +25,10 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
 
     public DexRewardsAttribute(BetterDexRewards manager, EnvyPlayer<?> parent) {
         super(manager, (ForgeEnvyPlayer) parent);
+    }
+
+    public DexRewardsAttribute(UUID uuid) {
+        super(uuid);
     }
 
     public long getLastReminder() {

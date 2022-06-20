@@ -50,13 +50,11 @@ dependencies {
 
     shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 
-    shadow (group: 'com.github.EnvyWare.API', name: 'commons', version: '2.5.1') {
+    shadow (group: 'com.github.EnvyWare.API', name: 'commons', version: '2.5.4')
+    shadow (group: 'com.github.EnvyWare.API', name: 'forge16', version: '2.5.4') {
         transitive = false
     }
-    shadow (group: 'com.github.EnvyWare.API', name: 'forge16', version: '2.5.1') {
-        transitive = false
-    }
-    shadow (group: 'com.github.EnvyWare.API', name: 'reforged16', version: '2.5.1') {
+    shadow (group: 'com.github.EnvyWare.API', name: 'reforged16', version: '2.5.4') {
         transitive = false
     }
 }
@@ -65,14 +63,14 @@ shadowJar {
     configurations = [project.configurations.shadow]
     archiveName = rootProject.name + '-Forge.jar'
 
-    relocate('org.spongepowered.configurate', 'com.envyful.npc.storage.forge.shade.configurate')
-    relocate('org.yaml.snakeyaml', 'com.envyful.npc.storage.forge.shade.snakeyaml')
-    relocate('io.leangen.geantyref', 'com.envyful.npc.storage.forge.shade.geantyref')
-    relocate('com.google.gson', 'com.envyful.npc.storage.forge.shade.gson')
-    relocate('com.zaxxer', 'com.envyful.npc.storage.forge.shade.hikari')
-    relocate('org.slf4j', 'com.envyful.npc.storage.forge.shade.slf4j')
-    relocate('com.envyful.api', 'com.envyful.npc.storage.forge.shade.envy.api')
-    relocate('org.bstats', 'com.envyful.npc.storage.forge.shade.bstats')
+    relocate('org.spongepowered.configurate', 'com.envyful.better.dex.rewards.shade.configurate')
+    relocate('org.yaml.snakeyaml', 'com.envyful.better.dex.rewards.shade.snakeyaml')
+    relocate('io.leangen.geantyref', 'com.envyful.better.dex.rewards.shade.geantyref')
+    relocate('com.google.gson', 'com.envyful.better.dex.rewards.shade.gson')
+    relocate('com.zaxxer', 'com.envyful.better.dex.rewards.shade.hikari')
+    relocate('org.slf4j', 'com.envyful.better.dex.rewards.shade.slf4j')
+    relocate('com.envyful.api', 'com.envyful.better.dex.rewards.shade.envy.api')
+    relocate('org.bstats', 'com.envyful.better.dex.rewards.shade.bstats')
 
     exclude "**/module-info.class"
 }
