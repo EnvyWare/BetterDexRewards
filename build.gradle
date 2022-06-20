@@ -18,6 +18,11 @@ subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
+
+    ext {
+        forgeVersion = "none"
+    }
+
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
     }
@@ -29,18 +34,21 @@ subprojects {
         maven { url = "https://repo.aikar.co/content/groups/aikar/" }
         maven { url = "https://jitpack.io" }
         maven {
-        	name = 'sponge'
-        	url = 'https://repo.spongepowered.org/maven'
-    	}
+            name = 'sponge'
+            url = 'https://repo.spongepowered.org/maven'
+        }
     }
 
     task versionedRelease(type: Copy) {
+        delete fileTree('../release/') {
+            include '**/*.jar'
+        }
         group "build"
         from('./build/libs/' + rootProject.name + '-Forge.jar')
         into('../release/')
         include '*.jar'
         rename { String filename ->
-            filename.replace(".jar", "-${project.version}.jar")
+            filename.replace(".jar", "-${project.version}-${forgeVersion}.jar")
         }
     }
 }
