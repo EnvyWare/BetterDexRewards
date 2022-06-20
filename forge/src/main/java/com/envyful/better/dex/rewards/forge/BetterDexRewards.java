@@ -36,7 +36,7 @@ import java.sql.SQLException;
 )
 public class BetterDexRewards {
 
-    protected static final String VERSION = "2.1.7";
+    protected static final String VERSION = "3.0.0";
 
     private static BetterDexRewards instance;
 
