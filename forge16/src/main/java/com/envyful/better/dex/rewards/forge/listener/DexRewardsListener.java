@@ -33,13 +33,11 @@ public class DexRewardsListener {
         }
 
         if (this.mod.getConfig().getRequiresOriginalTrainerToReward()) {
-            if (event.pokemon.getOriginalTrainerUUID() == null) {
-                return;
-            }
-
-            if (!(event.pokemon.getOriginalTrainerUUID().equals(entityPlayerMP.getUUID()))) {
-                event.setCanceled(true);
-                return;
+            if (event.pokemon.getOriginalTrainerUUID() != null) {
+                if (!(event.pokemon.getOriginalTrainerUUID().equals(entityPlayerMP.getUUID()))) {
+                    event.setCanceled(true);
+                    return;
+                }
             }
         }
 
