@@ -32,9 +32,20 @@ public class DexRewardsListener {
             return;
         }
 
+        if (event.pokemon == null) {
+            return;
+        }
+
         UtilConcurrency.runAsync(() -> {
             ForgeEnvyPlayer player = this.mod.getPlayerManager().getPlayer(event.uuid);
             DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
+
+            if (this.mod.getConfig().getRequiresOriginalTrainerToReward()) {
+                if (!event.pokemon.getOriginalTrainerUUID().equals(entityPlayerMP.getUUID())) {
+                    event.setCanceled(true);
+                    return;
+                }
+            }
 
             if (attribute == null) {
                 return;
@@ -59,5 +70,4 @@ public class DexRewardsListener {
             }
         });
     }
-
 }
