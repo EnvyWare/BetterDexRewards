@@ -32,10 +32,6 @@ public class DexRewardsListener {
             return;
         }
 
-        if (event.pokemon == null) {
-            return;
-        }
-
         if (this.mod.getConfig().getRequiresOriginalTrainerToReward()) {
             if (event.pokemon.getOriginalTrainerUUID() == null) {
                 return;
