@@ -26,6 +26,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                                                                  "admin", "password", "BetterDexRewards"
     );
 
+    private boolean requiresOriginalTrainerToReward = false;
+
     private ConfigInterface configInterface = new ConfigInterface();
 
     private PositionableConfigItem infoItem = new PositionableConfigItem(
@@ -131,6 +133,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public SQLDatabaseDetails getDatabase() {
         return this.database;
+    }
+
+    public boolean getRequiresOriginalTrainerToReward() {
+        return this.requiresOriginalTrainerToReward;
     }
 
     public Map<String, DexCompletion> getRewardStages() {
