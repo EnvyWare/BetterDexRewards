@@ -26,8 +26,6 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                                                                  "admin", "password", "BetterDexRewards"
     );
 
-    private boolean requiresOriginalTrainerToReward = false;
-
     private ConfigInterface configInterface = new ConfigInterface();
 
     private PositionableConfigItem infoItem = new PositionableConfigItem(
@@ -83,6 +81,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             Lists.newArrayList(),
             8, 5, Collections.emptyMap()
     );
+
+    private boolean requiresOriginalTrainerToReward = false;
 
     private int messageDelaySeconds = 60;
 
