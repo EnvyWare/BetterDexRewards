@@ -82,6 +82,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             8, 5, Collections.emptyMap()
     );
 
+    private boolean requiresOriginalTrainerToReward = false;
+
     private int messageDelaySeconds = 60;
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
@@ -131,6 +133,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public SQLDatabaseDetails getDatabase() {
         return this.database;
+    }
+
+    public boolean getRequiresOriginalTrainerToReward() {
+        return this.requiresOriginalTrainerToReward;
     }
 
     public Map<String, DexCompletion> getRewardStages() {
