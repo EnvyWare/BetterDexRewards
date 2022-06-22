@@ -41,7 +41,9 @@ public class BetterDexRewardsUI {
             pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(fillerItem)));
         }
 
-        UtilConfigItem.addConfigItem(pane, dexRewardsConfig.getBackButton());
+        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getBackButton(),
+                (envyPlayer, clickType) -> DexRewardsMainUI.open(player));
+
         double percentage = attribute.getPokeDexPercentage();
 
         for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : dexRewardsConfig.getRewardStages().entrySet()) {
