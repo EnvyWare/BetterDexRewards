@@ -66,7 +66,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
         );
 
         private PositionableConfigItem ranksItem = new PositionableConfigItem(
-                "4414",
+                "pixelmon:master_ball",
                 1, (byte) 0, "&ePokeDex Ranks",
                 Lists.newArrayList(""),
                 3, 1,
@@ -122,7 +122,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
         );
 
         private PositionableConfigItem backButton = new PositionableConfigItem(
-                PixelmonItems.trade_holder_left.getRegistryName().toString(),
+                "pixelmon:eject_button",
                 1, (byte) 0, "&eBack",
                 Lists.newArrayList(),
                 4, 5, Collections.emptyMap()
@@ -198,7 +198,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
         );
 
         private PositionableConfigItem backButton = new PositionableConfigItem(
-                PixelmonItems.trade_holder_left.getRegistryName().toString(),
+                "pixelmon:eject_button",
                 1, (byte) 0, "&eBack",
                 Lists.newArrayList(),
                 4, 5, Collections.emptyMap()
