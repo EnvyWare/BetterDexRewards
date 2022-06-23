@@ -11,6 +11,7 @@ import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.player.EnvyPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
+import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -23,12 +24,11 @@ public class BetterDexRewardsUI {
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
 
         if (attribute == null) {
-            System.out.println("Error loading " + player.getName() + "'s attribute - failed to open UI (database issue?)");
             return;
         }
 
-        BetterDexRewardsConfig dexRewardsConfig = BetterDexRewards.getInstance().getConfig();
-        ConfigInterface config = dexRewardsConfig.getConfigInterface();
+        BetterDexRewardsGraphics.RanksUI dexRewardsConfig = BetterDexRewards.getInstance().getGraphics().getRankUI();
+        ConfigInterface config = dexRewardsConfig.getGuiSettings();
         Pane pane = GuiFactory.paneBuilder()
                 .topLeftX(0)
                 .topLeftY(0)
@@ -36,8 +36,11 @@ public class BetterDexRewardsUI {
                 .height(config.getHeight())
                 .build();
 
-
         for (ConfigItem fillerItem : config.getFillerItems()) {
+            if (!fillerItem.isEnabled()) {
+                continue;
+            }
+
             pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(fillerItem)));
         }
 
@@ -46,7 +49,7 @@ public class BetterDexRewardsUI {
 
         double percentage = attribute.getPokeDexPercentage();
 
-        for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : dexRewardsConfig.getRewardStages().entrySet()) {
+        for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : BetterDexRewards.getInstance().getConfig().getRewardStages().entrySet()) {
             ConfigItem configItem = null;
 
             if (attribute.hasClaimed(entry.getKey())) {
@@ -95,7 +98,7 @@ public class BetterDexRewardsUI {
                 .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
                 .height(config.getHeight())
-                .title(UtilChatColour.translateColourCodes('&', config.getTitle()))
+                .title(UtilChatColour.colour(config.getTitle()).getString())
                 .build().open(player);
     }
 }

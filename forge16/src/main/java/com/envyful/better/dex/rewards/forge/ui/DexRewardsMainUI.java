@@ -1,6 +1,5 @@
 package com.envyful.better.dex.rewards.forge.ui;
 
-import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
@@ -10,7 +9,7 @@ import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.player.EnvyPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
-import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
+import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.envyful.better.dex.rewards.forge.transformer.CompletionTransformer;
 import com.envyful.better.dex.rewards.forge.transformer.PlaceholderAPITransformer;
@@ -26,12 +25,12 @@ public class DexRewardsMainUI {
             return;
         }
 
-        ConfigInterface config = BetterDexRewards.getInstance().getConfig().getConfigInterface();
+        BetterDexRewardsGraphics.MainUI config = BetterDexRewards.getInstance().getGraphics().getMainUI();
         Pane pane = GuiFactory.paneBuilder()
                 .topLeftX(0)
                 .topLeftY(0)
                 .width(9)
-                .height(config.getHeight())
+                .height(config.getGuiSettings().getHeight())
                 .build();
 
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
@@ -40,7 +39,11 @@ public class DexRewardsMainUI {
             return;
         }
 
-        for (ConfigItem fillerItem : config.getFillerItems()) {
+        for (ConfigItem fillerItem : config.getGuiSettings().getFillerItems()) {
+            if (!fillerItem.isEnabled()) {
+                continue;
+            }
+
             pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(
                     fillerItem,
                     getTransformers(
@@ -50,22 +53,19 @@ public class DexRewardsMainUI {
             )));
         }
 
-        BetterDexRewardsConfig actualConfig = BetterDexRewards.getInstance().getConfig();
-
-        UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute), actualConfig.getPercentageItem());
-
-        UtilConfigItem.addConfigItem(pane, actualConfig.getRanksItem(), getTransformers(player.getParent(), attribute),
+        UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute), config.getPercentageItem());
+        UtilConfigItem.addConfigItem(pane, config.getRanksItem(), getTransformers(player.getParent(), attribute),
                                      (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> BetterDexRewardsUI.open((EnvyPlayer<ServerPlayerEntity>) envyPlayer)));
-        UtilConfigItem.addConfigItem(pane, actualConfig.getMissingItem(), getTransformers(player.getParent(), attribute),
+        UtilConfigItem.addConfigItem(pane, config.getMissingItem(), getTransformers(player.getParent(), attribute),
                                      (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> DexRewardsMissingUI.open((EnvyPlayer<ServerPlayerEntity>) envyPlayer)));
-        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getInfoItem());
+        UtilConfigItem.addConfigItem(pane, config.getInfoItem());
 
         GuiFactory.guiBuilder()
                 .addPane(pane)
                 .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
-                .height(config.getHeight())
-                .title(UtilChatColour.translateColourCodes('&', config.getTitle()))
+                .height(config.getGuiSettings().getHeight())
+                .title(UtilChatColour.translateColourCodes('&', config.getGuiSettings().getTitle()))
                 .build()
                 .open(player);
     }

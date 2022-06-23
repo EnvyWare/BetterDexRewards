@@ -1,6 +1,5 @@
 package com.envyful.better.dex.rewards.forge.ui;
 
-import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.UtilConfigItem;
@@ -11,6 +10,7 @@ import com.envyful.api.reforged.pixelmon.transformer.PokemonDexFormattedTransfor
 import com.envyful.api.reforged.pixelmon.transformer.PokemonDexTransformer;
 import com.envyful.api.reforged.pixelmon.transformer.PokemonNameTransformer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
+import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.transformer.SpeciesSpriteTransformer;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
@@ -28,101 +28,69 @@ public class DexRewardsMissingUI {
     }
 
     public static void open(EnvyPlayer<ServerPlayerEntity> player, int startPos, boolean backwards) {
-        ConfigInterface config = BetterDexRewards.getInstance().getConfig().getConfigInterface();
+        BetterDexRewardsGraphics.MissingPokemonUI config = BetterDexRewards.getInstance().getGraphics().getMissingPokemonUI();
+
         Pane pane = GuiFactory.paneBuilder()
                 .topLeftX(0)
                 .topLeftY(0)
                 .width(9)
-                .height(6)
+                .height(config.getGuiSettings().getHeight())
                 .build();
 
+        for (ConfigItem fillerItem : config.getGuiSettings().getFillerItems()) {
+            if (!fillerItem.isEnabled()) {
+                continue;
+            }
 
-        for (ConfigItem fillerItem : config.getFillerItems()) {
             pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(fillerItem)));
         }
 
-        UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getBackButton(),
-                                     (envyPlayer, clickType) -> DexRewardsMainUI.open(player));
+        UtilConfigItem.addConfigItem(pane, config.getBackButton(), (envyPlayer, clickType) -> DexRewardsMainUI.open(player));
 
         List<Species> values = Lists.newArrayList(PixelmonSpecies.getAll());
         PlayerPartyStorage storage = StorageProxy.getParty(player.getParent());
-        int counter = 0;
-        int pos;
 
-        if (backwards) {
-            counter = 35;
-            for (pos = startPos; counter >= 0 && pos >= 0; pos--) {
-                Species species = values.get(pos);
+        int i = 0;
+        int speciesPosition = startPos;
 
-                if (species.is(PixelmonSpecies.MISSINGNO) || storage.playerPokedex.hasCaught(species)) {
-                    continue;
+        while (i < config.getMissingPokemonPositions().size()) {
+            Species species = values.get(speciesPosition);
+
+            if (species.is(PixelmonSpecies.MISSINGNO) || storage.playerPokedex.hasSeen(species)) {
+                if (backwards) {
+                    --speciesPosition;
+                } else {
+                    ++speciesPosition;
                 }
 
-                pane.set(counter % 9, counter / 9, GuiFactory.displayable((UtilConfigItem.fromConfigItem(
-                        BetterDexRewards.getInstance().getConfig().getMissingPokemonItem(),
-                        Lists.newArrayList(
-                                PokemonDexTransformer.of(species),
-                                PokemonNameTransformer.of(species),
-                                PokemonDexFormattedTransformer.of(species),
-                                SpeciesSpriteTransformer.of(species)
-                        )
-                ))));
-
-                --counter;
+                continue;
             }
 
-            int finalCounter = counter;
-            int finalPos = pos;
-            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
-                                         (envyPlayer, clickType) -> open((EnvyPlayer<ServerPlayerEntity>) envyPlayer,
-                                                                         finalPos == 0 ? values.size() - 1 : finalPos, true)
-            );
+            int position = config.getMissingPokemonPositions().get(backwards ? config.getMissingPokemonPositions().size() - i : i);
+            pane.set(position % 9, position / 9, GuiFactory.displayable((UtilConfigItem.fromConfigItem(
+                    config.getMissingPokemonItem(),
+                    Lists.newArrayList(
+                            PokemonDexTransformer.of(species),
+                            PokemonNameTransformer.of(species),
+                            PokemonDexFormattedTransformer.of(species),
+                            SpeciesSpriteTransformer.of(species)
+                    )
+            ))));
+            ++i;
 
-            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getNextPageButton(),
-                                         (envyPlayer, clickType) -> open((EnvyPlayer<ServerPlayerEntity>) envyPlayer,
-                                                                         finalCounter > -1 || values.size() <= finalPos ? 0 : startPos + 1, false)
-            );
-        } else {
-            for (pos = startPos; counter < 36 && values.size() > pos; pos++) {
-                Species species = values.get(pos);
-
-                if (species.is(PixelmonSpecies.MISSINGNO) || storage.playerPokedex.hasCaught(species)) {
-                    continue;
-                }
-
-                pane.set(counter % 9, counter / 9, GuiFactory.displayable((UtilConfigItem.fromConfigItem(
-                        BetterDexRewards.getInstance().getConfig().getMissingPokemonItem(),
-                        Lists.newArrayList(
-                                PokemonDexTransformer.of(species),
-                                PokemonNameTransformer.of(species),
-                                PokemonDexFormattedTransformer.of(species),
-                                SpeciesSpriteTransformer.of(species)
-                        )
-                ))));
-
-                ++counter;
+            if (backwards) {
+                --speciesPosition;
+            } else {
+                ++speciesPosition;
             }
-
-            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getPreviousPageButton(),
-                                         (envyPlayer, clickType) -> open((EnvyPlayer<ServerPlayerEntity>) envyPlayer,
-                                                                         startPos == 0 ? values.size() - 1 : startPos - 1,
-                                                                         true)
-            );
-
-            int finalPos = pos;
-            int finalCounter = counter;
-            UtilConfigItem.addConfigItem(pane, BetterDexRewards.getInstance().getConfig().getNextPageButton(),
-                                         (envyPlayer, clickType) -> open((EnvyPlayer<ServerPlayerEntity>) envyPlayer,
-                                                                         finalCounter < 36 || values.size() <= finalPos ? 0 : finalPos, false)
-            );
         }
 
         GuiFactory.guiBuilder()
                 .addPane(pane)
-                .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
-                .height(config.getHeight())
-                .title(UtilChatColour.translateColourCodes('&', config.getTitle()))
-                .build().open(player);
+                .height(config.getGuiSettings().getHeight())
+                .title(UtilChatColour.colour(config.getGuiSettings().getTitle()).getString())
+                .build()
+                .open(player);
     }
 }

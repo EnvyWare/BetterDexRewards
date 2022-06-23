@@ -13,6 +13,7 @@ import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.player.attribute.PlayerAttribute;
 import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
+import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
 import com.envyful.better.dex.rewards.forge.listener.DexRewardsListener;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
@@ -39,6 +40,7 @@ public class BetterDexRewards {
 
     private Database database;
     private BetterDexRewardsConfig config;
+    private BetterDexRewardsGraphics graphics;
     private boolean placeholders;
 
     public BetterDexRewards() {
@@ -79,6 +81,7 @@ public class BetterDexRewards {
     public void reloadConfig() {
         try {
             this.config = YamlConfigFactory.getInstance(BetterDexRewardsConfig.class);
+            this.graphics = YamlConfigFactory.getInstance(BetterDexRewardsGraphics.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,6 +126,10 @@ public class BetterDexRewards {
 
     public BetterDexRewardsConfig getConfig() {
         return this.config;
+    }
+
+    public BetterDexRewardsGraphics getGraphics() {
+        return this.graphics;
     }
 
     public boolean isPlaceholders() {
