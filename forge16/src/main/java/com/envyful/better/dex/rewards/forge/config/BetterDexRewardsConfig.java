@@ -21,6 +21,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     );
 
     private int messageDelaySeconds = 60;
+    private boolean originalTrainerRewardsOnly = false;
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
             "one", new DexCompletion(1, 1, new ConfigItem(), new ConfigItem(), new ConfigItem(), 1.0,
@@ -58,6 +59,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public int getMessageDelaySeconds() {
         return this.messageDelaySeconds;
+    }
+
+    public boolean isOriginalTrainerRewardsOnly() {
+        return this.originalTrainerRewardsOnly;
     }
 
     @ConfigSerializable
