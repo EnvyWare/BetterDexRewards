@@ -5,6 +5,7 @@ import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
+import net.minecraft.util.Util;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +39,7 @@ public class ReminderTask implements Runnable {
             attribute.setLastReminder(System.currentTimeMillis());
 
             for (String s : this.mod.getConfig().getClaimReminderMessage()) {
-                onlinePlayer.message(UtilChatColour.translateColourCodes('&', s));
+                onlinePlayer.getParent().sendMessage(UtilChatColour.colour(s), Util.NIL_UUID);
             }
         }
     }

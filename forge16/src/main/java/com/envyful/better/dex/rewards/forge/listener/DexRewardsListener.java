@@ -10,6 +10,7 @@ import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Util;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Map;
@@ -61,7 +62,7 @@ public class DexRewardsListener {
                 }
 
                 for (String s : this.mod.getConfig().getClaimReminderMessage()) {
-                    player.message(UtilChatColour.translateColourCodes('&', s));
+                    entityPlayerMP.sendMessage(UtilChatColour.colour(s), Util.NIL_UUID);
                 }
 
                 break;
