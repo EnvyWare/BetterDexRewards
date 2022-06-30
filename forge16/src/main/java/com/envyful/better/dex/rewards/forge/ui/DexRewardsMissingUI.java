@@ -110,7 +110,7 @@ public class DexRewardsMissingUI {
                 .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
                 .height(config.getGuiSettings().getHeight())
-                .title(UtilChatColour.colour(config.getGuiSettings().getTitle()).getString())
+                .title(UtilChatColour.colour(config.getGuiSettings().getTitle()))
                 .build()
                 .open(player);
     }

@@ -72,7 +72,7 @@ public class BetterDexRewardsUI {
                                  if (percentage >= entry.getValue().getRequiredPercentage()) {
                                      attribute.claimReward(finalId);
                                      for (String rewardMessage : entry.getValue().getRewardMessages()) {
-                                         envyPlayer.message(UtilChatColour.translateColourCodes('&', rewardMessage));
+                                         envyPlayer.message(UtilChatColour.colour(rewardMessage));
                                      }
 
                                      UtilForgeConcurrency.runSync(() -> {
@@ -97,7 +97,7 @@ public class BetterDexRewardsUI {
                 .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
                 .height(config.getHeight())
-                .title(UtilChatColour.colour(config.getTitle()).getString())
+                .title(UtilChatColour.colour(config.getTitle()))
                 .build().open(player);
     }
 }

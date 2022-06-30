@@ -65,7 +65,7 @@ public class DexRewardsMainUI {
                 .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
                 .height(config.getGuiSettings().getHeight())
-                .title(UtilChatColour.translateColourCodes('&', config.getGuiSettings().getTitle()))
+                .title(UtilChatColour.colour(config.getGuiSettings().getTitle()))
                 .build()
                 .open(player);
     }
