@@ -57,7 +57,7 @@ public class ViewLogsCommand {
                 sender.sendMessage(new StringTextComponent(
                         "Rank: " + resultSet.getString("claimed_rank") + ", Time: " +
                                 UtilTimeFormat.format(new Date(resultSet.getTimestamp("time_stamp").getTime()), "dd/MM/yyyy hh:mm:ss")
-                        + ", commands: " + resultSet.getBlob("commands")
+                        + ", commands: " + resultSet.getString("commands")
                 ), Util.NIL_UUID);
             }
         } catch (SQLException e) {
