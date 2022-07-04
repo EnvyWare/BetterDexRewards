@@ -66,6 +66,9 @@ public class BetterDexRewardsUI {
                              .itemStack(UtilConfigItem.fromConfigItem(configItem))
                              .clickHandler((envyPlayer, clickType) -> {
                                  if (attribute.hasClaimed(finalId)) {
+                                     for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                                         envyPlayer.message(msg);
+                                     }
                                      return;
                                  }
 
@@ -87,7 +90,7 @@ public class BetterDexRewardsUI {
                                          ((ServerPlayerEntity) envyPlayer.getParent()).closeContainer();
                                      });
                                  } else {
-                                     for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                                     for (String msg : BetterDexRewards.getInstance().getConfig().getInsufficientPercentage()) {
                                          envyPlayer.message(msg);
                                      }
                                  }

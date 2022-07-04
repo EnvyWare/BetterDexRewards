@@ -42,6 +42,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             "&c&l(!) &cYou've already claimed that tier"
     );
 
+    private List<String> insufficientPercentage = Lists.newArrayList(
+            "&c&l(!) &cYou do not have enough dex percentage to claim this"
+    );
+
     public BetterDexRewardsConfig() {
     }
 
@@ -71,6 +75,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public List<String> getAlreadyClaimed() {
         return this.alreadyClaimed;
+    }
+
+    public List<String> getInsufficientPercentage() {
+        return this.insufficientPercentage;
     }
 
     @ConfigSerializable
