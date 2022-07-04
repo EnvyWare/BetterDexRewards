@@ -86,6 +86,10 @@ public class BetterDexRewardsUI {
 
                                          ((ServerPlayerEntity) envyPlayer.getParent()).closeContainer();
                                      });
+                                 } else {
+                                     for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                                         envyPlayer.message(msg);
+                                     }
                                  }
                              })
                              .build()

@@ -38,6 +38,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             "&e&l(!) &eYou have a new PokeDex reward level you can claim!"
     );
 
+    private List<String> alreadyClaimed = Lists.newArrayList(
+            "&c&l(!) &cYou've already claimed that tier"
+    );
+
     public BetterDexRewardsConfig() {
     }
 
@@ -63,6 +67,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public boolean isOriginalTrainerRewardsOnly() {
         return this.originalTrainerRewardsOnly;
+    }
+
+    public List<String> getAlreadyClaimed() {
+        return this.alreadyClaimed;
     }
 
     @ConfigSerializable
