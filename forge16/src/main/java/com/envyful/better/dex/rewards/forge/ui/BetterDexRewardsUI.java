@@ -5,6 +5,7 @@ import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigItem;
+import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
@@ -53,6 +54,9 @@ public class BetterDexRewardsUI {
 
             if (attribute.hasClaimed(entry.getKey())) {
                 configItem = entry.getValue().getCompleteItem();
+            } else if (entry.getValue().getOptionalAntiClaimPermission() != null &&
+                    UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
+                configItem = entry.getValue().getCompleteItem();
             } else if (percentage < entry.getValue().getRequiredPercentage()) {
                 configItem = entry.getValue().getDisplayItem();
             } else {
@@ -66,6 +70,14 @@ public class BetterDexRewardsUI {
                              .itemStack(UtilConfigItem.fromConfigItem(configItem))
                              .clickHandler((envyPlayer, clickType) -> {
                                  if (attribute.hasClaimed(finalId)) {
+                                     for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                                         envyPlayer.message(msg);
+                                     }
+                                     return;
+                                 }
+
+                                 if (entry.getValue().getOptionalAntiClaimPermission() != null &&
+                                         UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
                                      for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
                                          envyPlayer.message(msg);
                                      }

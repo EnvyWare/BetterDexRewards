@@ -92,6 +92,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         private double requiredPercentage;
         private List<String> rewardCommands;
         private List<String> rewardMessages;
+        private String optionalAntiClaimPermission = null;
 
         protected DexCompletion(int xPos, int yPos, ConfigItem displayItem, ConfigItem completeItem,
                                 ConfigItem toClaimItem, double requiredPercentage,
@@ -138,6 +139,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
         public List<String> getRewardMessages() {
             return this.rewardMessages;
+        }
+
+        public String getOptionalAntiClaimPermission() {
+            return this.optionalAntiClaimPermission;
         }
     }
 }
