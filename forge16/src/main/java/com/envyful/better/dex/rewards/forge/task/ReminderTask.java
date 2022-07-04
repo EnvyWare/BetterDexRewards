@@ -2,6 +2,7 @@ package com.envyful.better.dex.rewards.forge.task;
 
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
+import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
@@ -49,6 +50,11 @@ public class ReminderTask implements Runnable {
 
         for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry :
                 this.mod.getConfig().getRewardStages().entrySet()) {
+            if (entry.getValue().getOptionalAntiClaimPermission() != null &&
+                    UtilPlayer.hasPermission(attribute.getParent().getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
+                continue;
+            }
+
             if (pokeDexPercentage >= entry.getValue().getRequiredPercentage() && !attribute.hasClaimed(entry.getKey())) {
                 return true;
             }
