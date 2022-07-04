@@ -63,8 +63,10 @@ public class BetterDexRewards {
             this.database = new SimpleHikariDatabase(this.config.getDatabase());
 
             try (Connection connection = this.database.getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_TABLE)) {
+                 PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_TABLE);
+                 PreparedStatement logStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_LOG_TABLE)) {
                 preparedStatement.executeUpdate();
+                logStatement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

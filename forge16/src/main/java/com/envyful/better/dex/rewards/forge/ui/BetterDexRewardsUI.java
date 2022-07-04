@@ -73,7 +73,7 @@ public class BetterDexRewardsUI {
                                  }
 
                                  if (percentage >= entry.getValue().getRequiredPercentage()) {
-                                     attribute.claimReward(finalId);
+                                     attribute.claimReward(finalId, entry.getValue().getRewardCommands());
                                      for (String rewardMessage : entry.getValue().getRewardMessages()) {
                                          envyPlayer.message(UtilChatColour.colour(rewardMessage));
                                      }
