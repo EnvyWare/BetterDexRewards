@@ -21,9 +21,13 @@ import com.envyful.better.dex.rewards.forge.task.ReminderTask;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
+import net.minecraftforge.fml.network.FMLNetworkConstants;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -46,6 +50,7 @@ public class BetterDexRewards {
     public BetterDexRewards() {
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);
+        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
     }
 
     @SubscribeEvent
