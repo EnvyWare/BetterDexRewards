@@ -3,7 +3,7 @@ package com.envyful.better.dex.rewards.forge.config;
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
-import com.envyful.api.config.type.PositionableConfigItem;
+import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -48,7 +48,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                 ))
         );
 
-        private PositionableConfigItem percentageItem = new PositionableConfigItem(
+        private ExtendedConfigItem percentageItem = new ExtendedConfigItem(
                 "pixelmon:poke_ball",
                 1, (byte) 0, "&eCurrent PokeDex Percentage",
                 Lists.newArrayList("&eComplete: &a%percentage%"),
@@ -56,7 +56,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                 ImmutableMap.of("tooltip", new ConfigItem.NBTValue("string", ""))
         );
 
-        private PositionableConfigItem missingItem = new PositionableConfigItem(
+        private ExtendedConfigItem missingItem = new ExtendedConfigItem(
                 "pixelmon:pokeradar",
                 1, (byte) 0, "&eMissing Pokemon",
                 Lists.newArrayList(""),
@@ -65,7 +65,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                         ""))
         );
 
-        private PositionableConfigItem ranksItem = new PositionableConfigItem(
+        private ExtendedConfigItem ranksItem = new ExtendedConfigItem(
                 "pixelmon:master_ball",
                 1, (byte) 0, "&ePokeDex Ranks",
                 Lists.newArrayList(""),
@@ -73,7 +73,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                 Collections.emptyMap()
         );
 
-        private PositionableConfigItem infoItem = new PositionableConfigItem(
+        private ExtendedConfigItem infoItem = new ExtendedConfigItem(
                 Items.PAPER.getRegistryName().toString(),
                 1, (byte) 0, "Info",
                 Lists.newArrayList(""),
@@ -87,19 +87,19 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
             return this.guiSettings;
         }
 
-        public PositionableConfigItem getPercentageItem() {
+        public ExtendedConfigItem getPercentageItem() {
             return this.percentageItem;
         }
 
-        public PositionableConfigItem getMissingItem() {
+        public ExtendedConfigItem getMissingItem() {
             return this.missingItem;
         }
 
-        public PositionableConfigItem getRanksItem() {
+        public ExtendedConfigItem getRanksItem() {
             return this.ranksItem;
         }
 
-        public PositionableConfigItem getInfoItem() {
+        public ExtendedConfigItem getInfoItem() {
             return this.infoItem;
         }
     }
@@ -121,21 +121,21 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                 27, 28, 29, 30, 31, 32, 33, 34, 35
         );
 
-        private PositionableConfigItem backButton = new PositionableConfigItem(
+        private ExtendedConfigItem backButton = new ExtendedConfigItem(
                 "pixelmon:eject_button",
                 1, (byte) 0, "&eBack",
                 Lists.newArrayList(),
                 4, 5, Collections.emptyMap()
         );
 
-        private PositionableConfigItem previousPageButton = new PositionableConfigItem(
+        private ExtendedConfigItem previousPageButton = new ExtendedConfigItem(
                 PixelmonItems.trade_holder_left.getRegistryName().toString(),
                 1, (byte) 0, "&ePrevious Page",
                 Lists.newArrayList(),
                 0, 5, Collections.emptyMap()
         );
 
-        private PositionableConfigItem nextPageButton = new PositionableConfigItem(
+        private ExtendedConfigItem nextPageButton = new ExtendedConfigItem(
                 PixelmonItems.trade_holder_left.getRegistryName().toString(),
                 1, (byte) 0, "&eNext Page",
                 Lists.newArrayList(),
@@ -171,15 +171,15 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
             return this.missingPokemonPositions;
         }
 
-        public PositionableConfigItem getBackButton() {
+        public ExtendedConfigItem getBackButton() {
             return this.backButton;
         }
 
-        public PositionableConfigItem getPreviousPageButton() {
+        public ExtendedConfigItem getPreviousPageButton() {
             return this.previousPageButton;
         }
 
-        public PositionableConfigItem getNextPageButton() {
+        public ExtendedConfigItem getNextPageButton() {
             return this.nextPageButton;
         }
 
@@ -197,7 +197,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                 ))
         );
 
-        private PositionableConfigItem backButton = new PositionableConfigItem(
+        private ExtendedConfigItem backButton = new ExtendedConfigItem(
                 "pixelmon:eject_button",
                 1, (byte) 0, "&eBack",
                 Lists.newArrayList(),
@@ -210,7 +210,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
             return this.guiSettings;
         }
 
-        public PositionableConfigItem getBackButton() {
+        public ExtendedConfigItem getBackButton() {
             return this.backButton;
         }
     }
