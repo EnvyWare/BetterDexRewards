@@ -1,16 +1,17 @@
 package com.envyful.better.dex.rewards.forge;
 
 import com.envyful.api.concurrency.UtilConcurrency;
+import com.envyful.api.concurrency.UtilLogger;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
-import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
-import com.envyful.api.player.attribute.PlayerAttribute;
+import com.envyful.api.player.SaveMode;
+import com.envyful.api.player.save.impl.JsonSaveManager;
 import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
@@ -28,6 +29,8 @@ import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.network.FMLNetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -46,8 +49,10 @@ public class BetterDexRewards {
     private BetterDexRewardsConfig config;
     private BetterDexRewardsGraphics graphics;
     private boolean placeholders;
+    private Logger logger = LogManager.getLogger("betterdexrewards");
 
     public BetterDexRewards() {
+        UtilLogger.setLogger(this.logger);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
@@ -58,24 +63,30 @@ public class BetterDexRewards {
         this.reloadConfig();
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
+        if (this.config.getSaveMode() == SaveMode.JSON) {
+            this.playerManager.setSaveManager(new JsonSaveManager<>());
+        }
+
         this.playerManager.registerAttribute(this, DexRewardsAttribute.class);
 
         this.checkForPlaceholders();
 
         new DexRewardsListener(this);
 
-        UtilConcurrency.runAsync(() -> {
-            this.database = new SimpleHikariDatabase(this.config.getDatabase());
+        if (this.config.getSaveMode() == SaveMode.MYSQL) {
+            UtilConcurrency.runAsync(() -> {
+                this.database = new SimpleHikariDatabase(this.config.getDatabase());
 
-            try (Connection connection = this.database.getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_TABLE);
-                 PreparedStatement logStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_LOG_TABLE)) {
-                preparedStatement.executeUpdate();
-                logStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+                try (Connection connection = this.database.getConnection();
+                     PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_TABLE);
+                     PreparedStatement logStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_LOG_TABLE)) {
+                    preparedStatement.executeUpdate();
+                    logStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
 
         new ForgeTaskBuilder()
                 .async(true)
@@ -105,17 +116,6 @@ public class BetterDexRewards {
             this.placeholders = true;
         } catch (ClassNotFoundException e) {
             this.placeholders = false;
-        }
-    }
-
-    @SubscribeEvent
-    public void onServerShutdown(FMLServerStoppingEvent event) {
-        for (ForgeEnvyPlayer onlinePlayer : this.playerManager.getOnlinePlayers()) {
-            PlayerAttribute<BetterDexRewards> attribute = onlinePlayer.getAttribute(BetterDexRewards.class);
-
-            if (attribute != null) {
-                attribute.save();
-            }
         }
     }
 

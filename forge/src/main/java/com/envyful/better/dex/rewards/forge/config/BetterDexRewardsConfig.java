@@ -3,7 +3,7 @@ package com.envyful.better.dex.rewards.forge.config;
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
-import com.envyful.api.config.type.PositionableConfigItem;
+import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.google.common.collect.ImmutableMap;
@@ -30,7 +30,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     private ConfigInterface configInterface = new ConfigInterface();
 
-    private PositionableConfigItem infoItem = new PositionableConfigItem(
+    private ExtendedConfigItem infoItem = new ExtendedConfigItem(
             Item.getIdFromItem(Items.PAPER) + "",
             1, (byte) 0, "Info",
             Lists.newArrayList(""),
@@ -38,7 +38,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             Collections.emptyMap()
     );
 
-    private PositionableConfigItem missingItem = new PositionableConfigItem(
+    private ExtendedConfigItem missingItem = new ExtendedConfigItem(
             "4601",
             1, (byte) 0, "&eMissing Pokemon",
             Lists.newArrayList(""),
@@ -47,7 +47,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                     ""))
     );
 
-    private PositionableConfigItem ranksItem = new PositionableConfigItem(
+    private ExtendedConfigItem ranksItem = new ExtendedConfigItem(
             "4414",
             1, (byte) 0, "&ePokeDex Ranks",
             Lists.newArrayList(""),
@@ -55,7 +55,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             Collections.emptyMap()
     );
 
-    private PositionableConfigItem percentageItem = new PositionableConfigItem(
+    private ExtendedConfigItem percentageItem = new ExtendedConfigItem(
             Item.getIdFromItem(PixelmonItemsPokeballs.pokeBall) + "",
             1, (byte) 0, "&eCurrent PokeDex Percentage",
             Lists.newArrayList("&eComplete: &a%percentage%"),
@@ -63,21 +63,21 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             ImmutableMap.of("tooltip", new ConfigItem.NBTValue("string", ""))
     );
 
-    private PositionableConfigItem backButton = new PositionableConfigItem(
+    private ExtendedConfigItem backButton = new ExtendedConfigItem(
             Item.getIdFromItem(PixelmonItems.LtradeHolderLeft) + "",
             1, (byte) 0, "&eBack",
             Lists.newArrayList(),
             4, 5, Collections.emptyMap()
     );
 
-    private PositionableConfigItem previousPageButton = new PositionableConfigItem(
+    private ExtendedConfigItem previousPageButton = new ExtendedConfigItem(
             Item.getIdFromItem(PixelmonItems.LtradeHolderLeft) + "",
             1, (byte) 0, "&ePrevious Page",
             Lists.newArrayList(),
             0, 5, Collections.emptyMap()
     );
 
-    private PositionableConfigItem nextPageButton = new PositionableConfigItem(
+    private ExtendedConfigItem nextPageButton = new ExtendedConfigItem(
             Item.getIdFromItem(PixelmonItems.tradeHolderRight) + "",
             1, (byte) 0, "&eNext Page",
             Lists.newArrayList(),
@@ -123,11 +123,11 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     public BetterDexRewardsConfig() {
     }
 
-    public PositionableConfigItem getBackButton() {
+    public ExtendedConfigItem getBackButton() {
         return this.backButton;
     }
 
-    public PositionableConfigItem getInfoItem() {
+    public ExtendedConfigItem getInfoItem() {
         return this.infoItem;
     }
 
@@ -155,15 +155,15 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         return this.messageDelaySeconds;
     }
 
-    public PositionableConfigItem getMissingItem() {
+    public ExtendedConfigItem getMissingItem() {
         return this.missingItem;
     }
 
-    public PositionableConfigItem getRanksItem() {
+    public ExtendedConfigItem getRanksItem() {
         return this.ranksItem;
     }
 
-    public PositionableConfigItem getPercentageItem() {
+    public ExtendedConfigItem getPercentageItem() {
         return this.percentageItem;
     }
 
@@ -171,11 +171,11 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         return this.missingPokemonItem;
     }
 
-    public PositionableConfigItem getPreviousPageButton() {
+    public ExtendedConfigItem getPreviousPageButton() {
         return this.previousPageButton;
     }
 
-    public PositionableConfigItem getNextPageButton() {
+    public ExtendedConfigItem getNextPageButton() {
         return this.nextPageButton;
     }
 

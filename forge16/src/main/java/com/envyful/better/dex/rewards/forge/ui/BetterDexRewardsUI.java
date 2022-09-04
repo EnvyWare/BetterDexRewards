@@ -4,6 +4,7 @@ import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
+import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.forge.server.UtilForgeServer;
@@ -37,14 +38,7 @@ public class BetterDexRewardsUI {
                 .height(config.getHeight())
                 .build();
 
-        for (ConfigItem fillerItem : config.getFillerItems()) {
-            if (!fillerItem.isEnabled()) {
-                continue;
-            }
-
-            pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(fillerItem)));
-        }
-
+        UtilConfigInterface.fillBackground(pane, config);
         UtilConfigItem.addConfigItem(pane, dexRewardsConfig.getBackButton(),
                 (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> DexRewardsMainUI.open(player)));
         double percentage = attribute.getPokeDexPercentage();

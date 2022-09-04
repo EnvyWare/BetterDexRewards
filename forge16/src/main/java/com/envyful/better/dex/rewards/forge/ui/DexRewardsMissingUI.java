@@ -4,7 +4,9 @@ import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
+import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
+import com.envyful.api.gui.Transformer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.api.player.EnvyPlayer;
@@ -38,13 +40,7 @@ public class DexRewardsMissingUI {
                     .height(config.getGuiSettings().getHeight())
                     .build();
 
-            for (ConfigItem fillerItem : config.getGuiSettings().getFillerItems()) {
-                if (!fillerItem.isEnabled()) {
-                    continue;
-                }
-
-                pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(fillerItem)));
-            }
+            UtilConfigInterface.fillBackground(pane, config.getGuiSettings());
 
             UtilConfigItem.addConfigItem(pane, config.getBackButton(), (envyPlayer, clickType) ->
                     UtilForgeConcurrency.runSync(() -> DexRewardsMainUI.open(player)));

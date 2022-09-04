@@ -4,6 +4,8 @@ import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
 import com.envyful.api.player.EnvyPlayer;
+import com.envyful.api.player.SaveMode;
+import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
 import com.google.common.collect.Sets;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+@DataDirectory("config/players/BetterDexRewards/")
 public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards> {
 
     private Set<String> claimedRewards = Sets.newHashSet();
@@ -43,23 +46,25 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
     public void claimReward(String id, List<String> commands) {
         this.claimedRewards.add(id);
 
-        UtilConcurrency.runAsync(() -> {
-            try (Connection connection = this.manager.getDatabase().getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.ADD_USER_CLAIMED);
-                 PreparedStatement logStatement = connection.prepareStatement(BetterDexRewardsQueries.ADD_USER_LOGS)) {
-                preparedStatement.setString(1, this.parent.getUuid().toString());
-                preparedStatement.setString(2, id);
+        if (this.manager.getConfig().getSaveMode() == SaveMode.MYSQL) {
+            UtilConcurrency.runAsync(() -> {
+                try (Connection connection = this.manager.getDatabase().getConnection();
+                     PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.ADD_USER_CLAIMED);
+                     PreparedStatement logStatement = connection.prepareStatement(BetterDexRewardsQueries.ADD_USER_LOGS)) {
+                    preparedStatement.setString(1, this.parent.getUuid().toString());
+                    preparedStatement.setString(2, id);
 
-                preparedStatement.executeUpdate();
+                    preparedStatement.executeUpdate();
 
-                logStatement.setString(1, this.parent.getUuid().toString());
-                logStatement.setString(2, id);
-                logStatement.setString(3, String.join(", " + commands));
-                logStatement.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+                    logStatement.setString(1, this.parent.getUuid().toString());
+                    logStatement.setString(2, id);
+                    logStatement.setString(3, String.join(", " + commands));
+                    logStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     public boolean hasClaimed(String id) {

@@ -3,6 +3,7 @@ package com.envyful.better.dex.rewards.forge.ui;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
+import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.gui.Transformer;
 import com.envyful.api.gui.factory.GuiFactory;
@@ -39,19 +40,7 @@ public class DexRewardsMainUI {
             return;
         }
 
-        for (ConfigItem fillerItem : config.getGuiSettings().getFillerItems()) {
-            if (!fillerItem.isEnabled()) {
-                continue;
-            }
-
-            pane.add(GuiFactory.displayable(UtilConfigItem.fromConfigItem(
-                    fillerItem,
-                    getTransformers(
-                            player.getParent(),
-                            attribute
-                    )
-            )));
-        }
+        UtilConfigInterface.fillBackground(pane, config.getGuiSettings(), getTransformers(player.getParent(), attribute).toArray(new Transformer[0]));
 
         UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute), config.getPercentageItem());
         UtilConfigItem.addConfigItem(pane, config.getRanksItem(), getTransformers(player.getParent(), attribute),
