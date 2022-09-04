@@ -4,6 +4,7 @@ import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.player.SaveMode;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -16,6 +17,7 @@ import java.util.Map;
 @ConfigSerializable
 public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
+    private SaveMode saveMode = SaveMode.JSON;
     private SQLDatabaseDetails database = new SQLDatabaseDetails("BetterDexRewards", "0.0.0.0", 3306,
                                                                  "admin", "password", "BetterDexRewards"
     );
@@ -47,6 +49,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     );
 
     public BetterDexRewardsConfig() {
+    }
+
+    public SaveMode getSaveMode() {
+        return this.saveMode;
     }
 
     public SQLDatabaseDetails getDatabase() {
