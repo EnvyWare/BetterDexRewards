@@ -27,15 +27,15 @@ public class DexRewardsListener {
 
     @SubscribeEvent
     public void onPokemonCatch(PokedexEvent event) {
-        ServerPlayerEntity entityPlayerMP = UtilPlayer.getOnlinePlayer(event.uuid);
+        ServerPlayerEntity entityPlayerMP = UtilPlayer.getOnlinePlayer(event.getPlayerUUID());
 
         if (entityPlayerMP == null) {
             return;
         }
 
         if (this.mod.getConfig().isOriginalTrainerRewardsOnly()) {
-            if (event.pokemon.getOriginalTrainerUUID() != null) {
-                if (!(event.pokemon.getOriginalTrainerUUID().equals(entityPlayerMP.getUUID()))) {
+            if (event.getPokemon().getOriginalTrainerUUID() != null) {
+                if (!(event.getPokemon().getOriginalTrainerUUID().equals(entityPlayerMP.getUUID()))) {
                     event.setCanceled(true);
                     return;
                 }
@@ -43,7 +43,7 @@ public class DexRewardsListener {
         }
 
         UtilConcurrency.runAsync(() -> {
-            ForgeEnvyPlayer player = this.mod.getPlayerManager().getPlayer(event.uuid);
+            ForgeEnvyPlayer player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
             DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
 
             if (attribute == null) {
