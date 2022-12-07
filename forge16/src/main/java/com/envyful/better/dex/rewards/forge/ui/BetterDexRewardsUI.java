@@ -6,11 +6,11 @@ import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
-import com.envyful.api.player.EnvyPlayer;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class BetterDexRewardsUI {
 
-    public static void open(EnvyPlayer<ServerPlayerEntity> player) {
+    public static void open(ForgeEnvyPlayer player) {
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
 
         if (attribute == null) {

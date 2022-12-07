@@ -1,13 +1,12 @@
 package com.envyful.better.dex.rewards.forge.ui;
 
-import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
-import com.envyful.api.player.EnvyPlayer;
 import com.envyful.api.reforged.pixelmon.transformer.PokemonDexFormattedTransformer;
 import com.envyful.api.reforged.pixelmon.transformer.PokemonDexTransformer;
 import com.envyful.api.reforged.pixelmon.transformer.PokemonNameTransformer;
@@ -22,16 +21,14 @@ import com.pixelmonmod.pixelmon.api.pokemon.species.Species;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
-import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class DexRewardsMissingUI {
 
-    public static void open(EnvyPlayer<ServerPlayerEntity> player) {
+    public static void open(ForgeEnvyPlayer player) {
         open(player, 1, false);
     }
 
-    public static void open(EnvyPlayer<ServerPlayerEntity> player, int startPos, boolean backwards) {
-        UtilConcurrency.runAsync(() -> {
+    public static void open(ForgeEnvyPlayer player, int startPos, boolean backwards) {
             BetterDexRewardsGraphics.MissingPokemonUI config = BetterDexRewards.getInstance().getGraphics().getMissingPokemonUI();
 
             Pane pane = GuiFactory.paneBuilder()
@@ -114,6 +111,5 @@ public class DexRewardsMissingUI {
                     .title(UtilChatColour.colour(config.getGuiSettings().getTitle()))
                     .build()
                     .open(player);
-        });
     }
 }
