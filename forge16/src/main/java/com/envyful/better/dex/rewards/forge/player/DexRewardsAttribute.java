@@ -17,7 +17,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,23 +42,17 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
         this.lastReminder = lastReminder;
     }
 
-    public void claimReward(String id, List<String> commands) {
+    public void claimReward(String id) {
         this.claimedRewards.add(id);
 
         if (this.manager.getConfig().getSaveMode() == SaveMode.MYSQL) {
             UtilConcurrency.runAsync(() -> {
                 try (Connection connection = this.manager.getDatabase().getConnection();
-                     PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.ADD_USER_CLAIMED);
-                     PreparedStatement logStatement = connection.prepareStatement(BetterDexRewardsQueries.ADD_USER_LOGS)) {
+                     PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.ADD_USER_CLAIMED)) {
                     preparedStatement.setString(1, this.parent.getUuid().toString());
                     preparedStatement.setString(2, id);
 
                     preparedStatement.executeUpdate();
-
-                    logStatement.setString(1, this.parent.getUuid().toString());
-                    logStatement.setString(2, id);
-                    logStatement.setString(3, String.join(", " + commands));
-                    logStatement.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

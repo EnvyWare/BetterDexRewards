@@ -8,14 +8,12 @@ import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
-import com.envyful.api.forge.server.UtilForgeServer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
@@ -61,7 +59,7 @@ public class BetterDexRewardsUI {
 
             pane.set(entry.getValue().getxPos(), entry.getValue().getyPos(),
                      GuiFactory.displayableBuilder(ItemStack.class)
-                             .itemStack(UtilConfigItem.fromConfigItem(configItem))
+                             .itemStack(UtilConfigItem.fromConfigItem(configItem, name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))))
                              .clickHandler((envyPlayer, clickType) -> {
                                  if (attribute.hasClaimed(finalId)) {
                                      for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
@@ -79,22 +77,8 @@ public class BetterDexRewardsUI {
                                  }
 
                                  if (percentage >= entry.getValue().getRequiredPercentage()) {
-                                     attribute.claimReward(finalId, entry.getValue().getRewardCommands());
-                                     for (String rewardMessage : entry.getValue().getRewardMessages()) {
-                                         envyPlayer.message(UtilChatColour.colour(rewardMessage));
-                                     }
-
-                                     UtilForgeConcurrency.runSync(() -> {
-                                         for (String rewardCommand : entry.getValue().getRewardCommands()) {
-                                             UtilForgeServer.executeCommand(rewardCommand
-                                                                                    .replace(
-                                                                                            "%player%",
-                                                                                            ((ServerPlayerEntity) envyPlayer.getParent()).getName().getString()
-                                                                                    ));
-                                         }
-
-                                         ((ServerPlayerEntity) envyPlayer.getParent()).closeContainer();
-                                     });
+                                     entry.getValue().getRewards().give(player.getParent());
+                                     attribute.claimReward(finalId);
                                  } else {
                                      for (String msg : BetterDexRewards.getInstance().getConfig().getInsufficientPercentage()) {
                                          envyPlayer.message(msg);
@@ -107,7 +91,6 @@ public class BetterDexRewardsUI {
 
         GuiFactory.guiBuilder()
                 .addPane(pane)
-                .setCloseConsumer(envyPlayer -> {})
                 .setPlayerManager(BetterDexRewards.getInstance().getPlayerManager())
                 .height(config.getHeight())
                 .title(UtilChatColour.colour(config.getTitle()))
