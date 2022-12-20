@@ -2,8 +2,11 @@ package com.envyful.better.dex.rewards.forge.config;
 
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigItem;
+import com.envyful.api.config.type.ConfigRandomWeightedSet;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.forge.config.ConfigReward;
+import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -26,9 +29,15 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     private boolean originalTrainerRewardsOnly = false;
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
-            "one", new DexCompletion(1, 1, new ConfigItem(), new ConfigItem(), new ConfigItem(), 1.0,
-                                     Lists.newArrayList("give %player% minecraft:diamond 1"),
-                                     Lists.newArrayList("&e&l(!) &eYou have completed 1% of the dex!")
+            "one", new DexCompletion(1, 1, ConfigItem.builder().build(), ConfigItem.builder().build(), ConfigItem.builder().build(), 1.0,
+                                     ConfigRewardPool.builder()
+                                             .guranteedReward(new ConfigReward(
+                                                     Lists.newArrayList("give %player% minecraft:diamond 1"),
+                                                     Lists.newArrayList("You've completed 1% of the dex!")))
+                                             .minRolls(1).maxRolls(1)
+                                             .rewards(new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(1,
+                                                     new ConfigReward(Lists.newArrayList("Hey %player%"), Lists.newArrayList("Hey %player%")))))
+                                             .build()
             )
     ));
 
@@ -96,21 +105,18 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         private ConfigItem completeItem;
         private ConfigItem toClaimItem;
         private double requiredPercentage;
-        private List<String> rewardCommands;
-        private List<String> rewardMessages;
+        private ConfigRewardPool rewards;
         private String optionalAntiClaimPermission = null;
 
         protected DexCompletion(int xPos, int yPos, ConfigItem displayItem, ConfigItem completeItem,
-                                ConfigItem toClaimItem, double requiredPercentage,
-                                List<String> rewardCommands, List<String> rewardMessages) {
+                                ConfigItem toClaimItem, double requiredPercentage, ConfigRewardPool rewards) {
             this.xPos = xPos;
             this.yPos = yPos;
             this.displayItem = displayItem;
             this.completeItem = completeItem;
             this.toClaimItem = toClaimItem;
             this.requiredPercentage = requiredPercentage;
-            this.rewardCommands = rewardCommands;
-            this.rewardMessages = rewardMessages;
+            this.rewards = rewards;
         }
 
         public DexCompletion() {}
@@ -139,12 +145,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             return this.requiredPercentage;
         }
 
-        public List<String> getRewardCommands() {
-            return this.rewardCommands;
-        }
-
-        public List<String> getRewardMessages() {
-            return this.rewardMessages;
+        public ConfigRewardPool getRewards() {
+            return this.rewards;
         }
 
         public String getOptionalAntiClaimPermission() {
