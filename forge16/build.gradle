@@ -84,6 +84,10 @@ repositories {
             artifact('[revision]/[artifact].[ext]')
         }
     }
+
+    maven {
+        url "https://maven.envyware.co.uk/releases"
+    }
 }
 
 dependencies {
@@ -94,11 +98,11 @@ dependencies {
 
     implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
 
-    shadow (group: 'com.github.EnvyWare.API', name: 'commons', version: '4.0.0')
-    shadow (group: 'com.github.EnvyWare.API', name: 'forge16', version: '4.0.0') {
+    shadow (group: 'com.envyful.api', name: 'commons', version: '4.1.5')
+    shadow (group: 'com.envyful.api', name: 'forge16', version: '4.1.5') {
         transitive = false
     }
-    shadow (group: 'com.github.EnvyWare.API', name: 'reforged16', version: '4.0.0') {
+    shadow (group: 'com.envyful.api', name: 'reforged16', version: '4.1.5') {
         transitive = false
     }
 }
