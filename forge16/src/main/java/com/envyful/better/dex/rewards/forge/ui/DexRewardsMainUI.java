@@ -45,7 +45,7 @@ public class DexRewardsMainUI {
         UtilConfigItem.builder().extendedConfigItem(player, pane, config.getPercentageItem(), transformers.toArray(new Placeholder[0]));
         UtilConfigItem.builder()
                 .asyncClick()
-                .clickHandler((envyPlayer, clickType) -> BetterDexRewardsUI.open(player))
+                .clickHandler((envyPlayer, clickType) -> BetterDexRewardsUI.open(player, 1))
                 .extendedConfigItem(player, pane, config.getRanksItem(), transformers.toArray(new Placeholder[0]));
 
         UtilConfigItem.builder()

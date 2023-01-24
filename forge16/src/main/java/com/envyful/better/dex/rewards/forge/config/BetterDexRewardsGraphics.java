@@ -210,6 +210,22 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                 4, 5, Collections.emptyMap()
         );
 
+        private ExtendedConfigItem previousPageButton = new ExtendedConfigItem(
+                "pixelmon:trade_holder_left",
+                1, (byte) 0, "&ePrevious Page",
+                Lists.newArrayList(),
+                0, 0, Collections.emptyMap()
+        );
+
+        private ExtendedConfigItem nextPageButton = new ExtendedConfigItem(
+                "pixelmon:trade_holder_right",
+                1, (byte) 0, "&eNext Page",
+                Lists.newArrayList(),
+                1, 0, Collections.emptyMap()
+        );
+
+        private int pages = 1;
+
         public RanksUI() {}
 
         public ConfigInterface getGuiSettings() {
@@ -218,6 +234,18 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
 
         public ExtendedConfigItem getBackButton() {
             return this.backButton;
+        }
+
+        public int getPages() {
+            return this.pages;
+        }
+
+        public ExtendedConfigItem getPreviousPageButton() {
+            return this.previousPageButton;
+        }
+
+        public ExtendedConfigItem getNextPageButton() {
+            return this.nextPageButton;
         }
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class BetterDexRewardsUI {
 
-    public static void open(ForgeEnvyPlayer player) {
+    public static void open(ForgeEnvyPlayer player, int page) {
         DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
 
         if (attribute == null) {
@@ -43,10 +43,24 @@ public class BetterDexRewardsUI {
                 .clickHandler((envyPlayer, clickType) -> DexRewardsMainUI.open(player))
                 .extendedConfigItem(player, pane, dexRewardsConfig.getBackButton());
 
+        UtilConfigItem.builder()
+                .asyncClick()
+                .clickHandler((envyPlayer, clickType) -> open(player, page == dexRewardsConfig.getPages() ? 1 : page + 1))
+                .extendedConfigItem(player, pane, dexRewardsConfig.getNextPageButton());
+
+        UtilConfigItem.builder()
+                .asyncClick()
+                .clickHandler((envyPlayer, clickType) -> open(player, page == 1 ? dexRewardsConfig.getPages() : page - 1))
+                .extendedConfigItem(player, pane, dexRewardsConfig.getPreviousPageButton());
+
         double percentage = attribute.getPokeDexPercentage();
 
         for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : BetterDexRewards.getInstance().getConfig().getRewardStages().entrySet()) {
             ConfigItem configItem = null;
+
+            if (entry.getValue().getPage() != page) {
+                continue;
+            }
 
             if (attribute.hasClaimed(entry.getKey())) {
                 configItem = entry.getValue().getCompleteItem();

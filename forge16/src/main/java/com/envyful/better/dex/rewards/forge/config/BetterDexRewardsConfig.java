@@ -101,6 +101,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
         private int xPos;
         private int yPos;
+        private int page;
         private ConfigItem displayItem;
         private ConfigItem completeItem;
         private ConfigItem toClaimItem;
@@ -151,6 +152,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
         public String getOptionalAntiClaimPermission() {
             return this.optionalAntiClaimPermission;
+        }
+
+        public int getPage() {
+            return this.page;
         }
     }
 }
