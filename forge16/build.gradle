@@ -88,7 +88,7 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
-    implementation 'pixelmon:Pixelmon-1.16.5-9.1.0-server:9.1.0'
+    implementation 'pixelmon:Pixelmon-1.16.5-9.1.2-server:9.1.2'
 
     implementation 'com.github.EnvyWare.ForgePlaceholderAPI:api:2.0.4'
 
