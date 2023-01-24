@@ -3,13 +3,13 @@ package com.envyful.better.dex.rewards.forge.ui;
 import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
-import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
+import com.envyful.api.text.parse.SimplePlaceholder;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
@@ -37,8 +37,12 @@ public class BetterDexRewardsUI {
                 .build();
 
         UtilConfigInterface.fillBackground(pane, config);
-        UtilConfigItem.addConfigItem(pane, dexRewardsConfig.getBackButton(),
-                (envyPlayer, clickType) -> UtilForgeConcurrency.runSync(() -> DexRewardsMainUI.open(player)));
+
+        UtilConfigItem.builder()
+                .asyncClick()
+                .clickHandler((envyPlayer, clickType) -> DexRewardsMainUI.open(player))
+                .extendedConfigItem(player, pane, dexRewardsConfig.getBackButton());
+
         double percentage = attribute.getPokeDexPercentage();
 
         for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : BetterDexRewards.getInstance().getConfig().getRewardStages().entrySet()) {
@@ -59,7 +63,7 @@ public class BetterDexRewardsUI {
 
             pane.set(entry.getValue().getxPos(), entry.getValue().getyPos(),
                      GuiFactory.displayableBuilder(ItemStack.class)
-                             .itemStack(UtilConfigItem.fromConfigItem(configItem, name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))))
+                             .itemStack(UtilConfigItem.fromConfigItem(configItem, (SimplePlaceholder) name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))))
                              .clickHandler((envyPlayer, clickType) -> {
                                  if (attribute.hasClaimed(finalId)) {
                                      for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {

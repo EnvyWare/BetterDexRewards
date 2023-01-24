@@ -4,9 +4,9 @@ import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
-import com.envyful.api.gui.Transformer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
+import com.envyful.api.text.Placeholder;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
@@ -38,14 +38,20 @@ public class DexRewardsMainUI {
             return;
         }
 
-        UtilConfigInterface.fillBackground(pane, config.getGuiSettings(), getTransformers(player.getParent(), attribute).toArray(new Transformer[0]));
+        List<Placeholder> transformers = getTransformers(player.getParent(), attribute);
 
-        UtilConfigItem.addConfigItem(pane, getTransformers(player.getParent(), attribute), config.getPercentageItem());
-        UtilConfigItem.addConfigItem(pane, config.getRanksItem(), getTransformers(player.getParent(), attribute),
-                                     (envyPlayer, clickType) -> BetterDexRewardsUI.open(player));
+        UtilConfigInterface.fillBackground(pane, config.getGuiSettings(), transformers.toArray(new Placeholder[0]));
+
+        UtilConfigItem.builder().extendedConfigItem(player, pane, config.getPercentageItem(), transformers.toArray(new Placeholder[0]));
+        UtilConfigItem.builder()
+                .asyncClick()
+                .clickHandler((envyPlayer, clickType) -> BetterDexRewardsUI.open(player))
+                .extendedConfigItem(player, pane, config.getRanksItem(), transformers.toArray(new Placeholder[0]));
+
         UtilConfigItem.builder()
                 .clickHandler((envyPlayer, clickType) -> DexRewardsMissingUI.open(player))
                 .extendedConfigItem(player, pane, config.getMissingItem());
+
         UtilConfigItem.builder().extendedConfigItem(player, pane, config.getInfoItem());
 
         GuiFactory.guiBuilder()
@@ -57,7 +63,7 @@ public class DexRewardsMainUI {
                 .open(player);
     }
 
-    private static List<Transformer> getTransformers(ServerPlayerEntity player, DexRewardsAttribute attribute) {
+    private static List<Placeholder> getTransformers(ServerPlayerEntity player, DexRewardsAttribute attribute) {
         if (!BetterDexRewards.getInstance().isPlaceholders()) {
             return Lists.newArrayList(CompletionTransformer.of(attribute.getPokeDexPercentage()));
         }

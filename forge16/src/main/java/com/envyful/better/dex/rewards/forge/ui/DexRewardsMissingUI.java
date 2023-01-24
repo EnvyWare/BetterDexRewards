@@ -1,7 +1,6 @@
 package com.envyful.better.dex.rewards.forge.ui;
 
 import com.envyful.api.forge.chat.UtilChatColour;
-import com.envyful.api.forge.concurrency.UtilForgeConcurrency;
 import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
@@ -40,8 +39,10 @@ public class DexRewardsMissingUI {
 
             UtilConfigInterface.fillBackground(pane, config.getGuiSettings());
 
-            UtilConfigItem.addConfigItem(pane, config.getBackButton(), (envyPlayer, clickType) ->
-                    UtilForgeConcurrency.runSync(() -> DexRewardsMainUI.open(player)));
+            UtilConfigItem.builder()
+                            .asyncClick()
+                            .clickHandler((envyPlayer, clickType) -> DexRewardsMainUI.open(player))
+                            .extendedConfigItem(player, pane, config.getBackButton());
 
             PlayerPartyStorage storage = StorageProxy.getParty(player.getParent());
 
@@ -99,10 +100,17 @@ public class DexRewardsMissingUI {
             boolean finalBackReset = backReset;
             int finalSpeciesPosition = speciesPosition;
             boolean finalForwardReset = forwardReset;
-            UtilConfigItem.addConfigItem(pane, config.getNextPageButton(), (envyPlayer, clickType) ->
-                    open(player, finalForwardReset || startPos == dexSize || finalSpeciesPosition == dexSize ? 1 : backwards ? startPos : finalSpeciesPosition, false));
-            UtilConfigItem.addConfigItem(pane, config.getPreviousPageButton(), (envyPlayer, clickType) ->
-                    open(player, finalBackReset || startPos == 1 ? dexSize : backwards ? finalSpeciesPosition : startPos - 1, true));
+
+        UtilConfigItem.builder()
+                .asyncClick()
+                .clickHandler((envyPlayer, clickType) ->
+                        open(player, finalForwardReset || startPos == dexSize || finalSpeciesPosition == dexSize ? 1 : backwards ? startPos : finalSpeciesPosition, false))
+                .extendedConfigItem(player, pane, config.getNextPageButton());
+
+        UtilConfigItem.builder()
+                .asyncClick()
+                .clickHandler((envyPlayer, clickType) ->
+                        open(player, finalBackReset || startPos == 1 ? dexSize : backwards ? finalSpeciesPosition : startPos - 1, true));
 
             GuiFactory.guiBuilder()
                     .addPane(pane)
