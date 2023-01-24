@@ -8,7 +8,7 @@ import com.pixelmonmod.pixelmon.api.spawning.SpawnSet;
 import com.pixelmonmod.pixelmon.api.spawning.archetypes.entities.pokemon.SpawnInfoPokemon;
 import com.pixelmonmod.pixelmon.api.util.helpers.BiomeHelper;
 import com.pixelmonmod.pixelmon.spawning.PixelmonSpawning;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,7 +46,7 @@ public class BiomesTransformer implements Transformer {
                     continue;
                 }
 
-                for (Biome biome : spawnInfoPokemon.condition.biomes) {
+                for (ResourceLocation biome : spawnInfoPokemon.condition.biomes) {
                     names.add(BiomeHelper.getLocalizedBiomeName(biome).getString());
                 }
             }
