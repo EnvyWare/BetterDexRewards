@@ -26,7 +26,6 @@ import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.network.FMLNetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -40,19 +39,20 @@ import java.sql.SQLException;
 @Mod("betterdexrewards")
 public class BetterDexRewards {
 
+    private static final Logger LOGGER = LogManager.getLogger("betterdexrewards");
+
     private static BetterDexRewards instance;
 
-    private ForgeCommandFactory commandFactory = new ForgeCommandFactory();
-    private ForgePlayerManager playerManager = new ForgePlayerManager();
+    private final ForgeCommandFactory commandFactory = new ForgeCommandFactory();
+    private final ForgePlayerManager playerManager = new ForgePlayerManager();
 
     private Database database;
     private BetterDexRewardsConfig config;
     private BetterDexRewardsGraphics graphics;
     private boolean placeholders;
-    private Logger logger = LogManager.getLogger("betterdexrewards");
 
     public BetterDexRewards() {
-        UtilLogger.setLogger(this.logger);
+        UtilLogger.setLogger(LOGGER);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
@@ -141,5 +141,9 @@ public class BetterDexRewards {
 
     public boolean isPlaceholders() {
         return this.placeholders;
+    }
+
+    public static Logger getLogger() {
+        return LOGGER;
     }
 }
