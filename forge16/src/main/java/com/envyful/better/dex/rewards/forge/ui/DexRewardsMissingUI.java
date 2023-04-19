@@ -110,7 +110,8 @@ public class DexRewardsMissingUI {
         UtilConfigItem.builder()
                 .asyncClick()
                 .clickHandler((envyPlayer, clickType) ->
-                        open(player, finalBackReset || startPos == 1 ? dexSize : backwards ? finalSpeciesPosition : startPos - 1, true));
+                        open(player, finalBackReset || startPos == 1 ? dexSize : backwards ? finalSpeciesPosition : startPos - 1, true))
+                .extendedConfigItem(player, pane, config.getPreviousPageButton());
 
             GuiFactory.guiBuilder()
                     .addPane(pane)
