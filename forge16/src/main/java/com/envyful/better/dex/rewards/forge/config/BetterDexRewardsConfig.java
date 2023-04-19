@@ -101,7 +101,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
         private int xPos;
         private int yPos;
-        private int page;
+        private int page = 1;
         private ConfigItem displayItem;
         private ConfigItem completeItem;
         private ConfigItem toClaimItem;
