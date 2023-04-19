@@ -55,7 +55,7 @@ public class DexRewardsMissingUI {
             while (i < config.getMissingPokemonPositions().size()) {
                 Species species = PixelmonSpecies.fromDex(speciesPosition).orElse(null);
 
-                if (species == null || species.is(PixelmonSpecies.MISSINGNO) || storage.playerPokedex.hasSeen(species)) {
+                if (species == null || species.is(PixelmonSpecies.MISSINGNO) || storage.playerPokedex.hasCaught(species)) {
                     if (speciesPosition > dexSize) {
                         forwardReset = true;
                         break;
