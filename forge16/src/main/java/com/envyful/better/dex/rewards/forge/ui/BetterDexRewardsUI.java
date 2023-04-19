@@ -78,6 +78,7 @@ public class BetterDexRewardsUI {
             pane.set(entry.getValue().getxPos(), entry.getValue().getyPos(),
                      GuiFactory.displayableBuilder(ItemStack.class)
                              .itemStack(UtilConfigItem.fromConfigItem(configItem, (SimplePlaceholder) name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))))
+                             .singleClick()
                              .clickHandler((envyPlayer, clickType) -> {
                                  if (attribute.hasClaimed(finalId)) {
                                      for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
@@ -97,6 +98,7 @@ public class BetterDexRewardsUI {
                                  if (percentage >= entry.getValue().getRequiredPercentage()) {
                                      entry.getValue().getRewards().give(player.getParent());
                                      attribute.claimReward(finalId);
+                                     open(player, page);
                                  } else {
                                      for (String msg : BetterDexRewards.getInstance().getConfig().getInsufficientPercentage()) {
                                          envyPlayer.message(msg);
