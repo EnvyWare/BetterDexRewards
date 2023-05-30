@@ -64,7 +64,7 @@ public class BetterDexRewards {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
         if (this.config.getSaveMode() == SaveMode.JSON) {
-            this.playerManager.setSaveManager(new JsonSaveManager<>());
+            this.playerManager.setSaveManager(new JsonSaveManager<>(playerManager));
         }
 
         this.playerManager.registerAttribute(this, DexRewardsAttribute.class);

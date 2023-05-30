@@ -58,7 +58,7 @@ public class DexRewardsListener {
                 }
 
                 if (entry.getValue().getOptionalAntiClaimPermission() != null &&
-                        UtilPlayer.hasPermission(attribute.getParent().getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
+                        UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
                     continue;
                 }
 

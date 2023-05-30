@@ -33,7 +33,7 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
-            if (!this.canClaimReward(attribute)) {
+            if (!this.canClaimReward(onlinePlayer, attribute)) {
                 continue;
             }
 
@@ -45,13 +45,13 @@ public class ReminderTask implements Runnable {
         }
     }
 
-    private boolean canClaimReward(DexRewardsAttribute attribute) {
+    private boolean canClaimReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
         double pokeDexPercentage = attribute.getPokeDexPercentage();
 
         for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry :
                 this.mod.getConfig().getRewardStages().entrySet()) {
             if (entry.getValue().getOptionalAntiClaimPermission() != null &&
-                    UtilPlayer.hasPermission(attribute.getParent().getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
+                    UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
                 continue;
             }
 
