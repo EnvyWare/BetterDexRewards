@@ -24,7 +24,7 @@ public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards
     private Set<String> claimedRewards = Sets.newHashSet();
     private long lastReminder = System.currentTimeMillis();
 
-    protected DexRewardsAttribute(BetterDexRewards manager, ForgePlayerManager playerManager) {
+    public DexRewardsAttribute(BetterDexRewards manager, ForgePlayerManager playerManager) {
         super(manager, playerManager);
     }
 
