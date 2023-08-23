@@ -7,9 +7,7 @@ import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.pixelmonmod.pixelmon.api.registries.PixelmonItems;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
-import net.minecraft.item.Items;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.Collections;
@@ -75,7 +73,7 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
         );
 
         private ExtendedConfigItem infoItem = new ExtendedConfigItem(
-                Items.PAPER.getRegistryName().toString(),
+                "minecraft:paper",
                 1, (byte) 0, "Info",
                 Lists.newArrayList(""),
                 7, 1,
@@ -132,14 +130,14 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
         );
 
         private ExtendedConfigItem previousPageButton = new ExtendedConfigItem(
-                PixelmonItems.trade_holder_left.getRegistryName().toString(),
+                "pixelmon:trade_holder_left",
                 1, (byte) 0, "&ePrevious Page",
                 Lists.newArrayList(),
                 0, 5, Collections.emptyMap()
         );
 
         private ExtendedConfigItem nextPageButton = new ExtendedConfigItem(
-                PixelmonItems.trade_holder_left.getRegistryName().toString(),
+                "pixelmon:trade_holder_left",
                 1, (byte) 0, "&eNext Page",
                 Lists.newArrayList(),
                 8, 5, Collections.emptyMap()
