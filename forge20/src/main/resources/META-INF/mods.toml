@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="MIT"
+issueTrackerURL="https://github.com/EnvyWare/BetterDexRewards/issues"
+
+[[mods]]
+modId="betterdexrewards"
+version="3.2.5"
+displayName="BetterDexRewards Forge"
+displayURL="https://github.com/EnvyWare"
+credits="https://github.com/EnvyWare"
+authors="https://github.com/EnvyWare"
+updateJSONURL="https://ogn.pixelmonmod.com/update/sm-dr/update.json"
+description='''
+Adds Dex Rewards
+'''
+
+[[dependencies.betterdexrewards]]
+modId="forge"
+mandatory=true
+versionRange="[36,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.betterdexrewards]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.16.5,1.17)"
+ordering="NONE"
+side="BOTH"
