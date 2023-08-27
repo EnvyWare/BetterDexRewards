@@ -111,10 +111,30 @@ shadowJar {
     relocate('org.slf4j', 'com.envyful.better.dex.rewards.shade.slf4j')
     relocate('com.envyful.api', 'com.envyful.better.dex.rewards.shade.envy.api')
     relocate('org.bstats', 'com.envyful.better.dex.rewards.shade.bstats')
+    relocate('com.google.common', 'com.envyful.better.dex.rewards.shade.guava')
+    relocate('org.apache.logging', 'com.envyful.better.dex.rewards.shade.log4j')
+    relocate('io.netty', 'com.envyful.better.dex.rewards.shade.netty')
+    relocate('io.lettuce', 'com.envyful.better.dex.rewards.shade.lettuce')
+    relocate('com.cronutils', 'com.envyful.better.dex.rewards.shade.cronutils')
+    relocate('com.cronutils', 'com.envyful.better.dex.rewards.shade.cronutils')
+    relocate('com.sun.el', 'com.envyful.better.dex.rewards.shade.sun.el')
+    relocate('javax', 'com.envyful.better.dex.rewards.shade.javax')
+    relocate('javax', 'com.envyful.better.dex.rewards.shade.javax')
+    relocate('org.reactivestreams', 'com.envyful.better.dex.rewards.shade.reactivestreams')
+    relocate('reactor', 'com.envyful.better.dex.rewards.shade.reactor')
 
     exclude "**/module-info.class"
+    exclude "**/*.properties"
+    exclude "**/*.xml"
+    exclude "META-INF/versions/9/**"
+    exclude "META-INF/native-image/**"
+    exclude "META-INF/services/**"
 }
 
-assemble.dependsOn shadowJar
-jar.finalizedBy('reobfJar')
+afterEvaluate {
+    tasks.reobfJar.configure {
+        finalizedBy('shadowJar')
+    }
+}
+
 build.finalizedBy('versionedRelease')
