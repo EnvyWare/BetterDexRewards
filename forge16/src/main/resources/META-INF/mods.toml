@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/EnvyWare/BetterDexRewards/issues"
 
 [[mods]]
 modId="betterdexrewards"
-version="3.3.0"
+version="3.3.1"
 displayName="BetterDexRewards Forge"
 displayURL="https://github.com/EnvyWare"
 credits="https://github.com/EnvyWare"
