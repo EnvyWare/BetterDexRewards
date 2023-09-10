@@ -21,7 +21,7 @@ import java.util.Map;
 public class BetterDexRewardsUI {
 
     public static void open(ForgeEnvyPlayer player, int page) {
-        DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
+        DexRewardsAttribute attribute = player.getAttribute(DexRewardsAttribute.class);
 
         if (attribute == null) {
             return;

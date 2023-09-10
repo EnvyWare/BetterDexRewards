@@ -62,7 +62,7 @@ public class BetterDexRewards {
             this.playerManager.setSaveManager(new JsonSaveManager<>(playerManager));
         }
 
-        this.playerManager.registerAttribute(this, DexRewardsAttribute.class);
+        this.playerManager.registerAttribute(DexRewardsAttribute.class);
 
         this.checkForPlaceholders();
 

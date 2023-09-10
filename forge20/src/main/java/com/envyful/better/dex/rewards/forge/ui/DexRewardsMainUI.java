@@ -32,7 +32,7 @@ public class DexRewardsMainUI {
                 .height(config.getGuiSettings().getHeight())
                 .build();
 
-        DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
+        DexRewardsAttribute attribute = player.getAttribute(DexRewardsAttribute.class);
 
         if (attribute == null) {
             return;

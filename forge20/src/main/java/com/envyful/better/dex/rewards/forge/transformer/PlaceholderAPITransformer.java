@@ -1,10 +1,10 @@
 package com.envyful.better.dex.rewards.forge.transformer;
 
-import com.envyful.api.gui.Transformer;
+import com.envyful.api.text.parse.SimplePlaceholder;
 import com.envyful.papi.api.util.UtilPlaceholder;
 import net.minecraft.server.level.ServerPlayer;
 
-public class PlaceholderAPITransformer implements Transformer {
+public class PlaceholderAPITransformer implements SimplePlaceholder {
 
     private final ServerPlayer player;
 
@@ -15,7 +15,7 @@ public class PlaceholderAPITransformer implements Transformer {
     private PlaceholderAPITransformer(ServerPlayer player) {this.player = player;}
 
     @Override
-    public String transformName(String name) {
+    public String replace(String name) {
         return UtilPlaceholder.replaceIdentifiers(this.player, name);
     }
 }
