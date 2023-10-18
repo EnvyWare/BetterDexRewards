@@ -5,6 +5,7 @@ import com.envyful.api.config.type.ConfigInterface;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.type.Pair;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
@@ -38,22 +39,21 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
     @ConfigSerializable
     public static class MainUI {
 
-        private ConfigInterface guiSettings = new ConfigInterface(
-                "BetterDexRewards", 3, ConfigInterface.FillType.BLOCK.name(),
-                ImmutableMap.of("one", ConfigItem.builder()
-                                .type("minecraft:black_stained_glass_pane")
-                                .amount(1)
-                                .name(" ")
-                                .build())
-        );
+        private ConfigInterface guiSettings = ConfigInterface.builder()
+                .title("BetterDexRewards")
+                .height(3)
+                .fillType(ConfigInterface.FillType.BLOCK)
+                .fillerItem(ConfigItem.builder().type("minecraft:black_stained_glass_pane").amount(1).name(" ").build())
+                .build();
 
-        private ExtendedConfigItem percentageItem = new ExtendedConfigItem(
-                "pixelmon:poke_ball",
-                1, (byte) 0, "&eCurrent PokeDex Percentage",
-                Lists.newArrayList("&eComplete: &a%percentage%"),
-                1, 1,
-                ImmutableMap.of("tooltip", new ConfigItem.NBTValue("string", ""))
-        );
+        private ExtendedConfigItem percentageItem = ExtendedConfigItem.builder()
+                .type("pixelmon:poke_ball")
+                .amount(1)
+                .name("&eCurrent PokeDex Percentage")
+                .lore("&eComplete: &a%percentage%")
+                .positions(Pair.of(1, 1))
+                .nbt("PokeBallID", new ConfigItem.NBTValue("string", "poke_ball"))
+                .build();
 
         private ExtendedConfigItem missingItem = new ExtendedConfigItem(
                 "pixelmon:pokeradar",
@@ -106,14 +106,12 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
     @ConfigSerializable
     public static class MissingPokemonUI {
 
-        private ConfigInterface guiSettings = new ConfigInterface(
-                "BetterDexRewards", 6, ConfigInterface.FillType.BLOCK.name(),
-                ImmutableMap.of("one", ConfigItem.builder()
-                        .type("minecraft:black_stained_glass_pane")
-                        .amount(1)
-                        .name(" ")
-                        .build())
-        );
+        private ConfigInterface guiSettings = ConfigInterface.builder()
+                .title("BetterDexRewards")
+                .height(6)
+                .fillType(ConfigInterface.FillType.BLOCK)
+                .fillerItem(ConfigItem.builder().type("minecraft:black_stained_glass_pane").amount(1).name(" ").build())
+                .build();
 
         private List<Integer> missingPokemonPositions = Lists.newArrayList(
                 0, 1, 2, 3, 4, 5, 6, 7, 8,
@@ -161,6 +159,12 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                         .nbt("UIImageG", new ConfigItem.NBTValue("float", "0"))
                         .nbt("UIImageB", new ConfigItem.NBTValue("float", "0"))
                         .nbt("UIImageA", new ConfigItem.NBTValue("float", "1"))
+                        .nbt("UIImageHeight", new ConfigItem.NBTValue("short", "32"))
+                        .nbt("UIImageWidth", new ConfigItem.NBTValue("short", "32"))
+                        .nbt("UIImageScaleX", new ConfigItem.NBTValue("float", "0.64"))
+                        .nbt("UIImageScaleY", new ConfigItem.NBTValue("float", "0.64"))
+                        .nbt("UIXOffset", new ConfigItem.NBTValue("short", "-2"))
+                        .nbt("UIYOffset", new ConfigItem.NBTValue("short", "-4"))
                         .build();
 
         public MissingPokemonUI() {}
@@ -192,14 +196,12 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
     @ConfigSerializable
     public static class RanksUI {
 
-        private ConfigInterface guiSettings = new ConfigInterface(
-                "BetterDexRewards", 6, ConfigInterface.FillType.BLOCK.name(),
-                ImmutableMap.of("one", ConfigItem.builder()
-                        .type("minecraft:black_stained_glass_pane")
-                        .amount(1)
-                        .name(" ")
-                        .build())
-        );
+        private ConfigInterface guiSettings = ConfigInterface.builder()
+                .title("BetterDexRewards")
+                .height(6)
+                .fillType(ConfigInterface.FillType.BLOCK)
+                .fillerItem(ConfigItem.builder().type("minecraft:black_stained_glass_pane").amount(1).name(" ").build())
+                .build();
 
         private ExtendedConfigItem backButton = new ExtendedConfigItem(
                 "pixelmon:eject_button",

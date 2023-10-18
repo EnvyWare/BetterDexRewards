@@ -10,6 +10,7 @@ import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
 import com.google.common.collect.Lists;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.util.List;
 import java.util.Map;
@@ -18,12 +19,33 @@ import java.util.Map;
 @ConfigSerializable
 public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
+    @Comment("""
+            The setting to tell the mod how to save the player data.
+            The options are:
+            - JSON
+            - MYSQL
+            """)
     private SaveMode saveMode = SaveMode.JSON;
+
+    @Comment("""
+            The MySQL database details.
+            This will only be used if the save mode is set to MYSQL
+            
+            NOTE: DO NOT SHARE THESE WITH ANYONE YOU DO NOT TRUST
+            """)
     private SQLDatabaseDetails database = new SQLDatabaseDetails("BetterDexRewards", "0.0.0.0", 3306,
                                                                  "admin", "password", "BetterDexRewards"
     );
 
+    @Comment("""
+            The delay in seconds between reminders that the player has an unclaimed reward
+            """)
     private int messageDelaySeconds = 60;
+
+    @Comment("""
+            The setting to prevent pokemon that are not originally captured by the player
+            counting towards their pokedex
+            """)
     private boolean originalTrainerRewardsOnly = false;
 
     private Map<String, DexCompletion> rewardStages = Map.of(
