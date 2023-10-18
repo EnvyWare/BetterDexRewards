@@ -1,10 +1,9 @@
 package com.envyful.better.dex.rewards.forge.command;
 
-import com.envyful.api.command.annotate.Child;
 import com.envyful.api.command.annotate.Command;
-import com.envyful.api.command.annotate.Permissible;
 import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Sender;
+import com.envyful.api.command.annotate.permission.Permissible;
 import com.envyful.api.time.UtilTimeFormat;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
@@ -20,14 +19,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Command(
-        value = "viewlogs",
-        description = "Views the logs",
-        aliases = {
+        value = {
+                "viewlogs",
                 "vl"
         }
 )
 @Permissible("better.dex.rewards.command.view.logs")
-@Child
 public class ViewLogsCommand {
 
     @CommandProcessor

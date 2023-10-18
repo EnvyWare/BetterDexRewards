@@ -18,7 +18,7 @@ Adds Dex Rewards
 [[dependencies.betterdexrewards]]
 modId="forge"
 mandatory=true
-versionRange="[47.1.28,)"
+versionRange="[48.0.22,)"
 ordering="NONE"
 side="BOTH"
 

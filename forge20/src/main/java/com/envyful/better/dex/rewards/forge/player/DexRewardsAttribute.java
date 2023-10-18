@@ -59,7 +59,7 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
     }
 
     public double getPokeDexPercentage() {
-        PlayerPartyStorage storage = StorageProxy.getParty(this.parent.getParent());
+        PlayerPartyStorage storage = StorageProxy.getPartyNow(this.parent.getParent());
 
         return (storage.playerPokedex.countCaught() / (double) Pokedex.pokedexSize) * 100.0;
     }

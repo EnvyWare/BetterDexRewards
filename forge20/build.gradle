@@ -5,10 +5,10 @@ plugins {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-forgeVersion = "1.20.1"
+forgeVersion = "1.20.2"
 
 minecraft {
-    mappings channel: 'official', version: '1.20.1'
+    mappings channel: 'official', version: '1.20.2'
 
     runs {
         client {
@@ -59,19 +59,19 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {}
 
 dependencies {
-    minecraft "net.minecraftforge:forge:1.20.1-47.1.44"
+    minecraft 'net.minecraftforge:forge:1.20.2-48.0.30'
 
-    implementation 'pixelmon:Pixelmon-1.20.1-9.2.2-server:9.2.2'
+    implementation 'pixelmon:Pixelmon-1.20.2-9.2.4-server:9.2.4'
 
     implementation 'com.github.EnvyWare.ForgePlaceholderAPI:api:2.0.4'
 
-    implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.0.0'
+    implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
 
-    shadow group: 'com.envyful.api', name: 'commons', version: '5.1.2'
-    shadow (group: 'com.envyful.api', name: 'forge20', version: '5.1.2') {
+    shadow group: 'com.envyful.api', name: 'commons', version: '5.5.1'
+    shadow (group: 'com.envyful.api', name: 'forge20', version: '5.5.1') {
         transitive = false;
     }
-    shadow (group: 'com.envyful.api', name: 'reforged20', version: '5.1.2') {
+    shadow (group: 'com.envyful.api', name: 'reforged20', version: '5.5.1') {
         transitive = false;
     }
 }
@@ -84,23 +84,21 @@ shadowJar {
     relocate('org.spongepowered.configurate', 'com.envyful.better.dex.rewards.shade.configurate')
     relocate('org.yaml.snakeyaml', 'com.envyful.better.dex.rewards.shade.snakeyaml')
     relocate('io.leangen.geantyref', 'com.envyful.better.dex.rewards.shade.geantyref')
-    relocate('com.google.gson', 'com.envyful.better.dex.rewards.shade.gson')
     relocate('com.zaxxer', 'com.envyful.better.dex.rewards.shade.hikari')
     relocate('org.slf4j', 'com.envyful.better.dex.rewards.shade.slf4j')
     relocate('com.envyful.api', 'com.envyful.better.dex.rewards.shade.envy.api')
     relocate('org.bstats', 'com.envyful.better.dex.rewards.shade.bstats')
-    relocate('com.google.common', 'com.envyful.better.dex.rewards.shade.guava')
     relocate('org.apache.logging', 'com.envyful.better.dex.rewards.shade.log4j')
     relocate('io.netty', 'com.envyful.better.dex.rewards.shade.netty')
     relocate('io.lettuce', 'com.envyful.better.dex.rewards.shade.lettuce')
     relocate('com.cronutils', 'com.envyful.better.dex.rewards.shade.cronutils')
     relocate('com.cronutils', 'com.envyful.better.dex.rewards.shade.cronutils')
     relocate('com.sun.el', 'com.envyful.better.dex.rewards.shade.sun.el')
-    relocate('javax', 'com.envyful.better.dex.rewards.shade.javax')
-    relocate('javax', 'com.envyful.better.dex.rewards.shade.javax')
     relocate('org.reactivestreams', 'com.envyful.better.dex.rewards.shade.reactivestreams')
     relocate('reactor', 'com.envyful.better.dex.rewards.shade.reactor')
 
+    exclude "com/google/**"
+    exclude "javax/**"
     exclude "**/module-info.class"
     exclude "**/*.properties"
     exclude "**/*.xml"

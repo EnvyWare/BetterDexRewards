@@ -9,9 +9,8 @@ import com.envyful.better.dex.rewards.forge.ui.DexRewardsMainUI;
 import net.minecraft.server.level.ServerPlayer;
 
 @Command(
-        value = "betterdexrewards",
-        description = "Root command",
-        aliases = {
+        value = {
+                "betterdexrewards",
                 "dexrewards",
                 "drewards",
                 "dexr",

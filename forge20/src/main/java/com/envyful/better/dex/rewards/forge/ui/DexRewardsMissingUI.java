@@ -44,7 +44,7 @@ public class DexRewardsMissingUI {
                             .clickHandler((envyPlayer, clickType) -> DexRewardsMainUI.open(player))
                             .extendedConfigItem(player, pane, config.getBackButton());
 
-            PlayerPartyStorage storage = StorageProxy.getParty(player.getParent());
+            PlayerPartyStorage storage = StorageProxy.getPartyNow(player.getParent());
 
             int i = 0;
             int speciesPosition = startPos;
