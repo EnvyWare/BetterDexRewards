@@ -1,10 +1,10 @@
 package com.envyful.better.dex.rewards.forge.transformer;
 
-import com.envyful.api.gui.Transformer;
 import com.envyful.api.reforged.pixelmon.UtilPokemonInfo;
+import com.envyful.api.text.parse.SimplePlaceholder;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Stats;
 
-public class SpawnTimesTransformer implements Transformer {
+public class SpawnTimesTransformer implements SimplePlaceholder {
 
     private final Stats pokemon;
 
@@ -17,7 +17,7 @@ public class SpawnTimesTransformer implements Transformer {
     }
 
     @Override
-    public String transformName(String name) {
+    public String replace(String name) {
         return name.replace("%spawn_times%",  String.join(", ", UtilPokemonInfo.getSpawnTimes(this.pokemon)));
     }
 }

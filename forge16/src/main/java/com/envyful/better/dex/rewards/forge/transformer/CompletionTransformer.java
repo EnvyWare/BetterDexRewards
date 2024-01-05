@@ -1,8 +1,8 @@
 package com.envyful.better.dex.rewards.forge.transformer;
 
-import com.envyful.api.gui.Transformer;
+import com.envyful.api.text.parse.SimplePlaceholder;
 
-public class CompletionTransformer implements Transformer {
+public class CompletionTransformer implements SimplePlaceholder {
 
     private final double percentage;
 
@@ -13,7 +13,7 @@ public class CompletionTransformer implements Transformer {
     private CompletionTransformer(double percentage) {this.percentage = percentage;}
 
     @Override
-    public String transformName(String name) {
+    public String replace(String name) {
         return name.replace(
                 "%percentage%",
                 String.format("%.2f", percentage) + "%"

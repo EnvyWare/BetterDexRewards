@@ -6,6 +6,7 @@ import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
 import com.envyful.api.forge.command.ForgeCommandFactory;
+import com.envyful.api.forge.command.parser.ForgeAnnotationCommandParser;
 import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.player.ForgePlayerManager;
@@ -43,8 +44,8 @@ public class BetterDexRewards {
 
     private static BetterDexRewards instance;
 
-    private final ForgeCommandFactory commandFactory = new ForgeCommandFactory();
     private final ForgePlayerManager playerManager = new ForgePlayerManager();
+    private final ForgeCommandFactory commandFactory = new ForgeCommandFactory(ForgeAnnotationCommandParser::new, playerManager);
 
     private Database database;
     private BetterDexRewardsConfig config;
@@ -67,7 +68,7 @@ public class BetterDexRewards {
             this.playerManager.setSaveManager(new JsonSaveManager<>(playerManager));
         }
 
-        this.playerManager.registerAttribute(this, DexRewardsAttribute.class);
+        this.playerManager.registerAttribute(DexRewardsAttribute.class);
 
         this.checkForPlaceholders();
 
@@ -107,7 +108,7 @@ public class BetterDexRewards {
 
     @SubscribeEvent
     public void onServerStart(RegisterCommandsEvent event) {
-        this.commandFactory.registerCommand(event.getDispatcher(), new BetterDexRewardsCommand());
+        this.commandFactory.registerCommand(event.getDispatcher(), this.commandFactory.parseCommand(new BetterDexRewardsCommand()));
     }
 
     private void checkForPlaceholders() {

@@ -2,7 +2,7 @@ package com.envyful.better.dex.rewards.forge.player;
 
 import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.forge.player.ForgePlayerManager;
-import com.envyful.api.forge.player.attribute.AbstractForgeAttribute;
+import com.envyful.api.forge.player.attribute.ManagedForgeAttribute;
 import com.envyful.api.player.SaveMode;
 import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
@@ -19,13 +19,13 @@ import java.sql.SQLException;
 import java.util.Set;
 
 @DataDirectory("config/players/BetterDexRewards/")
-public class DexRewardsAttribute extends AbstractForgeAttribute<BetterDexRewards> {
+public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards> {
 
     private Set<String> claimedRewards = Sets.newHashSet();
     private long lastReminder = System.currentTimeMillis();
 
-    public DexRewardsAttribute(BetterDexRewards manager, ForgePlayerManager playerManager) {
-        super(manager, playerManager);
+    public DexRewardsAttribute(ForgePlayerManager playerManager) {
+        super(BetterDexRewards.getInstance(), playerManager);
     }
 
     public long getLastReminder() {

@@ -44,7 +44,7 @@ public class DexRewardsListener {
 
         UtilConcurrency.runAsync(() -> {
             ForgeEnvyPlayer player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
-            DexRewardsAttribute attribute = player.getAttribute(BetterDexRewards.class);
+            DexRewardsAttribute attribute = player.getAttributeNow(DexRewardsAttribute.class);
 
             if (attribute == null) {
                 return;

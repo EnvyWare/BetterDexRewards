@@ -30,8 +30,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     private Map<String, DexCompletion> rewardStages = Maps.newHashMap(ImmutableMap.of(
             "one", new DexCompletion(1, 1, ConfigItem.builder().build(), ConfigItem.builder().build(), ConfigItem.builder().build(), 1.0,
-                                     ConfigRewardPool.builder()
-                                             .guranteedReward(new ConfigReward(
+                                     ConfigRewardPool.builder(new ConfigReward(
                                                      Lists.newArrayList("give %player% minecraft:diamond 1"),
                                                      Lists.newArrayList("You've completed 1% of the dex!")))
                                              .minRolls(1).maxRolls(1)
@@ -106,11 +105,11 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         private ConfigItem completeItem;
         private ConfigItem toClaimItem;
         private double requiredPercentage;
-        private ConfigRewardPool rewards;
+        private ConfigRewardPool<ConfigReward> rewards;
         private String optionalAntiClaimPermission = null;
 
         protected DexCompletion(int xPos, int yPos, ConfigItem displayItem, ConfigItem completeItem,
-                                ConfigItem toClaimItem, double requiredPercentage, ConfigRewardPool rewards) {
+                                ConfigItem toClaimItem, double requiredPercentage, ConfigRewardPool<ConfigReward> rewards) {
             this.xPos = xPos;
             this.yPos = yPos;
             this.displayItem = displayItem;
