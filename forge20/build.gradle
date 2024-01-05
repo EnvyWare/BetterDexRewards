@@ -9,49 +9,6 @@ forgeVersion = "1.20.2"
 
 minecraft {
     mappings channel: 'official', version: '1.20.2'
-
-    runs {
-        client {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                betterdexrewards {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                betterdexrewards {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                betterdexrewards {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -61,17 +18,17 @@ repositories {}
 dependencies {
     minecraft 'net.minecraftforge:forge:1.20.2-48.0.30'
 
-    implementation 'pixelmon:Pixelmon-1.20.2-9.2.4-server:9.2.4'
+    implementation 'pixelmon:Pixelmon-1.20.2-9.2.6-server:9.2.6'
 
-    implementation 'com.github.EnvyWare.ForgePlaceholderAPI:api:2.0.4'
+    implementation "com.envyful.papi:api:2.0.5"
 
     implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
 
-    shadow group: 'com.envyful.api', name: 'commons', version: '5.5.1'
-    shadow (group: 'com.envyful.api', name: 'forge20', version: '5.5.1') {
+    shadow group: 'com.envyful.api', name: 'commons', version: '5.7.6'
+    shadow (group: 'com.envyful.api', name: 'forge20', version: '5.7.6') {
         transitive = false;
     }
-    shadow (group: 'com.envyful.api', name: 'reforged20', version: '5.5.1') {
+    shadow (group: 'com.envyful.api', name: 'reforged20', version: '5.7.6') {
         transitive = false;
     }
 }
@@ -81,6 +38,7 @@ shadowJar {
     setArchiveClassifier('')
     setArchiveBaseName("${rootProject.name}-Forge")
 
+    relocate('org.apache.logging', 'com.envyful.better.dex.rewards.shade.log4j')
     relocate('org.spongepowered.configurate', 'com.envyful.better.dex.rewards.shade.configurate')
     relocate('org.yaml.snakeyaml', 'com.envyful.better.dex.rewards.shade.snakeyaml')
     relocate('io.leangen.geantyref', 'com.envyful.better.dex.rewards.shade.geantyref')
@@ -88,20 +46,17 @@ shadowJar {
     relocate('org.slf4j', 'com.envyful.better.dex.rewards.shade.slf4j')
     relocate('com.envyful.api', 'com.envyful.better.dex.rewards.shade.envy.api')
     relocate('org.bstats', 'com.envyful.better.dex.rewards.shade.bstats')
-    relocate('org.apache.logging', 'com.envyful.better.dex.rewards.shade.log4j')
     relocate('io.netty', 'com.envyful.better.dex.rewards.shade.netty')
     relocate('io.lettuce', 'com.envyful.better.dex.rewards.shade.lettuce')
-    relocate('com.cronutils', 'com.envyful.better.dex.rewards.shade.cronutils')
     relocate('com.cronutils', 'com.envyful.better.dex.rewards.shade.cronutils')
     relocate('com.sun.el', 'com.envyful.better.dex.rewards.shade.sun.el')
     relocate('org.reactivestreams', 'com.envyful.better.dex.rewards.shade.reactivestreams')
     relocate('reactor', 'com.envyful.better.dex.rewards.shade.reactor')
+    relocate('com.mysql', 'com.envyful.better.dex.rewards.shade.mysql')
 
     exclude "com/google/**"
     exclude "javax/**"
     exclude "**/module-info.class"
-    exclude "**/*.properties"
-    exclude "**/*.xml"
     exclude "META-INF/versions/9/**"
     exclude "META-INF/native-image/**"
     exclude "META-INF/services/**"
