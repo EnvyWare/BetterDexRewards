@@ -38,7 +38,7 @@ public class DexRewardsListener {
 
         UtilConcurrency.runAsync(() -> {
             var player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
-            var attribute = player.getAttribute(DexRewardsAttribute.class);
+            var attribute = player.getAttributeNow(DexRewardsAttribute.class);
 
             if (attribute == null) {
                 return;

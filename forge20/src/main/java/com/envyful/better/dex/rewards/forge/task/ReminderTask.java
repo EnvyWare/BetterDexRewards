@@ -21,7 +21,7 @@ public class ReminderTask implements Runnable {
     @Override
     public void run() {
         for (ForgeEnvyPlayer onlinePlayer : this.mod.getPlayerManager().getOnlinePlayers()) {
-            DexRewardsAttribute attribute = onlinePlayer.getAttribute(DexRewardsAttribute.class);
+            DexRewardsAttribute attribute = onlinePlayer.getAttributeNow(DexRewardsAttribute.class);
 
             if (attribute == null) {
                 continue;
