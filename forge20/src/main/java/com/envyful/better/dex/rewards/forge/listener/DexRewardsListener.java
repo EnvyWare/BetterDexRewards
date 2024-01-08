@@ -45,8 +45,6 @@ public class DexRewardsListener {
                 return;
             }
 
-            double percentage = attribute.getPokeDexPercentage();
-
             for (var entry : this.mod.getConfig().getRewardStages()) {
                 if (attribute.hasClaimed(entry.getId())) {
                     continue;
@@ -57,7 +55,7 @@ public class DexRewardsListener {
                     continue;
                 }
 
-                if (percentage < entry.getRequiredPercentage()) {
+                if (entry.getRequiredDex().test(player)) {
                     continue;
                 }
 

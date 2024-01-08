@@ -1,6 +1,7 @@
 package com.envyful.better.dex.rewards.forge.config;
 
 import com.envyful.api.config.data.ConfigPath;
+import com.envyful.api.config.data.TypeSerializers;
 import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
@@ -10,6 +11,8 @@ import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
 import com.envyful.api.type.Pair;
+import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
+import com.envyful.better.dex.rewards.forge.config.comparator.RankComparatorTypeSerializer;
 import com.google.common.collect.Lists;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -18,6 +21,7 @@ import java.util.List;
 
 @ConfigPath("config/BetterDexRewards/config.yml")
 @ConfigSerializable
+@TypeSerializers(clazz = RankComparator.class, serializer = RankComparatorTypeSerializer.class)
 public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
 
@@ -54,7 +58,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                 DefaultConfig.onlyNew("one.yml", DexCompletion.builder()
                         .id("one")
                         .page(1)
-                        .requiredPercentage(20)
+                        .requiredDex(RankComparator.percentage(20))
                         .displayItem(ExtendedConfigItem.builder()
                                 .type("pixelmon:poke_ball")
                                 .name("&e&lDex Reward &7- &e%percentage%%")

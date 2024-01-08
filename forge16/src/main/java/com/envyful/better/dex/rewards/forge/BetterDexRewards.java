@@ -17,6 +17,7 @@ import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
+import com.envyful.better.dex.rewards.forge.config.comparator.RankComparatorRegistry;
 import com.envyful.better.dex.rewards.forge.listener.DexRewardsListener;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.envyful.better.dex.rewards.forge.task.ReminderTask;
@@ -50,6 +51,7 @@ public class BetterDexRewards {
     private boolean placeholders;
 
     public BetterDexRewards() {
+        RankComparatorRegistry.init();
         UtilLogger.setLogger(LOGGER);
         instance = this;
         MinecraftForge.EVENT_BUS.register(this);

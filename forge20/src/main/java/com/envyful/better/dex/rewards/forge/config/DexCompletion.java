@@ -4,6 +4,7 @@ import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
+import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
@@ -14,7 +15,7 @@ public class DexCompletion extends AbstractYamlConfig {
     private ExtendedConfigItem displayItem;
     private ExtendedConfigItem completeItem;
     private ExtendedConfigItem toClaimItem;
-    private double requiredPercentage;
+    private RankComparator requiredDex;
     private ConfigRewardPool<ConfigReward> rewards;
     private String optionalAntiClaimPermission = null;
 
@@ -24,7 +25,7 @@ public class DexCompletion extends AbstractYamlConfig {
         this.displayItem = builder.displayItem;
         this.completeItem = builder.completeItem;
         this.toClaimItem = builder.toClaimItem;
-        this.requiredPercentage = builder.requiredPercentage;
+        this.requiredDex = builder.requiredDex;
         this.rewards = builder.rewards;
         this.optionalAntiClaimPermission = builder.optionalAntiClaimPermission;
     }
@@ -48,8 +49,8 @@ public class DexCompletion extends AbstractYamlConfig {
         return this.toClaimItem;
     }
 
-    public double getRequiredPercentage() {
-        return this.requiredPercentage;
+    public RankComparator getRequiredDex() {
+        return this.requiredDex;
     }
 
     public ConfigRewardPool<ConfigReward> getRewards() {
@@ -75,7 +76,7 @@ public class DexCompletion extends AbstractYamlConfig {
         private ExtendedConfigItem displayItem;
         private ExtendedConfigItem completeItem;
         private ExtendedConfigItem toClaimItem;
-        private double requiredPercentage;
+        private RankComparator requiredDex;
         private ConfigRewardPool<ConfigReward> rewards;
         private String optionalAntiClaimPermission;
 
@@ -108,8 +109,8 @@ public class DexCompletion extends AbstractYamlConfig {
             return this;
         }
 
-        public Builder requiredPercentage(double requiredPercentage) {
-            this.requiredPercentage = requiredPercentage;
+        public Builder requiredDex(RankComparator requiredDex) {
+            this.requiredDex = requiredDex;
             return this;
         }
 

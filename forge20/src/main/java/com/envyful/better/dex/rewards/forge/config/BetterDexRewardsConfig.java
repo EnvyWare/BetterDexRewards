@@ -10,9 +10,9 @@ import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
 import com.envyful.api.type.Pair;
+import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
 import com.google.common.collect.Lists;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,33 +21,13 @@ import java.util.List;
 @ConfigSerializable
 public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
-    @Comment("""
-            The setting to tell the mod how to save the player data.
-            The options are:
-            - JSON
-            - MYSQL
-            """)
-    private SaveMode saveMode = SaveMode.JSON;
 
-    @Comment("""
-            The MySQL database details.
-            This will only be used if the save mode is set to MYSQL
-            
-            NOTE: DO NOT SHARE THESE WITH ANYONE YOU DO NOT TRUST
-            """)
+    private SaveMode saveMode = SaveMode.JSON;
     private SQLDatabaseDetails database = new SQLDatabaseDetails("BetterDexRewards", "0.0.0.0", 3306,
-                                                                 "admin", "password", "BetterDexRewards"
+            "admin", "password", "BetterDexRewards"
     );
 
-    @Comment("""
-            The delay in seconds between reminders that the player has an unclaimed reward
-            """)
     private int messageDelaySeconds = 60;
-
-    @Comment("""
-            The setting to prevent pokemon that are not originally captured by the player
-            counting towards their pokedex
-            """)
     private boolean originalTrainerRewardsOnly = false;
 
     private transient List<DexCompletion> rewardStages = Lists.newArrayList();
@@ -71,11 +51,11 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     public BetterDexRewardsConfig() throws IOException {
         super();
 
-        this.rewardStages.addAll(YamlConfigFactory.getInstances(com.envyful.better.dex.rewards.forge.config.DexCompletion.class, "config/BetterDexRewards/rewards/",
-                DefaultConfig.onlyNew("one.yml", com.envyful.better.dex.rewards.forge.config.DexCompletion.builder()
+        this.rewardStages.addAll(Lists.newArrayList(YamlConfigFactory.getInstances(DexCompletion.class, "config/BetterDexRewards/rewards/",
+                DefaultConfig.onlyNew("one.yml", DexCompletion.builder()
                         .id("one")
                         .page(1)
-                        .requiredPercentage(20)
+                        .requiredDex(RankComparator.percentage(20))
                         .displayItem(ExtendedConfigItem.builder()
                                 .type("pixelmon:poke_ball")
                                 .name("&e&lDex Reward &7- &e%percentage%%")
@@ -109,7 +89,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                                 .messages(Lists.newArrayList("&e&l(!) &eYou've claimed your Dex reward!"))
                                 .build()).build())
                         .build()
-                )));
+                ))));
     }
 
     public SaveMode getSaveMode() {
@@ -147,4 +127,5 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     public List<String> getInsufficientPercentage() {
         return this.insufficientPercentage;
     }
+
 }
