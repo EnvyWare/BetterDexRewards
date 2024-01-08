@@ -1,10 +1,10 @@
 package com.envyful.better.dex.rewards.forge;
 
-import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.concurrency.UtilLogger;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
+import com.envyful.api.database.sql.UtilSql;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.command.parser.ForgeAnnotationCommandParser;
 import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
@@ -33,9 +33,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 @Mod("betterdexrewards")
 public class BetterDexRewards {
@@ -75,18 +72,11 @@ public class BetterDexRewards {
         new DexRewardsListener(this);
 
         if (this.config.getSaveMode() == SaveMode.MYSQL) {
-            UtilConcurrency.runAsync(() -> {
-                this.database = new SimpleHikariDatabase(this.config.getDatabase());
+            this.database = new SimpleHikariDatabase(this.config.getDatabase());
 
-                try (Connection connection = this.database.getConnection();
-                     PreparedStatement preparedStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_TABLE);
-                     PreparedStatement logStatement = connection.prepareStatement(BetterDexRewardsQueries.CREATE_LOG_TABLE)) {
-                    preparedStatement.executeUpdate();
-                    logStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
+            UtilSql.update(this.database)
+                    .query(BetterDexRewardsQueries.CREATE_TABLE)
+                    .executeAsync();
         }
 
         new ForgeTaskBuilder()
@@ -102,7 +92,7 @@ public class BetterDexRewards {
             this.config = YamlConfigFactory.getInstance(BetterDexRewardsConfig.class);
             this.graphics = YamlConfigFactory.getInstance(BetterDexRewardsGraphics.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            getLogger().error("Error loading configs", e);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.envyful.better.dex.rewards.forge.ui;
 
 import com.envyful.api.config.type.ConfigInterface;
-import com.envyful.api.config.type.ConfigItem;
+import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.config.UtilConfigInterface;
 import com.envyful.api.forge.config.UtilConfigItem;
@@ -9,14 +9,10 @@ import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
-import com.envyful.api.text.parse.SimplePlaceholder;
+import com.envyful.api.text.Placeholder;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
-import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.Map;
 
 public class BetterDexRewardsUI {
 
@@ -55,58 +51,56 @@ public class BetterDexRewardsUI {
 
         double percentage = attribute.getPokeDexPercentage();
 
-        for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : BetterDexRewards.getInstance().getConfig().getRewardStages().entrySet()) {
-            ConfigItem configItem = null;
-
-            if (entry.getValue().getPage() != page) {
+        for (var entry : BetterDexRewards.getInstance().getConfig().getRewardStages()) {
+            if (entry.getPage() != page) {
                 continue;
             }
 
-            if (attribute.hasClaimed(entry.getKey())) {
-                configItem = entry.getValue().getCompleteItem();
-            } else if (entry.getValue().getOptionalAntiClaimPermission() != null &&
-                    UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
-                configItem = entry.getValue().getCompleteItem();
-            } else if (percentage < entry.getValue().getRequiredPercentage()) {
-                configItem = entry.getValue().getDisplayItem();
+            ExtendedConfigItem configItem;
+
+            if (attribute.hasClaimed(entry.getId())) {
+                configItem = entry.getCompleteItem();
+            } else if (entry.getOptionalAntiClaimPermission() != null &&
+                    UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
+                configItem = entry.getCompleteItem();
+            } else if (percentage < entry.getRequiredPercentage()) {
+                configItem = entry.getDisplayItem();
             } else {
-                configItem = entry.getValue().getToClaimItem();
+                configItem = entry.getToClaimItem();
             }
 
-            final String finalId = entry.getKey();
+            final String finalId = entry.getId();
 
-            pane.set(entry.getValue().getxPos(), entry.getValue().getyPos(),
-                     GuiFactory.displayableBuilder(ItemStack.class)
-                             .itemStack(UtilConfigItem.fromConfigItem(configItem, (SimplePlaceholder) name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))))
-                             .singleClick()
-                             .clickHandler((envyPlayer, clickType) -> {
-                                 if (attribute.hasClaimed(finalId)) {
-                                     for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
-                                         envyPlayer.message(msg);
-                                     }
-                                     return;
-                                 }
+            UtilConfigItem.builder()
+                    .singleClick()
+                    .clickHandler((envyPlayer, clickType) -> {
+                        if (attribute.hasClaimed(finalId)) {
+                            for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                                envyPlayer.message(msg);
+                            }
+                            return;
+                        }
 
-                                 if (entry.getValue().getOptionalAntiClaimPermission() != null &&
-                                         UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
-                                     for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
-                                         envyPlayer.message(msg);
-                                     }
-                                     return;
-                                 }
+                        if (entry.getOptionalAntiClaimPermission() != null &&
+                                UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
+                            for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                                envyPlayer.message(msg);
+                            }
+                            return;
+                        }
 
-                                 if (percentage >= entry.getValue().getRequiredPercentage()) {
-                                     entry.getValue().getRewards().give(player.getParent());
-                                     attribute.claimReward(finalId);
-                                     open(player, page);
-                                 } else {
-                                     for (String msg : BetterDexRewards.getInstance().getConfig().getInsufficientPercentage()) {
-                                         envyPlayer.message(msg);
-                                     }
-                                 }
-                             })
-                             .build()
-            );
+                        if (percentage >= entry.getRequiredPercentage()) {
+                            entry.getRewards().give(player.getParent());
+                            attribute.claimReward(finalId);
+                            open(player, page);
+                        } else {
+                            for (String msg : BetterDexRewards.getInstance().getConfig().getInsufficientPercentage()) {
+                                envyPlayer.message(msg);
+                            }
+                        }
+                    })
+                    .extendedConfigItem(player, pane, configItem,
+                            Placeholder.simple(name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))));
         }
 
         GuiFactory.guiBuilder()

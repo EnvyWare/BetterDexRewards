@@ -1,14 +1,11 @@
 package com.envyful.better.dex.rewards.forge.task;
 
-import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
+import com.envyful.api.platform.PlatformProxy;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
-import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
-import net.minecraft.util.Util;
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ReminderTask implements Runnable {
@@ -38,24 +35,21 @@ public class ReminderTask implements Runnable {
             }
 
             attribute.setLastReminder(System.currentTimeMillis());
-
-            for (String s : this.mod.getConfig().getClaimReminderMessage()) {
-                onlinePlayer.getParent().sendMessage(UtilChatColour.colour(s), Util.NIL_UUID);
-            }
+            PlatformProxy.sendMessage(onlinePlayer, this.mod.getConfig().getClaimReminderMessage());
         }
     }
 
     private boolean canClaimReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
         double pokeDexPercentage = attribute.getPokeDexPercentage();
 
-        for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry :
-                this.mod.getConfig().getRewardStages().entrySet()) {
-            if (entry.getValue().getOptionalAntiClaimPermission() != null &&
-                    UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
+        for (var entry :
+                this.mod.getConfig().getRewardStages()) {
+            if (entry.getOptionalAntiClaimPermission() != null &&
+                    UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
                 continue;
             }
 
-            if (pokeDexPercentage >= entry.getValue().getRequiredPercentage() && !attribute.hasClaimed(entry.getKey())) {
+            if (pokeDexPercentage >= entry.getRequiredPercentage() && !attribute.hasClaimed(entry.getId())) {
                 return true;
             }
         }

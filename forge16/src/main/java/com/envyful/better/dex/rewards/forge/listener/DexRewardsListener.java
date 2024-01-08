@@ -1,19 +1,15 @@
 package com.envyful.better.dex.rewards.forge.listener;
 
 import com.envyful.api.concurrency.UtilConcurrency;
-import com.envyful.api.forge.chat.UtilChatColour;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
+import com.envyful.api.platform.PlatformProxy;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
-import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.Util;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.Map;
 
 public class DexRewardsListener {
 
@@ -52,24 +48,21 @@ public class DexRewardsListener {
 
             double percentage = attribute.getPokeDexPercentage();
 
-            for (Map.Entry<String, BetterDexRewardsConfig.DexCompletion> entry : this.mod.getConfig().getRewardStages().entrySet()) {
-                if (attribute.hasClaimed(entry.getKey())) {
+            for (var entry : this.mod.getConfig().getRewardStages()) {
+                if (attribute.hasClaimed(entry.getId())) {
                     continue;
                 }
 
-                if (entry.getValue().getOptionalAntiClaimPermission() != null &&
-                        UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
+                if (entry.getOptionalAntiClaimPermission() != null &&
+                        UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
                     continue;
                 }
 
-                if (percentage < entry.getValue().getRequiredPercentage()) {
+                if (percentage < entry.getRequiredPercentage()) {
                     continue;
                 }
 
-                for (String s : this.mod.getConfig().getClaimReminderMessage()) {
-                    entityPlayerMP.sendMessage(UtilChatColour.colour(s), Util.NIL_UUID);
-                }
-
+                PlatformProxy.sendMessage(player, this.mod.getConfig().getClaimReminderMessage());
                 break;
             }
         });

@@ -1,19 +1,21 @@
 package com.envyful.better.dex.rewards.forge.config;
 
 import com.envyful.api.config.data.ConfigPath;
-import com.envyful.api.config.type.ConfigItem;
-import com.envyful.api.config.type.ConfigRandomWeightedSet;
+import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.type.SQLDatabaseDetails;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.config.yaml.DefaultConfig;
+import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
+import com.envyful.api.type.Pair;
 import com.google.common.collect.Lists;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @ConfigPath("config/BetterDexRewards/config.yml")
 @ConfigSerializable
@@ -48,17 +50,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             """)
     private boolean originalTrainerRewardsOnly = false;
 
-    private Map<String, DexCompletion> rewardStages = Map.of(
-            "one", new DexCompletion(1, 1, ConfigItem.builder().build(), ConfigItem.builder().build(), ConfigItem.builder().build(), 1.0,
-                                     ConfigRewardPool.builder(new ConfigReward(
-                                                     Lists.newArrayList("give %player% minecraft:diamond 1"),
-                                                     Lists.newArrayList("You've completed 1% of the dex!")))
-                                             .minRolls(1).maxRolls(1)
-                                             .rewards(new ConfigRandomWeightedSet<>(new ConfigRandomWeightedSet.WeightedObject<>(1,
-                                                     new ConfigReward(Lists.newArrayList("Hey %player%"), Lists.newArrayList("Hey %player%")))))
-                                             .build()
-            )
-    );
+    private transient List<DexCompletion> rewardStages = Lists.newArrayList();
 
     private List<String> claimReminderMessage = Lists.newArrayList(
             "&e&l(!) &eYou have a PokeDex reward level you can claim!"
@@ -76,7 +68,48 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             "&c&l(!) &cYou do not have enough dex percentage to claim this"
     );
 
-    public BetterDexRewardsConfig() {
+    public BetterDexRewardsConfig() throws IOException {
+        super();
+
+        this.rewardStages.addAll(YamlConfigFactory.getInstances(com.envyful.better.dex.rewards.forge.config.DexCompletion.class, "config/BetterDexRewards/rewards/",
+                DefaultConfig.onlyNew("one.yml", com.envyful.better.dex.rewards.forge.config.DexCompletion.builder()
+                        .id("one")
+                        .page(1)
+                        .requiredPercentage(20)
+                        .displayItem(ExtendedConfigItem.builder()
+                                .type("pixelmon:poke_ball")
+                                .name("&e&lDex Reward &7- &e%percentage%%")
+                                .positions(Pair.of(2, 2))
+                                .lore(
+                                        "&7&m---------------------",
+                                        "&e&l* &e&lRewards:",
+                                        "&e&l* &e&l- &e&l1x Diamond",
+                                        "&7&m---------------------"
+                                )
+                                .build())
+                        .completeItem(ExtendedConfigItem.builder()
+                                .type("minecraft:barrier")
+                                .name("&e&lClaimed!")
+                                .positions(Pair.of(2, 2))
+                                .lore()
+                                .build())
+                        .toClaimItem(ExtendedConfigItem.builder()
+                                .type("pixelmon:poke_ball")
+                                .name("&e&lDex Reward &7- &e%percentage%%")
+                                .positions(Pair.of(2, 2))
+                                .lore(
+                                        "&7&m---------------------",
+                                        "&e&l* &e&lRewards:",
+                                        "&e&l* &e&l- &e&l1x Diamond",
+                                        "&7&m---------------------"
+                                )
+                                .build())
+                        .rewards(ConfigRewardPool.builder(ConfigReward.builder()
+                                .commands(Lists.newArrayList("give %player% minecraft:diamond 1"))
+                                .messages(Lists.newArrayList("&e&l(!) &eYou've claimed your Dex reward!"))
+                                .build()).build())
+                        .build()
+                )));
     }
 
     public SaveMode getSaveMode() {
@@ -87,7 +120,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         return this.database;
     }
 
-    public Map<String, DexCompletion> getRewardStages() {
+    public List<DexCompletion> getRewardStages() {
         return this.rewardStages;
     }
 
@@ -113,68 +146,5 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public List<String> getInsufficientPercentage() {
         return this.insufficientPercentage;
-    }
-
-    @ConfigSerializable
-    public static class DexCompletion {
-
-        private int xPos;
-        private int yPos;
-        private int page = 1;
-        private ConfigItem displayItem;
-        private ConfigItem completeItem;
-        private ConfigItem toClaimItem;
-        private double requiredPercentage;
-        private ConfigRewardPool rewards;
-        private String optionalAntiClaimPermission = null;
-
-        protected DexCompletion(int xPos, int yPos, ConfigItem displayItem, ConfigItem completeItem,
-                                ConfigItem toClaimItem, double requiredPercentage, ConfigRewardPool rewards) {
-            this.xPos = xPos;
-            this.yPos = yPos;
-            this.displayItem = displayItem;
-            this.completeItem = completeItem;
-            this.toClaimItem = toClaimItem;
-            this.requiredPercentage = requiredPercentage;
-            this.rewards = rewards;
-        }
-
-        public DexCompletion() {}
-
-        public int getxPos() {
-            return this.xPos;
-        }
-
-        public int getyPos() {
-            return this.yPos;
-        }
-
-        public ConfigItem getDisplayItem() {
-            return this.displayItem;
-        }
-
-        public ConfigItem getCompleteItem() {
-            return this.completeItem;
-        }
-
-        public ConfigItem getToClaimItem() {
-            return this.toClaimItem;
-        }
-
-        public double getRequiredPercentage() {
-            return this.requiredPercentage;
-        }
-
-        public ConfigRewardPool getRewards() {
-            return this.rewards;
-        }
-
-        public String getOptionalAntiClaimPermission() {
-            return this.optionalAntiClaimPermission;
-        }
-
-        public int getPage() {
-            return this.page;
-        }
     }
 }

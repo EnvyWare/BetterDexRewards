@@ -1,8 +1,9 @@
 package com.envyful.better.dex.rewards.forge.listener;
 
 import com.envyful.api.concurrency.UtilConcurrency;
-import com.envyful.api.forge.chat.UtilChatColour;
+import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
+import com.envyful.api.platform.PlatformProxy;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.Pixelmon;
@@ -37,33 +38,30 @@ public class DexRewardsListener {
         }
 
         UtilConcurrency.runAsync(() -> {
-            var player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
-            var attribute = player.getAttributeNow(DexRewardsAttribute.class);
+            ForgeEnvyPlayer player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
+            DexRewardsAttribute attribute = player.getAttributeNow(DexRewardsAttribute.class);
 
             if (attribute == null) {
                 return;
             }
 
-            var percentage = attribute.getPokeDexPercentage();
+            double percentage = attribute.getPokeDexPercentage();
 
-            for (var entry : this.mod.getConfig().getRewardStages().entrySet()) {
-                if (attribute.hasClaimed(entry.getKey())) {
+            for (var entry : this.mod.getConfig().getRewardStages()) {
+                if (attribute.hasClaimed(entry.getId())) {
                     continue;
                 }
 
-                if (entry.getValue().getOptionalAntiClaimPermission() != null &&
-                        UtilPlayer.hasPermission(player.getParent(), entry.getValue().getOptionalAntiClaimPermission())) {
+                if (entry.getOptionalAntiClaimPermission() != null &&
+                        UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
                     continue;
                 }
 
-                if (percentage < entry.getValue().getRequiredPercentage()) {
+                if (percentage < entry.getRequiredPercentage()) {
                     continue;
                 }
 
-                for (String s : this.mod.getConfig().getClaimReminderMessage()) {
-                    entityPlayerMP.sendSystemMessage(UtilChatColour.colour(s));
-                }
-
+                PlatformProxy.sendMessage(player, this.mod.getConfig().getClaimReminderMessage());
                 break;
             }
         });

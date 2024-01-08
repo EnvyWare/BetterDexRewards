@@ -4,9 +4,11 @@ import com.envyful.api.command.annotate.Command;
 import com.envyful.api.command.annotate.executor.CommandProcessor;
 import com.envyful.api.command.annotate.executor.Sender;
 import com.envyful.api.command.annotate.permission.Permissible;
+import com.envyful.api.platform.PlatformProxy;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import net.minecraft.commands.CommandSource;
-import net.minecraft.network.chat.Component;
+
+import java.util.List;
 
 @Command(
         value = {
@@ -20,6 +22,6 @@ public class ReloadCommand {
     @CommandProcessor
     public void onCommand(@Sender CommandSource sender, String[] args) {
         BetterDexRewards.getInstance().reloadConfig();
-        sender.sendSystemMessage(Component.literal("Reloaded config"));
+        PlatformProxy.sendMessage(sender, List.of("Reloaded config"));
     }
 }
