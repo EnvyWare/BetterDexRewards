@@ -8,13 +8,13 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @ConfigSerializable
 public class CountRankComparator implements RankComparator {
 
-    protected double percentage;
+    protected double count;
 
     public CountRankComparator() {
     }
 
-    public CountRankComparator(double percentage) {
-        this.percentage = percentage;
+    public CountRankComparator(double count) {
+        this.count = count;
     }
 
     @Override
@@ -24,6 +24,6 @@ public class CountRankComparator implements RankComparator {
 
     @Override
     public boolean test(ForgeEnvyPlayer player) {
-        return StorageProxy.getParty(player.getParent()).playerPokedex.countCaught() >= this.percentage;
+        return StorageProxy.getParty(player.getParent()).playerPokedex.countCaught() >= this.count;
     }
 }

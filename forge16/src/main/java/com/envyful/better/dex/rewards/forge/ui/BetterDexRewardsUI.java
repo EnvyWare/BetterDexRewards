@@ -63,7 +63,7 @@ public class BetterDexRewardsUI {
             } else if (entry.getOptionalAntiClaimPermission() != null &&
                     UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
                 configItem = entry.getCompleteItem();
-            } else if (percentage < entry.getRequiredPercentage()) {
+            } else if (entry.getRequiredDex().test(player)) {
                 configItem = entry.getDisplayItem();
             } else {
                 configItem = entry.getToClaimItem();
@@ -89,7 +89,7 @@ public class BetterDexRewardsUI {
                             return;
                         }
 
-                        if (percentage >= entry.getRequiredPercentage()) {
+                        if (entry.getRequiredDex().test(player)) {
                             entry.getRewards().give(player.getParent());
                             attribute.claimReward(finalId);
                             open(player, page);

@@ -49,7 +49,7 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
-            if (pokeDexPercentage >= entry.getRequiredPercentage() && !attribute.hasClaimed(entry.getId())) {
+            if (entry.getRequiredDex().test(player) && !attribute.hasClaimed(entry.getId())) {
                 return true;
             }
         }
