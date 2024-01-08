@@ -52,7 +52,7 @@ public class DexCompletion extends AbstractYamlConfig {
         return this.requiredPercentage;
     }
 
-    public ConfigRewardPool getRewards() {
+    public ConfigRewardPool<ConfigReward> getRewards() {
         return this.rewards;
     }
 
