@@ -1,16 +1,13 @@
 package com.envyful.better.dex.rewards.forge.config;
 
-import com.envyful.api.config.data.TypeSerializers;
 import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
-import com.envyful.better.dex.rewards.forge.config.comparator.RankComparatorTypeSerializer;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@TypeSerializers(clazz = RankComparator.class, serializer = RankComparatorTypeSerializer.class)
 public class DexCompletion extends AbstractYamlConfig {
 
     private String id;

@@ -40,47 +40,54 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
     @ConfigSerializable
     public static class MainUI {
 
-        private ConfigInterface guiSettings = new ConfigInterface(
-                "BetterDexRewards", 3, ConfigInterface.FillType.BLOCK.name(),
-                ImmutableMap.of("one", ConfigItem.builder()
-                                .type("minecraft:black_stained_glass_pane")
-                                .amount(1)
-                                .name(" ")
-                                .build())
-        );
+        private ConfigInterface guiSettings = ConfigInterface.builder()
+                .title("BetterDexRewards")
+                .height(3)
+                .fillType(ConfigInterface.FillType.BLOCK)
+                .fillerItem(ConfigItem.builder()
+                        .type("minecraft:black_stained_glass_pane")
+                        .amount(1)
+                        .name(" ")
+                        .build())
+                .build();
 
-        private ExtendedConfigItem percentageItem = new ExtendedConfigItem(
-                "pixelmon:poke_ball",
-                1, (byte) 0, "&eCurrent PokeDex Percentage",
-                Lists.newArrayList("&eComplete: &a%percentage%"),
-                1, 1,
-                ImmutableMap.of("tooltip", new ConfigItem.NBTValue("string", ""))
-        );
+        private ExtendedConfigItem percentageItem = ExtendedConfigItem.builder()
+                .type("pixelmon:poke_ball")
+                .amount(1)
+                .name("&eCurrent PokeDex Percentage")
+                .lore(
+                        "&eComplete: &a%percentage%"
+                )
+                .nbt("tooltip", new ConfigItem.NBTValue("string", ""))
+                .positions(1, 1)
+                .build();
 
-        private ExtendedConfigItem missingItem = new ExtendedConfigItem(
-                "pixelmon:pokeradar",
-                1, (byte) 0, "&eMissing Pokemon",
-                Lists.newArrayList(""),
-                5, 1,
-                ImmutableMap.of("ndex", new ConfigItem.NBTValue("short", PixelmonSpecies.UNOWN.getValueUnsafe().getDex() +
-                        ""))
-        );
+        private ExtendedConfigItem missingItem = ExtendedConfigItem.builder()
+                .type("pixelmon:pokeradar")
+                .amount(1)
+                .name("&eMissing Pokemon")
+                .lore(
+                        "",
+                        "&eMissing: %missing%",
+                        ""
+                )
+                .positions(5, 1)
+                .nbt("ndex", new ConfigItem.NBTValue("short", PixelmonSpecies.UNOWN.getValueUnsafe().getDex() + ""))
+                .build();
 
-        private ExtendedConfigItem ranksItem = new ExtendedConfigItem(
-                "pixelmon:master_ball",
-                1, (byte) 0, "&ePokeDex Ranks",
-                Lists.newArrayList(""),
-                3, 1,
-                Collections.emptyMap()
-        );
+        private ExtendedConfigItem ranksItem = ExtendedConfigItem.builder()
+                .type("pixelmon:master_ball")
+                .amount(1)
+                .name("&ePokeDex Ranks")
+                .positions(3, 1)
+                .build();
 
-        private ExtendedConfigItem infoItem = new ExtendedConfigItem(
-                Items.PAPER.getRegistryName().toString(),
-                1, (byte) 0, "Info",
-                Lists.newArrayList(""),
-                7, 1,
-                Collections.emptyMap()
-        );
+        private ExtendedConfigItem infoItem = ExtendedConfigItem.builder()
+                .type("minecraft:paper")
+                .amount(1)
+                .name("&eInfo")
+                .positions(7, 1)
+                .build();
 
         public MainUI() {}
 
@@ -108,14 +115,16 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
     @ConfigSerializable
     public static class MissingPokemonUI {
 
-        private ConfigInterface guiSettings = new ConfigInterface(
-                "BetterDexRewards", 6, ConfigInterface.FillType.BLOCK.name(),
-                ImmutableMap.of("one", ConfigItem.builder()
+        private ConfigInterface guiSettings = ConfigInterface.builder()
+                .title("BetterDexRewards")
+                .height(6)
+                .fillType(ConfigInterface.FillType.BLOCK)
+                .fillerItem(ConfigItem.builder()
                         .type("minecraft:black_stained_glass_pane")
                         .amount(1)
                         .name(" ")
                         .build())
-        );
+                .build();
 
         private List<Integer> missingPokemonPositions = Lists.newArrayList(
                 0, 1, 2, 3, 4, 5, 6, 7, 8,
@@ -124,26 +133,26 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
                 27, 28, 29, 30, 31, 32, 33, 34, 35
         );
 
-        private ExtendedConfigItem backButton = new ExtendedConfigItem(
-                "pixelmon:eject_button",
-                1, (byte) 0, "&eBack",
-                Lists.newArrayList(),
-                4, 5, Collections.emptyMap()
-        );
+        private ExtendedConfigItem backButton = ExtendedConfigItem.builder()
+                .type("pixelmon:eject_button")
+                .amount(1)
+                .name("&eBack")
+                .positions(4, 5)
+                .build();
 
-        private ExtendedConfigItem previousPageButton = new ExtendedConfigItem(
-                PixelmonItems.trade_holder_left.getRegistryName().toString(),
-                1, (byte) 0, "&ePrevious Page",
-                Lists.newArrayList(),
-                0, 5, Collections.emptyMap()
-        );
+        private ExtendedConfigItem previousPageButton = ExtendedConfigItem.builder()
+                .type("pixelmon:trade_holder_left")
+                .amount(1)
+                .name("&ePrevious Page")
+                .positions(0, 5)
+                .build();
 
-        private ExtendedConfigItem nextPageButton = new ExtendedConfigItem(
-                PixelmonItems.trade_holder_left.getRegistryName().toString(),
-                1, (byte) 0, "&eNext Page",
-                Lists.newArrayList(),
-                8, 5, Collections.emptyMap()
-        );
+        private ExtendedConfigItem nextPageButton = ExtendedConfigItem.builder()
+                .type("pixelmon:trade_holder_left")
+                .amount(1)
+                .name("&eNext Page")
+                .positions(8, 5)
+                .build();
 
         private ConfigItem missingPokemonItem =
                 ConfigItem.builder()
@@ -194,35 +203,37 @@ public class BetterDexRewardsGraphics extends AbstractYamlConfig {
     @ConfigSerializable
     public static class RanksUI {
 
-        private ConfigInterface guiSettings = new ConfigInterface(
-                "BetterDexRewards", 6, ConfigInterface.FillType.BLOCK.name(),
-                ImmutableMap.of("one", ConfigItem.builder()
+        private ConfigInterface guiSettings = ConfigInterface.builder()
+                .title("BetterDexRewards")
+                .height(6)
+                .fillType(ConfigInterface.FillType.BLOCK)
+                .fillerItem(ConfigItem.builder()
                         .type("minecraft:black_stained_glass_pane")
                         .amount(1)
                         .name(" ")
                         .build())
-        );
+                .build();
 
-        private ExtendedConfigItem backButton = new ExtendedConfigItem(
-                "pixelmon:eject_button",
-                1, (byte) 0, "&eBack",
-                Lists.newArrayList(),
-                4, 5, Collections.emptyMap()
-        );
+        private ExtendedConfigItem backButton = ExtendedConfigItem.builder()
+                .type("pixelmon:eject_button")
+                .amount(1)
+                .name("&eBack")
+                .positions(4, 5)
+                .build();
 
-        private ExtendedConfigItem previousPageButton = new ExtendedConfigItem(
-                "pixelmon:trade_holder_left",
-                1, (byte) 0, "&ePrevious Page",
-                Lists.newArrayList(),
-                0, 0, Collections.emptyMap()
-        );
+        private ExtendedConfigItem previousPageButton = ExtendedConfigItem.builder()
+                .type("pixelmon:trade_holder_left")
+                .amount(1)
+                .name("&ePrevious Page")
+                .positions(0, 0)
+                .build();
 
-        private ExtendedConfigItem nextPageButton = new ExtendedConfigItem(
-                "pixelmon:trade_holder_right",
-                1, (byte) 0, "&eNext Page",
-                Lists.newArrayList(),
-                1, 0, Collections.emptyMap()
-        );
+        private ExtendedConfigItem nextPageButton = ExtendedConfigItem.builder()
+                .type("pixelmon:trade_holder_left")
+                .amount(1)
+                .name("&eNext Page")
+                .positions(1, 0)
+                .build();
 
         private int pages = 1;
 

@@ -1,6 +1,7 @@
 package com.envyful.better.dex.rewards.forge.config.comparator.type;
 
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
+import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -25,5 +26,10 @@ public class PercentageRankComparator implements RankComparator {
     @Override
     public boolean test(ForgeEnvyPlayer player) {
         return StorageProxy.getPartyNow(player.getParent()).playerPokedex.getCaughtCompletionPercentage() >= this.percentage;
+    }
+
+    @Override
+    public String getPercentage() {
+        return String.format(BetterDexRewards.getConfig().getPercentageFormat(), this.percentage);
     }
 }

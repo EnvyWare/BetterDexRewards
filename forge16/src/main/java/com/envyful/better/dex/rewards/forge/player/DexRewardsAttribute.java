@@ -2,7 +2,6 @@ package com.envyful.better.dex.rewards.forge.player;
 
 import com.envyful.api.database.sql.SqlType;
 import com.envyful.api.database.sql.UtilSql;
-import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.forge.player.attribute.ManagedForgeAttribute;
 import com.envyful.api.player.SaveMode;
 import com.envyful.api.player.save.attribute.DataDirectory;
@@ -21,8 +20,8 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
     private Set<String> claimedRewards = Sets.newHashSet();
     private long lastReminder = System.currentTimeMillis();
 
-    public DexRewardsAttribute(ForgePlayerManager playerManager) {
-        super(BetterDexRewards.getInstance(), playerManager);
+    public DexRewardsAttribute() {
+        super(BetterDexRewards.getInstance());
     }
 
     public long getLastReminder() {
@@ -39,7 +38,7 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
         if (this.manager.getConfig().getSaveMode() == SaveMode.MYSQL) {
             UtilSql.update(this.manager.getDatabase())
                     .query(BetterDexRewardsQueries.ADD_USER_CLAIMED)
-                    .data(SqlType.text(this.parent.getUuid().toString()), SqlType.text(id))
+                    .data(SqlType.text(this.id.toString()), SqlType.text(id))
                     .executeAsync();
         }
     }
@@ -58,7 +57,7 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
     public void load() {
         UtilSql.query(this.manager.getDatabase())
                 .query(BetterDexRewardsQueries.LOAD_USER_CLAIMED)
-                .data(SqlType.text(this.parent.getUuid().toString()))
+                .data(SqlType.text(this.id.toString()))
                 .converter(resultSet -> {
                     this.claimedRewards.add(resultSet.getString("claimed_rank"));
                     return null;

@@ -28,7 +28,7 @@ public class DexRewardsListener {
             return;
         }
 
-        if (this.mod.getConfig().isOriginalTrainerRewardsOnly()) {
+        if (BetterDexRewards.getConfig().isOriginalTrainerRewardsOnly()) {
             if (event.getPokemon().getOriginalTrainerUUID() != null) {
                 if (!(event.getPokemon().getOriginalTrainerUUID().equals(entityPlayerMP.getUUID()))) {
                     event.setCanceled(true);

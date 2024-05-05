@@ -75,7 +75,7 @@ public class BetterDexRewardsUI {
                     .singleClick()
                     .clickHandler((envyPlayer, clickType) -> {
                         if (attribute.hasClaimed(finalId)) {
-                            for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                            for (String msg : BetterDexRewards.getConfig().getAlreadyClaimed()) {
                                 envyPlayer.message(msg);
                             }
                             return;
@@ -83,7 +83,7 @@ public class BetterDexRewardsUI {
 
                         if (entry.getOptionalAntiClaimPermission() != null &&
                                 UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
-                            for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                            for (String msg : BetterDexRewards.getConfig().getAlreadyClaimed()) {
                                 envyPlayer.message(msg);
                             }
                             return;
@@ -100,7 +100,7 @@ public class BetterDexRewardsUI {
                         }
                     })
                     .extendedConfigItem(player, pane, configItem,
-                            Placeholder.simple(name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))));
+                            Placeholder.simple(name -> name.replace("%dex%", String.format(BetterDexRewards.getConfig().getPercentageFormat(), attribute.getPokeDexPercentage()))));
         }
 
         GuiFactory.guiBuilder()

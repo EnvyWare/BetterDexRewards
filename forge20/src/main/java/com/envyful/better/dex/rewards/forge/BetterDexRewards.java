@@ -1,6 +1,7 @@
 package com.envyful.better.dex.rewards.forge;
 
 import com.envyful.api.concurrency.UtilLogger;
+import com.envyful.api.config.ConfigTypeSerializer;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.database.Database;
 import com.envyful.api.database.impl.SimpleHikariDatabase;
@@ -17,7 +18,9 @@ import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
+import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparatorRegistry;
+import com.envyful.better.dex.rewards.forge.config.comparator.RankComparatorTypeSerializer;
 import com.envyful.better.dex.rewards.forge.listener.DexRewardsListener;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.envyful.better.dex.rewards.forge.task.ReminderTask;
@@ -62,7 +65,7 @@ public class BetterDexRewards {
             this.playerManager.setSaveManager(new JsonSaveManager<>(playerManager));
         }
 
-        this.playerManager.registerAttribute(DexRewardsAttribute.class);
+        this.playerManager.registerAttribute(DexRewardsAttribute.class, DexRewardsAttribute::new);
 
         this.checkForPlaceholders();
 
@@ -86,6 +89,8 @@ public class BetterDexRewards {
 
     public void reloadConfig() {
         try {
+            ConfigTypeSerializer.register(new RankComparatorTypeSerializer(), RankComparator.class);
+
             this.config = YamlConfigFactory.getInstance(BetterDexRewardsConfig.class);
             this.graphics = YamlConfigFactory.getInstance(BetterDexRewardsGraphics.class);
         } catch (IOException e) {
@@ -119,12 +124,12 @@ public class BetterDexRewards {
         return this.database;
     }
 
-    public BetterDexRewardsConfig getConfig() {
-        return this.config;
+    public static BetterDexRewardsConfig getConfig() {
+        return instance.config;
     }
 
-    public BetterDexRewardsGraphics getGraphics() {
-        return this.graphics;
+    public static BetterDexRewardsGraphics getGraphics() {
+        return instance.graphics;
     }
 
     public boolean isPlaceholders() {

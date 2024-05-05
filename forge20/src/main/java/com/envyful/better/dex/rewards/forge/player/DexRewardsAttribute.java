@@ -21,8 +21,8 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
     private Set<String> claimedRewards = Sets.newHashSet();
     private long lastReminder = System.currentTimeMillis();
 
-    public DexRewardsAttribute(ForgePlayerManager playerManager) {
-        super(BetterDexRewards.getInstance(), playerManager);
+    public DexRewardsAttribute() {
+        super(BetterDexRewards.getInstance());
     }
 
     public long getLastReminder() {
@@ -36,10 +36,10 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
     public void claimReward(String id) {
         this.claimedRewards.add(id);
 
-        if (this.manager.getConfig().getSaveMode() == SaveMode.MYSQL) {
+        if (BetterDexRewards.getConfig().getSaveMode() == SaveMode.MYSQL) {
             UtilSql.update(this.manager.getDatabase())
                     .query(BetterDexRewardsQueries.ADD_USER_CLAIMED)
-                    .data(SqlType.text(this.parent.getUuid().toString()), SqlType.text(id))
+                    .data(SqlType.text(this.id.toString()), SqlType.text(id))
                     .executeAsync();
         }
     }
@@ -58,7 +58,7 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
     public void load() {
         UtilSql.query(this.manager.getDatabase())
                 .query(BetterDexRewardsQueries.LOAD_USER_CLAIMED)
-                .data(SqlType.text(this.parent.getUuid().toString()))
+                .data(SqlType.text(this.id.toString()))
                 .converter(resultSet -> {
                     this.claimedRewards.add(resultSet.getString("claimed_rank"));
                     return null;

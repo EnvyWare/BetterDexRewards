@@ -48,6 +48,8 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             "&c&l(!) &cYou do not have enough dex percentage to claim this"
     );
 
+    private String percentageFormat = "%.2f";
+
     public BetterDexRewardsConfig() throws IOException {
         super();
 
@@ -128,4 +130,7 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         return this.insufficientPercentage;
     }
 
+    public String getPercentageFormat() {
+        return this.percentageFormat;
+    }
 }

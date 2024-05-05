@@ -18,7 +18,7 @@ public class ReminderTask implements Runnable {
 
     @Override
     public void run() {
-        for (ForgeEnvyPlayer onlinePlayer : this.mod.getPlayerManager().getOnlinePlayers()) {
+        for (var onlinePlayer : this.mod.getPlayerManager().getOnlinePlayers()) {
             DexRewardsAttribute attribute = onlinePlayer.getAttributeNow(DexRewardsAttribute.class);
 
             if (attribute == null) {
@@ -26,7 +26,7 @@ public class ReminderTask implements Runnable {
             }
 
             if ((System.currentTimeMillis() - attribute.getLastReminder()) <=
-                    TimeUnit.SECONDS.toMillis(this.mod.getConfig().getMessageDelaySeconds())) {
+                    TimeUnit.SECONDS.toMillis(BetterDexRewards.getConfig().getMessageDelaySeconds())) {
                 continue;
             }
 
@@ -35,17 +35,14 @@ public class ReminderTask implements Runnable {
             }
 
             attribute.setLastReminder(System.currentTimeMillis());
-            PlatformProxy.sendMessage(onlinePlayer, this.mod.getConfig().getClaimReminderMessage());
+            PlatformProxy.sendMessage(onlinePlayer, BetterDexRewards.getConfig().getClaimReminderMessage());
         }
     }
 
     private boolean canClaimReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
-        double pokeDexPercentage = attribute.getPokeDexPercentage();
-
-        for (var entry :
-                this.mod.getConfig().getRewardStages()) {
+        for (var entry : BetterDexRewards.getConfig().getRewardStages()) {
             if (entry.getOptionalAntiClaimPermission() != null &&
-                    UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
+                    PlatformProxy.hasPermission(player, entry.getOptionalAntiClaimPermission())) {
                 continue;
             }
 
