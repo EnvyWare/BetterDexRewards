@@ -50,6 +50,7 @@ public class BetterDexRewards {
     private boolean placeholders;
 
     public BetterDexRewards() {
+        GuiFactory.setPlayerManager(this.playerManager);
         RankComparatorRegistry.init();
         UtilLogger.setLogger(LOGGER);
         instance = this;
