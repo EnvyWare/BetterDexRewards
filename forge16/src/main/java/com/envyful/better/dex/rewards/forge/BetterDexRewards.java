@@ -54,7 +54,6 @@ public class BetterDexRewards {
     private boolean placeholders;
 
     public BetterDexRewards() {
-        GuiFactory.setPlayerManager(this.playerManager);
         RankComparatorRegistry.init();
         UtilLogger.setLogger(LOGGER);
         instance = this;
@@ -66,6 +65,7 @@ public class BetterDexRewards {
     public void onInit(FMLServerAboutToStartEvent event) {
         this.reloadConfig();
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
+        GuiFactory.setPlayerManager(this.playerManager);
 
         if (this.config.getSaveMode() == SaveMode.JSON) {
             this.playerManager.setSaveManager(new JsonSaveManager<>(playerManager));
