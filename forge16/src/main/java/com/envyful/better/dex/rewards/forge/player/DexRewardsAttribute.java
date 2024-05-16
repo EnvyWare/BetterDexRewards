@@ -47,6 +47,15 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
         return this.claimedRewards.contains(id);
     }
 
+    public void clearClaims() {
+        UtilSql.update(BetterDexRewards.getInstance().getDatabase())
+                .query(BetterDexRewardsQueries.CLEAR_USER)
+                .data(SqlType.text(this.id.toString()))
+                .executeAsync();
+
+        this.claimedRewards.clear();
+    }
+
     public double getPokeDexPercentage() {
         PlayerPartyStorage storage = StorageProxy.getParty(this.parent.getParent());
 

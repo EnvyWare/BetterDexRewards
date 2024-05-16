@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
                 "pokedex"
         }
 )
-@SubCommands({ReloadCommand.class, ViewLogsCommand.class})
+@SubCommands({ReloadCommand.class, ViewLogsCommand.class, ResetPlayerCommand.class})
 public class BetterDexRewardsCommand {
 
     @CommandProcessor

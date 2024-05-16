@@ -26,4 +26,6 @@ public class BetterDexRewardsQueries {
     public static final String ADD_USER_LOGS = "INSERT INTO `better_dex_rewards_player_log`(uuid, claimed_rank, commands) " +
             "VALUES (?, ?, ?);";
 
+    public static final String CLEAR_USER = "DELETE * FROM `better_dex_rewards_player_claims` WHERE uuid = ?;";
+
 }

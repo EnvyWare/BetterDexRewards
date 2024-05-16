@@ -44,6 +44,15 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
         }
     }
 
+    public void clearClaims() {
+        UtilSql.update(BetterDexRewards.getInstance().getDatabase())
+                .query(BetterDexRewardsQueries.CLEAR_USER)
+                .data(SqlType.text(this.id.toString()))
+                .executeAsync();
+
+        this.claimedRewards.clear();
+    }
+
     public boolean hasClaimed(String id) {
         return this.claimedRewards.contains(id);
     }
