@@ -49,8 +49,6 @@ public class BetterDexRewardsUI {
                 .clickHandler((envyPlayer, clickType) -> open(player, page == 1 ? dexRewardsConfig.getPages() : page - 1))
                 .extendedConfigItem(player, pane, dexRewardsConfig.getPreviousPageButton());
 
-        double percentage = attribute.getPokeDexPercentage();
-
         for (var entry : BetterDexRewards.getInstance().getConfig().getRewardStages()) {
             if (entry.getPage() != page) {
                 continue;
@@ -63,7 +61,7 @@ public class BetterDexRewardsUI {
             } else if (entry.getOptionalAntiClaimPermission() != null &&
                     UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
                 configItem = entry.getCompleteItem();
-            } else if (entry.getRequiredDex().test(player)) {
+            } else if (!entry.getRequiredDex().test(player)) {
                 configItem = entry.getDisplayItem();
             } else {
                 configItem = entry.getToClaimItem();
