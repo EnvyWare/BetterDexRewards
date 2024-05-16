@@ -10,8 +10,10 @@ import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.command.parser.ForgeAnnotationCommandParser;
 import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
+import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
+import com.envyful.api.platform.PlatformProxy;
 import com.envyful.api.player.SaveMode;
 import com.envyful.api.player.save.impl.JsonSaveManager;
 import com.envyful.better.dex.rewards.forge.command.BetterDexRewardsCommand;
@@ -54,6 +56,7 @@ public class BetterDexRewards {
     private boolean placeholders;
 
     public BetterDexRewards() {
+        PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
         RankComparatorRegistry.init();
         UtilLogger.setLogger(LOGGER);
         instance = this;
