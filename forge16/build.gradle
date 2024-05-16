@@ -37,7 +37,6 @@ shadowJar {
     setArchiveClassifier('')
     setArchiveBaseName("${rootProject.name}-Forge")
 
-    relocate('org.apache.logging', 'com.envyful.better.dex.rewards.shade.log4j')
     relocate('org.spongepowered.configurate', 'com.envyful.better.dex.rewards.shade.configurate')
     relocate('org.yaml.snakeyaml', 'com.envyful.better.dex.rewards.shade.snakeyaml')
     relocate('io.leangen.geantyref', 'com.envyful.better.dex.rewards.shade.geantyref')
