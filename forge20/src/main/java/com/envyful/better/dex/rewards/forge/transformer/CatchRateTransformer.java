@@ -18,6 +18,6 @@ public class CatchRateTransformer implements SimplePlaceholder {
 
     @Override
     public String replace(String name) {
-        return name.replace("%catch_rate%", String.join(System.lineSeparator(), UtilPokemonInfo.getCatchRate(this.pokemon)));
+        return name.replace("%catch_rate%", String.format("%.2f", UtilPokemonInfo.getCatchRatePercentage(this.pokemon)));
     }
 }
