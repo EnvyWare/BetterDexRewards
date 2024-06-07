@@ -43,7 +43,7 @@ public class ReminderTask implements Runnable {
     }
 
     private DexCompletion findClaimableReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
-        for (var entry : this.mod.getConfig().getRewardStages()) {
+        for (var entry : BetterDexRewards.getConfig().getRewardStages()) {
             if (entry.getOptionalAntiClaimPermission() != null &&
                     PlatformProxy.hasPermission(player, entry.getOptionalAntiClaimPermission())) {
                 continue;
