@@ -4,11 +4,12 @@ import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.ConfigReward;
 import com.envyful.api.forge.config.ConfigRewardPool;
+import com.envyful.api.text.parse.SimplePlaceholder;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-public class DexCompletion extends AbstractYamlConfig {
+public class DexCompletion extends AbstractYamlConfig implements SimplePlaceholder {
 
     private String id;
     private int page = 1;
@@ -63,6 +64,11 @@ public class DexCompletion extends AbstractYamlConfig {
 
     public int getPage() {
         return this.page;
+    }
+
+    @Override
+    public String replace(String s) {
+        return s.replace("%id%", this.id);
     }
 
     public static Builder builder() {
