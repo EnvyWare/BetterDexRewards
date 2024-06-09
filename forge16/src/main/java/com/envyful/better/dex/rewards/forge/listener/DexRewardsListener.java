@@ -5,6 +5,7 @@ import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
+import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
@@ -23,7 +24,7 @@ public class DexRewardsListener {
 
     @SubscribeEvent
     public void onPokemonCatch(PokedexEvent event) {
-        ServerPlayerEntity entityPlayerMP = UtilPlayer.getOnlinePlayer(event.getPlayerUUID());
+        var entityPlayerMP = UtilPlayer.getOnlinePlayer(event.getPlayerUUID());
 
         if (entityPlayerMP == null) {
             return;
@@ -39,30 +40,36 @@ public class DexRewardsListener {
         }
 
         UtilConcurrency.runAsync(() -> {
-            ForgeEnvyPlayer player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
-            DexRewardsAttribute attribute = player.getAttributeNow(DexRewardsAttribute.class);
+            var player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
+            var attribute = player.getAttributeNow(DexRewardsAttribute.class);
 
             if (attribute == null) {
                 return;
             }
 
-            for (var entry : this.mod.getConfig().getRewardStages()) {
-                if (attribute.hasClaimed(entry.getId())) {
-                    continue;
-                }
+            var reward = this.findClaimableReward(player, attribute);
 
-                if (entry.getOptionalAntiClaimPermission() != null &&
-                        UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
-                    continue;
-                }
-
-                if (entry.getRequiredDex().test(player)) {
-                    continue;
-                }
-
-                PlatformProxy.sendMessage(player, this.mod.getConfig().getClaimReminderMessage());
-                break;
+            if (reward == null) {
+                return;
             }
+
+            attribute.setLastReminder(System.currentTimeMillis());
+            PlatformProxy.sendMessage(player, this.mod.getConfig().getClaimReminderMessage(), reward);
         });
+    }
+
+    private DexCompletion findClaimableReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
+        for (var entry : this.mod.getConfig().getRewardStages()) {
+            if (entry.getOptionalAntiClaimPermission() != null &&
+                    PlatformProxy.hasPermission(player, entry.getOptionalAntiClaimPermission())) {
+                continue;
+            }
+
+            if (entry.getRequiredDex().test(player) && !attribute.hasClaimed(entry.getId())) {
+                return entry;
+            }
+        }
+
+        return null;
     }
 }
