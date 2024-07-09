@@ -7,6 +7,7 @@ import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class ReminderTask implements Runnable {
@@ -20,11 +21,11 @@ public class ReminderTask implements Runnable {
     @Override
     public void run() {
         for (var onlinePlayer : this.mod.getPlayerManager().getOnlinePlayers()) {
-            DexRewardsAttribute attribute = onlinePlayer.getAttributeNow(DexRewardsAttribute.class);
-
-            if (attribute == null) {
+            if (!onlinePlayer.hasAttribute(DexRewardsAttribute.class)) {
                 continue;
             }
+
+            var attribute = onlinePlayer.getAttributeNow(DexRewardsAttribute.class);
 
             if ((System.currentTimeMillis() - attribute.getLastReminder()) <=
                     TimeUnit.SECONDS.toMillis(BetterDexRewards.getConfig().getMessageDelaySeconds())) {
