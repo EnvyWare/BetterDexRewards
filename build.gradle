@@ -2,7 +2,7 @@ subprojects {
     apply plugin: 'java'
 
     group = 'com.envyful.better.dex.rewards'
-    version = '3.5.4'
+    version = '3.6.0'
 
     ext {
         forgeVersion = "none"
