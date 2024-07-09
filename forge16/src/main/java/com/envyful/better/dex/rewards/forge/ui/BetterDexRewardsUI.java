@@ -56,7 +56,7 @@ public class BetterDexRewardsUI {
 
             ExtendedConfigItem configItem;
 
-            if (attribute.hasClaimed(entry.getId())) {
+            if (attribute.hasClaimed(entry)) {
                 configItem = entry.getCompleteItem();
             } else if (entry.getOptionalAntiClaimPermission() != null &&
                     UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
@@ -72,7 +72,7 @@ public class BetterDexRewardsUI {
             UtilConfigItem.builder()
                     .singleClick()
                     .clickHandler((envyPlayer, clickType) -> {
-                        if (attribute.hasClaimed(finalId)) {
+                        if (attribute.hasClaimed(entry)) {
                             for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
                                 envyPlayer.message(msg);
                             }

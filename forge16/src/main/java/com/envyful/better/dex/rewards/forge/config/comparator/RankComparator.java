@@ -12,6 +12,8 @@ public interface RankComparator {
 
     boolean test(ForgeEnvyPlayer player);
 
+    int distance(ForgeEnvyPlayer player);
+
     static RankComparator percentage(double percentage) {
         return new PercentageRankComparator(percentage);
     }

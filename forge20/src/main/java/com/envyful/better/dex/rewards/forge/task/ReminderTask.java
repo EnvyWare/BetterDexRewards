@@ -1,13 +1,11 @@
 package com.envyful.better.dex.rewards.forge.task;
 
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
-import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class ReminderTask implements Runnable {
@@ -50,7 +48,7 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
-            if (entry.getRequiredDex().test(player) && !attribute.hasClaimed(entry.getId())) {
+            if (entry.getRequiredDex().test(player) && !attribute.hasClaimed(entry)) {
                 return entry;
             }
         }

@@ -30,7 +30,8 @@ public class CountRankComparator implements RankComparator {
     }
 
     @Override
-    public String getPercentage() {
-        return "0.0"; //TODO:
+    public int distance(ForgeEnvyPlayer player) {
+        var caught = StorageProxy.getPartyNow(player.getParent()).playerPokedex.countCaught();
+        return (int) Math.max(0, this.count - caught);
     }
 }

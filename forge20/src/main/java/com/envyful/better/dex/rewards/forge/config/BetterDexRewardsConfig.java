@@ -11,11 +11,14 @@ import com.envyful.api.forge.config.ConfigRewardPool;
 import com.envyful.api.player.SaveMode;
 import com.envyful.api.type.Pair;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @ConfigPath("config/BetterDexRewards/config.yml")
 @ConfigSerializable
@@ -49,6 +52,11 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
     );
 
     private String percentageFormat = "%.2f";
+
+
+    private Map<String, RewardReminder> rewardReminders = ImmutableMap.of(
+            "one", new RewardReminder(5, "message %player% You're 5 Pokemon away from %next%!")
+    );
 
     public BetterDexRewardsConfig() throws IOException {
         super();
@@ -132,5 +140,40 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public String getPercentageFormat() {
         return this.percentageFormat;
+    }
+
+    public RewardReminder findReminder(int distance) {
+        for (var value : this.rewardReminders.values()) {
+            if (value.getDistanceFromNext() == distance) {
+                return value;
+            }
+        }
+
+        return null;
+    }
+
+    @ConfigSerializable
+    public static class RewardReminder {
+
+        @Comment("The distance from the next reward level to send the reminder")
+        private int distanceFromNext = 5;
+        @Comment("The commands to run when the reminder threshold is met")
+        private List<String> commands;
+
+        public RewardReminder() {
+        }
+
+        public RewardReminder(int distanceFromNext, String... commands) {
+            this.distanceFromNext = distanceFromNext;
+            this.commands = List.of(commands);
+        }
+
+        public int getDistanceFromNext() {
+            return this.distanceFromNext;
+        }
+
+        public List<String> getCommands() {
+            return this.commands;
+        }
     }
 }

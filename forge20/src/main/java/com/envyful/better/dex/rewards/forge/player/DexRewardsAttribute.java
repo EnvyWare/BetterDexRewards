@@ -8,6 +8,7 @@ import com.envyful.api.player.SaveMode;
 import com.envyful.api.player.save.attribute.DataDirectory;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsQueries;
+import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.google.common.collect.Sets;
 import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
@@ -53,14 +54,34 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
         this.claimedRewards.clear();
     }
 
-    public boolean hasClaimed(String id) {
-        return this.claimedRewards.contains(id);
+    public boolean hasClaimed(DexCompletion stage) {
+        return this.claimedRewards.contains(stage.getId());
     }
 
     public double getPokeDexPercentage() {
         PlayerPartyStorage storage = StorageProxy.getPartyNow(this.parent.getParent());
 
         return (storage.playerPokedex.countCaught() / (double) Pokedex.pokedexSize) * 100.0;
+    }
+
+    public DexCompletion findNextStage() {
+        var smallestDistance = 10_000;
+        DexCompletion closest = null;
+
+        for (var rewardStage : this.manager.getConfig().getRewardStages()) {
+            if (this.hasClaimed(rewardStage)) {
+                continue;
+            }
+
+            var currentDistance = rewardStage.getRequiredDex().distance(this.parent);
+
+            if (currentDistance < smallestDistance) {
+                smallestDistance = currentDistance;
+                closest = rewardStage;
+            }
+        }
+
+        return closest;
     }
 
     @Override
