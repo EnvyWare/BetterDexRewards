@@ -5,7 +5,7 @@ BetterDexRewards allows you to design rewards for players that are related to de
 # Installation Instructions
 Head over to releases and grab the version that corresponds to the Minecraft server you are running:
 
-For 1.12.2 - `BetterDexRewards-Forge-x.x.x-1.12.2.jar` For 1.16.5 - `BetterDexRewards-Forge-x.x.x-1.16.5.jar`
+For 1.16.5 - `BetterDexRewards-Forge-x.x.x-1.16.5.jar`
 
 Install this Into your `/mods` folder.
 
