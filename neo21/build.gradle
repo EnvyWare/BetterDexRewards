@@ -17,14 +17,15 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {}
 
 dependencies {
-    implementation "pixelmon:Pixelmon-1.21.1-9.3.2-universal:9.3.2"
-    interfaceInjectionData("pixelmon:Pixelmon-1.21.1-9.3.2-universal-interfaceinjection:9.3.2@json")
+    var pixelmonVersion = "9.3.7"
+    implementation "pixelmon:Pixelmon-1.21.1-${pixelmonVersion}-universal:${pixelmonVersion}"
+    interfaceInjectionData("pixelmon:Pixelmon-1.21.1-${pixelmonVersion}-universal-interfaceinjection:${pixelmonVersion}@json")
 
     implementation "com.envyful.papi:api:2.1.0"
 
     implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
 
-    var apiVersion = "8.0.7"
+    var apiVersion = "8.1.9"
     shadow (group: 'com.envyful.api', name: 'commons', version: apiVersion)
     shadow (group: 'com.envyful.api', name: 'neo21', version: apiVersion) {
         transitive = false

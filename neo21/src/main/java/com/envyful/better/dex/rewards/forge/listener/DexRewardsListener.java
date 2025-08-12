@@ -9,7 +9,7 @@ import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.api.events.PokedexEvent;
+import com.pixelmonmod.pixelmon.api.pokedex.event.PokedexEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 
 public class DexRewardsListener {

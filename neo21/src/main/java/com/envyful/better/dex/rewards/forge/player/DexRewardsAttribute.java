@@ -4,7 +4,7 @@ import com.envyful.api.neoforge.player.attribute.ManagedForgeAttribute;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.google.common.collect.Sets;
-import com.pixelmonmod.pixelmon.api.pokemon.species.Pokedex;
+import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 
 import java.util.Set;
 import java.util.UUID;
@@ -41,9 +41,9 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
     }
 
     public double getPokeDexPercentage() {
-        var storage = this.parent.getParent().getPartyNow();
+        var pokedex = this.parent.getParent().getPokedexNow();
 
-        return (storage.playerPokedex.countCaught() / (double) Pokedex.pokedexSize) * 100.0;
+        return (pokedex.countCaught() / (double) PixelmonSpecies.getAll().size()) * 100.0;
     }
 
     public DexCompletion findNextStage() {

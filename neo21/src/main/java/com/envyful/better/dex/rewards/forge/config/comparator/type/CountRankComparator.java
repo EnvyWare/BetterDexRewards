@@ -23,12 +23,12 @@ public class CountRankComparator implements RankComparator {
 
     @Override
     public boolean test(ForgeEnvyPlayer player) {
-        return player.getParent().getPartyNow().playerPokedex.countCaught() >= this.count;
+        return player.getParent().getPokedexNow().countCaught() >= this.count;
     }
 
     @Override
     public int distance(ForgeEnvyPlayer player) {
-        var caught =  player.getParent().getPartyNow().playerPokedex.countCaught();
+        var caught =  player.getParent().getPokedexNow().countCaught();
         return (int) Math.max(0, this.count - caught);
     }
 }

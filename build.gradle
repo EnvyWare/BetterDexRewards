@@ -4,11 +4,7 @@ subprojects {
     apply plugin: 'maven-publish'
 
     group = 'com.envyful.better.dex.rewards'
-    version = '4.0.0'
-
-    ext {
-        forgeVersion = "none"
-    }
+    version = '4.0.1'
 
     ext {
         forgeVersion = "none"
