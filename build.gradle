@@ -33,6 +33,38 @@ subprojects {
     }
 
     afterEvaluate {
+        publishing {
+            repositories {
+                maven {
+                    name = "envyware"
+                    url = uri("https://maven.envyware.co.uk/releases")
+                    credentials(PasswordCredentials)
+                    authentication {
+                        basic(BasicAuthentication)
+                    }
+                }
+            }
+            publications {
+                maven(MavenPublication) {
+                    groupId = project.group
+                    artifactId = project.name
+                    version = project.version
+                    artifact("build/libs/${rootProject.name}-${platform}-${version}.jar")
+                }
+            }
+        }
+
+        tasks.named("publishMavenPublicationToEnvywareRepository") {
+            dependsOn ':api:jar'
+            dependsOn shadowJar
+        }
+
+        tasks.register('customPublish') {
+            dependsOn ':api:jar'
+            dependsOn 'build'
+            dependsOn 'publish'
+        }
+
         jar {
             setArchiveBaseName("${rootProject.name}-${platform}")
         }
