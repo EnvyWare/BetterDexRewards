@@ -22,7 +22,7 @@ public class BetterDexRewardsUI {
 
     private ConfigInterface guiSettings = ConfigInterface.builder()
             .title("BetterDexRewards")
-            .height(6)
+            .height(3)
             .fillType(ConfigInterface.FillType.BLOCK)
             .fillerItem(ConfigItem.builder()
                     .type("minecraft:black_stained_glass_pane")
@@ -33,6 +33,7 @@ public class BetterDexRewardsUI {
 
     private ExtendedConfigItem previousPageButton = ExtendedConfigItem.builder()
             .type("pixelmon:trade_holder_left")
+            .disable()
             .amount(1)
             .name("&ePrevious Page")
             .positions(0, 0)
@@ -40,6 +41,7 @@ public class BetterDexRewardsUI {
 
     private ExtendedConfigItem nextPageButton = ExtendedConfigItem.builder()
             .type("pixelmon:trade_holder_left")
+            .disable()
             .amount(1)
             .name("&eNext Page")
             .positions(1, 0)
@@ -48,6 +50,7 @@ public class BetterDexRewardsUI {
     private ExtendedConfigItem infoItem = ExtendedConfigItem.builder()
             .type("minecraft:paper")
             .amount(1)
+            .disable()
             .name("&eInfo")
             .positions(7, 1)
             .build();
@@ -60,7 +63,7 @@ public class BetterDexRewardsUI {
                     "&eComplete: &a%percentage%"
             )
             .nbt("tooltip", new ConfigItem.NBTValue("string", ""))
-            .positions(1, 1)
+            .positions(4, 0)
             .build();
 
     private int pages = 1;
