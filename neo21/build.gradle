@@ -17,7 +17,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {}
 
 dependencies {
-    var pixelmonVersion = "9.3.7"
+    var pixelmonVersion = "9.3.9"
     implementation "pixelmon:Pixelmon-1.21.1-${pixelmonVersion}-universal:${pixelmonVersion}"
     interfaceInjectionData("pixelmon:Pixelmon-1.21.1-${pixelmonVersion}-universal-interfaceinjection:${pixelmonVersion}@json")
 
@@ -25,7 +25,7 @@ dependencies {
 
     implementation group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
 
-    var apiVersion = "8.1.9"
+    var apiVersion = "8.2.2"
     shadow (group: 'com.envyful.api', name: 'commons', version: apiVersion)
     shadow (group: 'com.envyful.api', name: 'neo21', version: apiVersion) {
         transitive = false
