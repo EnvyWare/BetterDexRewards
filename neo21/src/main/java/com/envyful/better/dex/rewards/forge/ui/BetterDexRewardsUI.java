@@ -8,11 +8,13 @@ import com.envyful.api.neoforge.player.ForgeEnvyPlayer;
 import com.envyful.api.neoforge.player.util.UtilPlayer;
 import com.envyful.api.text.Placeholder;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
+import com.envyful.better.dex.rewards.forge.api.event.PlayerClaimRewardEvent;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.envyful.better.dex.rewards.forge.transformer.CompletionTransformer;
 import com.envyful.better.dex.rewards.forge.transformer.PlaceholderAPITransformer;
 import com.google.common.collect.Lists;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.common.NeoForge;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.List;
@@ -110,27 +112,22 @@ public class BetterDexRewardsUI {
                     .singleClick()
                     .clickHandler((envyPlayer, clickType) -> {
                         if (attribute.hasClaimed(entry)) {
-                            for (String msg : BetterDexRewards.getConfig().getAlreadyClaimed()) {
-                                envyPlayer.message(msg);
-                            }
+                            envyPlayer.message(BetterDexRewards.getConfig().getAlreadyClaimed());
                             return;
                         }
 
                         if (entry.getOptionalAntiClaimPermission() != null && player.hasPermission(entry.getOptionalAntiClaimPermission())) {
-                            for (String msg : BetterDexRewards.getConfig().getAlreadyClaimed()) {
-                                envyPlayer.message(msg);
-                            }
+                            envyPlayer.message(BetterDexRewards.getConfig().getAlreadyClaimed());
                             return;
                         }
 
                         if (entry.getRequiredDex().test(player)) {
+                            NeoForge.EVENT_BUS.post(new PlayerClaimRewardEvent(player.getParent(), entry));
                             entry.getRewards().give(player.getParent());
                             attribute.claimReward(finalId);
                             open(player, page);
                         } else {
-                            for (String msg : BetterDexRewards.getConfig().getInsufficientPercentage()) {
-                                envyPlayer.message(msg);
-                            }
+                            envyPlayer.message(BetterDexRewards.getConfig().getInsufficientPercentage());
                         }
                     })
                     .extendedConfigItem(player, pane, configItem,

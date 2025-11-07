@@ -28,7 +28,7 @@ public class DexRewardsAttribute extends ManagedForgeAttribute<BetterDexRewards>
 
     public void claimReward(String id) {
         this.claimedRewards.add(id);
-        ((DexRewardsAdapter) BetterDexRewards.getInstance().getPlayerManager().getAdapter(DexRewardsAttribute.class)).claimReward(this, id);
+        ((DexRewardsAdapter) BetterDexRewards.getPlayerManager().getAdapter(DexRewardsAttribute.class)).claimReward(this, id);
     }
 
     public boolean hasClaimed(DexCompletion stage) {

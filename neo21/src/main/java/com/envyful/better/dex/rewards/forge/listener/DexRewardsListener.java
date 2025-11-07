@@ -6,11 +6,13 @@ import com.envyful.api.neoforge.player.util.UtilPlayer;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.api.text.Placeholder;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
+import com.envyful.better.dex.rewards.forge.api.event.PlayerRankupEvent;
 import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokedex.event.PokedexEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class DexRewardsListener {
 
@@ -30,26 +32,24 @@ public class DexRewardsListener {
             return;
         }
 
-        if (this.mod.getConfig().isOriginalTrainerRewardsOnly()) {
+        if (BetterDexRewards.getConfig().isOriginalTrainerRewardsOnly()) {
             if (event.getPokemon().getOriginalTrainerUUID() != null && !event.getPokemon().isOriginalTrainer(entityPlayerMP)) {
                 event.setCanceled(true);
                 return;
             }
         }
+    }
 
+    @SubscribeEvent
+    public void onPokedexEvent(PokedexEvent.Post event) {
         UtilConcurrency.runAsync(() -> {
-            var player = this.mod.getPlayerManager().getPlayer(event.getPlayerUUID());
+            var player = BetterDexRewards.getPlayerManager().getPlayer(event.getPlayerUUID());
             var attribute = player.getAttributeNow(DexRewardsAttribute.class);
-
-            if (attribute == null) {
-                return;
-            }
-
             var nextStage = attribute.findNextStage();
 
             if (nextStage != null) {
                 var distance = nextStage.getRequiredDex().distance(player);
-                var reminder = this.mod.getConfig().findReminder(distance);
+                var reminder = BetterDexRewards.getConfig().findReminder(distance);
 
                 if (reminder != null) {
                     PlatformProxy.executeConsoleCommands(reminder.getCommands(),
@@ -65,13 +65,15 @@ public class DexRewardsListener {
                 return;
             }
 
+            NeoForge.EVENT_BUS.post(new PlayerRankupEvent(player.getParent(), reward));
+
             attribute.setLastReminder(System.currentTimeMillis());
             PlatformProxy.sendMessage(player, this.mod.getConfig().getClaimReminderMessage(), reward);
         });
     }
 
     private DexCompletion findClaimableReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
-        for (var entry : this.mod.getConfig().getRewardStages()) {
+        for (var entry : BetterDexRewards.getConfig().getRewardStages()) {
             if (entry.getOptionalAntiClaimPermission() != null &&
                     PlatformProxy.hasPermission(player, entry.getOptionalAntiClaimPermission())) {
                 continue;
