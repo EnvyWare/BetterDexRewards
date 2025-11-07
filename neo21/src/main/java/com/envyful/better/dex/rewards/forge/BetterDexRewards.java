@@ -70,7 +70,7 @@ public class BetterDexRewards {
 
     @SubscribeEvent
     public void onInit(ServerAboutToStartEvent event) {
-        this.reloadConfig();
+        reloadConfig();
 
         this.playerManager.registerAttribute(Attribute.builder(DexRewardsAttribute.class, ForgeEnvyPlayer.class)
                 .constructor(DexRewardsAttribute::new)
@@ -93,12 +93,12 @@ public class BetterDexRewards {
                 .start();
     }
 
-    public void reloadConfig() {
+    public static void reloadConfig() {
         try {
             ConfigTypeSerializer.register(new RankComparatorTypeSerializer(), RankComparator.class);
 
-            this.config = YamlConfigFactory.getInstance(BetterDexRewardsConfig.class);
-            this.graphics = YamlConfigFactory.getInstance(BetterDexRewardsGraphics.class);
+            instance.config = YamlConfigFactory.getInstance(BetterDexRewardsConfig.class);
+            instance.graphics = YamlConfigFactory.getInstance(BetterDexRewardsGraphics.class);
         } catch (IOException e) {
             getLogger().error("Error loading configs", e);
         }
@@ -118,31 +118,31 @@ public class BetterDexRewards {
         }
     }
 
-    public static BetterDexRewards getInstance() {
-        return instance;
+    public static ForgePlayerManager getPlayerManager() {
+        return instance.playerManager;
     }
 
-    public ForgePlayerManager getPlayerManager() {
-        return this.playerManager;
+    public static Database getDatabase() {
+        return instance.database;
     }
 
-    public Database getDatabase() {
-        return this.database;
+    public static BetterDexRewardsConfig getConfig() {
+        return instance.config;
     }
 
-    public BetterDexRewardsConfig getConfig() {
-        return this.config;
+    public static BetterDexRewardsGraphics getGraphics() {
+        return instance.graphics;
     }
 
-    public BetterDexRewardsGraphics getGraphics() {
-        return this.graphics;
-    }
-
-    public boolean isPlaceholders() {
-        return this.placeholders;
+    public static boolean isPlaceholders() {
+        return instance.placeholders;
     }
 
     public static Logger getLogger() {
         return LOGGER;
+    }
+
+    public static BetterDexRewards getInstance() {
+        return instance;
     }
 }

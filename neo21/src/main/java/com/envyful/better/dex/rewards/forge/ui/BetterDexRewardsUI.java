@@ -1,46 +1,89 @@
 package com.envyful.better.dex.rewards.forge.ui;
 
 import com.envyful.api.config.type.ConfigInterface;
+import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.neoforge.config.UtilConfigItem;
 import com.envyful.api.neoforge.player.ForgeEnvyPlayer;
 import com.envyful.api.neoforge.player.util.UtilPlayer;
 import com.envyful.api.text.Placeholder;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
-import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.envyful.better.dex.rewards.forge.transformer.CompletionTransformer;
+import com.envyful.better.dex.rewards.forge.transformer.PlaceholderAPITransformer;
+import com.google.common.collect.Lists;
+import net.minecraft.server.level.ServerPlayer;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+import java.util.List;
+
+@ConfigSerializable
 public class BetterDexRewardsUI {
 
-    public static void open(ForgeEnvyPlayer player, int page) {
-        DexRewardsAttribute attribute = player.getAttributeNow(DexRewardsAttribute.class);
+    private ConfigInterface guiSettings = ConfigInterface.builder()
+            .title("BetterDexRewards")
+            .height(6)
+            .fillType(ConfigInterface.FillType.BLOCK)
+            .fillerItem(ConfigItem.builder()
+                    .type("minecraft:black_stained_glass_pane")
+                    .amount(1)
+                    .name(" ")
+                    .build())
+            .build();
 
-        if (attribute == null) {
-            return;
-        }
+    private ExtendedConfigItem previousPageButton = ExtendedConfigItem.builder()
+            .type("pixelmon:trade_holder_left")
+            .amount(1)
+            .name("&ePrevious Page")
+            .positions(0, 0)
+            .build();
 
-        BetterDexRewardsGraphics.RanksUI dexRewardsConfig = BetterDexRewards.getInstance().getGraphics().getRankUI();
-        ConfigInterface config = dexRewardsConfig.getGuiSettings();
-        var pane = config.toPane();
+    private ExtendedConfigItem nextPageButton = ExtendedConfigItem.builder()
+            .type("pixelmon:trade_holder_left")
+            .amount(1)
+            .name("&eNext Page")
+            .positions(1, 0)
+            .build();
+
+    private ExtendedConfigItem infoItem = ExtendedConfigItem.builder()
+            .type("minecraft:paper")
+            .amount(1)
+            .name("&eInfo")
+            .positions(7, 1)
+            .build();
+
+    private ExtendedConfigItem percentageItem = ExtendedConfigItem.builder()
+            .type("pixelmon:poke_ball")
+            .amount(1)
+            .name("&eCurrent PokeDex Percentage")
+            .lore(
+                    "&eComplete: &a%percentage%"
+            )
+            .nbt("tooltip", new ConfigItem.NBTValue("string", ""))
+            .positions(1, 1)
+            .build();
+
+    private int pages = 1;
+
+    public void open(ForgeEnvyPlayer player, int page) {
+        var attribute = player.getAttributeNow(DexRewardsAttribute.class);
+        var pane = this.guiSettings.toPane();
         var percentagePlaceholder = CompletionTransformer.of(attribute.getPokeDexPercentage());
 
-        UtilConfigItem.builder()
+        this.nextPageButton.convertToBuilder(player, pane)
                 .asyncClick()
-                .clickHandler((envyPlayer, clickType) -> DexRewardsMainUI.open(player))
-                .extendedConfigItem(player, pane, dexRewardsConfig.getBackButton());
+                .clickHandler((envyPlayer, clickType) -> open(player, page == this.pages ? 1 : page + 1))
+                .build();
 
-        UtilConfigItem.builder()
+        this.previousPageButton.convertToBuilder(player, pane)
                 .asyncClick()
-                .clickHandler((envyPlayer, clickType) -> open(player, page == dexRewardsConfig.getPages() ? 1 : page + 1))
-                .extendedConfigItem(player, pane, dexRewardsConfig.getNextPageButton());
+                .clickHandler((envyPlayer, clickType) -> open(player, page == 1 ? this.pages : page - 1))
+                .build();
 
-        UtilConfigItem.builder()
-                .asyncClick()
-                .clickHandler((envyPlayer, clickType) -> open(player, page == 1 ? dexRewardsConfig.getPages() : page - 1))
-                .extendedConfigItem(player, pane, dexRewardsConfig.getPreviousPageButton());
+        this.percentageItem.convertToBuilder(player, pane, getTransformers(player.getParent(), attribute).toArray(new Placeholder[0])).build();
+        this.infoItem.convertToBuilder(player, pane).build();
 
-        for (var entry : BetterDexRewards.getInstance().getConfig().getRewardStages()) {
+        for (var entry : BetterDexRewards.getConfig().getRewardStages()) {
             if (entry.getPage() != page) {
                 continue;
             }
@@ -64,15 +107,14 @@ public class BetterDexRewardsUI {
                     .singleClick()
                     .clickHandler((envyPlayer, clickType) -> {
                         if (attribute.hasClaimed(entry)) {
-                            for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                            for (String msg : BetterDexRewards.getConfig().getAlreadyClaimed()) {
                                 envyPlayer.message(msg);
                             }
                             return;
                         }
 
-                        if (entry.getOptionalAntiClaimPermission() != null &&
-                                UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
-                            for (String msg : BetterDexRewards.getInstance().getConfig().getAlreadyClaimed()) {
+                        if (entry.getOptionalAntiClaimPermission() != null && player.hasPermission(entry.getOptionalAntiClaimPermission())) {
+                            for (String msg : BetterDexRewards.getConfig().getAlreadyClaimed()) {
                                 envyPlayer.message(msg);
                             }
                             return;
@@ -83,7 +125,7 @@ public class BetterDexRewardsUI {
                             attribute.claimReward(finalId);
                             open(player, page);
                         } else {
-                            for (String msg : BetterDexRewards.getInstance().getConfig().getInsufficientPercentage()) {
+                            for (String msg : BetterDexRewards.getConfig().getInsufficientPercentage()) {
                                 envyPlayer.message(msg);
                             }
                         }
@@ -92,6 +134,17 @@ public class BetterDexRewardsUI {
                             Placeholder.simple(name -> name.replace("%dex%", String.valueOf(attribute.getPokeDexPercentage()))), percentagePlaceholder);
         }
 
-        pane.open(player, config);
+        pane.open(player, this.guiSettings);
+    }
+
+    private static List<Placeholder> getTransformers(ServerPlayer player, DexRewardsAttribute attribute) {
+        if (!BetterDexRewards.isPlaceholders()) {
+            return Lists.newArrayList(CompletionTransformer.of(attribute.getPokeDexPercentage()));
+        }
+
+        return Lists.newArrayList(
+                CompletionTransformer.of(attribute.getPokeDexPercentage()),
+                PlaceholderAPITransformer.of(player)
+        );
     }
 }

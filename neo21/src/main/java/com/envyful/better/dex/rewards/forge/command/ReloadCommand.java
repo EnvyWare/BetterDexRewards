@@ -21,7 +21,7 @@ public class ReloadCommand {
 
     @CommandProcessor
     public void onCommand(@Sender Messageable<?> sender, String[] args) {
-        BetterDexRewards.getInstance().reloadConfig();
+        BetterDexRewards.reloadConfig();
         PlatformProxy.sendMessage(sender, List.of("Reloaded config"));
     }
 }

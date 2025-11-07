@@ -31,7 +31,7 @@ public class SQLiteAttributeAdapter implements AttributeAdapter<DexRewardsAttrib
 
     @Override
     public void load(DexRewardsAttribute dexRewardsAttribute) {
-        UtilSql.query(BetterDexRewards.getInstance().getDatabase())
+        UtilSql.query(BetterDexRewards.getDatabase())
                 .query(LOAD_USER_CLAIMED)
                 .data(SqlType.text(dexRewardsAttribute.getUniqueId().toString()))
                 .converter(resultSet -> {
@@ -53,14 +53,14 @@ public class SQLiteAttributeAdapter implements AttributeAdapter<DexRewardsAttrib
 
     @Override
     public void initialize() {
-        UtilSql.update(BetterDexRewards.getInstance().getDatabase())
+        UtilSql.update(BetterDexRewards.getDatabase())
                 .query(CREATE_TABLE)
                 .executeAsync();
     }
 
     @Override
     public void claimReward(DexRewardsAttribute attribute, String id) {
-        UtilSql.update(BetterDexRewards.getInstance().getDatabase())
+        UtilSql.update(BetterDexRewards.getDatabase())
                 .query(ADD_USER_CLAIMED)
                 .data(SqlType.text(attribute.getUniqueId().toString()), SqlType.text(id))
                 .executeAsync();
@@ -68,7 +68,7 @@ public class SQLiteAttributeAdapter implements AttributeAdapter<DexRewardsAttrib
 
     @Override
     public void clearClaims(DexRewardsAttribute attribute) {
-        UtilSql.update(BetterDexRewards.getInstance().getDatabase())
+        UtilSql.update(BetterDexRewards.getDatabase())
                 .query(CLEAR_USER)
                 .data(SqlType.text(attribute.getUniqueId().toString()))
                 .executeAsync();

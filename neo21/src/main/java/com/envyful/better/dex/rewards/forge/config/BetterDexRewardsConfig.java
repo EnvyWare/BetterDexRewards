@@ -35,10 +35,6 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             "&e&l(!) &eYou have a PokeDex reward level you can claim!"
     );
 
-    private List<String> claimUpdateMessage = Lists.newArrayList(
-            "&e&l(!) &eYou have a new PokeDex reward level you can claim!"
-    );
-
     private List<String> alreadyClaimed = Lists.newArrayList(
             "&c&l(!) &cYou've already claimed that tier"
     );
@@ -105,10 +101,6 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
 
     public List<String> getClaimReminderMessage() {
         return this.claimReminderMessage;
-    }
-
-    public List<String> getClaimUpdateMessage() {
-        return this.claimUpdateMessage;
     }
 
     public int getMessageDelaySeconds() {
