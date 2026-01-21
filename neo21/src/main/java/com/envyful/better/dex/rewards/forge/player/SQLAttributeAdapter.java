@@ -21,7 +21,7 @@ public class SQLAttributeAdapter implements AttributeAdapter<DexRewardsAttribute
     public static final String ADD_USER_CLAIMED = "INSERT IGNORE INTO `better_dex_rewards_player_claims`(uuid, claimed_rank) " +
             "VALUES (?, ?);";
 
-    public static final String CLEAR_USER = "DELETE * FROM `better_dex_rewards_player_claims` WHERE uuid = ?;";
+    public static final String CLEAR_USER = "DELETE FROM `better_dex_rewards_player_claims` WHERE uuid = ?;";
 
     @Override
     public CompletableFuture<Void> save(DexRewardsAttribute dexRewardsAttribute) {
