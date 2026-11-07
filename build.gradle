@@ -55,12 +55,10 @@ subprojects {
         }
 
         tasks.named("publishMavenPublicationToEnvywareRepository") {
-            dependsOn ':api:jar'
             dependsOn shadowJar
         }
 
         tasks.register('customPublish') {
-            dependsOn ':api:jar'
             dependsOn 'build'
             dependsOn 'publish'
         }
