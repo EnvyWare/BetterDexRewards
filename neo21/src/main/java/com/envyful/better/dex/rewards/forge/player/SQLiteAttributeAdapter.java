@@ -20,9 +20,10 @@ public class SQLiteAttributeAdapter implements AttributeAdapter<DexRewardsAttrib
 
     public static final String LOAD_USER_CLAIMED = "SELECT claimed_rank FROM `better_dex_rewards_player_claims` WHERE uuid = ?;";
 
-    public static final String ADD_USER_CLAIMED = "INSERT IGNORE INTO `better_dex_rewards_player_claims`(uuid, claimed_rank) VALUES (?, ?);";
+    public static final String ADD_USER_CLAIMED = "INSERT OR IGNORE INTO `better_dex_rewards_player_claims`(id, uuid, claimed_rank) " +
+            "VALUES ((SELECT COALESCE(MAX(id), 0) + 1 FROM `better_dex_rewards_player_claims`), ?, ?);";
 
-    public static final String CLEAR_USER = "DELETE * FROM `better_dex_rewards_player_claims` WHERE uuid = ?;";
+    public static final String CLEAR_USER = "DELETE FROM `better_dex_rewards_player_claims` WHERE uuid = ?;";
 
     @Override
     public CompletableFuture<Void> save(DexRewardsAttribute dexRewardsAttribute) {
