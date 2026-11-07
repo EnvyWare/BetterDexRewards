@@ -24,6 +24,7 @@ import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsConfig;
 import com.envyful.better.dex.rewards.forge.config.BetterDexRewardsGraphics;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparatorRegistry;
+import com.envyful.better.dex.rewards.forge.api.requirement.DexRewardRequirementRegistry;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparatorTypeSerializer;
 import com.envyful.better.dex.rewards.forge.listener.DexRewardsListener;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
@@ -63,6 +64,7 @@ public class BetterDexRewards {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
         RankComparatorRegistry.init();
+        DexRewardRequirementRegistry.init();
         UtilLogger.setLogger(LOGGER);
         instance = this;
         NeoForge.EVENT_BUS.register(this);

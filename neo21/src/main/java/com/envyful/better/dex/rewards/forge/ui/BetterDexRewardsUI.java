@@ -100,7 +100,7 @@ public class BetterDexRewardsUI {
             } else if (entry.getOptionalAntiClaimPermission() != null &&
                     UtilPlayer.hasPermission(player.getParent(), entry.getOptionalAntiClaimPermission())) {
                 configItem = entry.getCompleteItem();
-            } else if (!entry.getRequiredDex().test(player)) {
+            } else if (!entry.getRequiredDex().test(player) || !entry.meetsRequirements(player.getParent())) {
                 configItem = entry.getDisplayItem();
             } else {
                 configItem = entry.getToClaimItem();
@@ -122,6 +122,13 @@ public class BetterDexRewardsUI {
                         }
 
                         if (entry.getRequiredDex().test(player)) {
+                            var unmet = entry.getUnmetRequirements(player.getParent());
+
+                            if (!unmet.isEmpty()) {
+                                unmet.forEach(requirement -> envyPlayer.message(requirement.getFailedMessage()));
+                                return;
+                            }
+
                             NeoForge.EVENT_BUS.post(new PlayerClaimRewardEvent(player.getParent(), entry));
                             entry.getRewards().give(player.getParent());
                             attribute.claimReward(finalId);
