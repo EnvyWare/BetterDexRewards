@@ -48,7 +48,7 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
-            if (!attribute.hasClaimed(entry) && entry.getRequiredDex().test(player)) {
+            if (!attribute.hasClaimed(entry) && entry.getRequiredDex().test(player) && entry.meetsRequirements(player.getParent())) {
                 return entry;
             }
         }

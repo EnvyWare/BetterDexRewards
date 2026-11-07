@@ -5,8 +5,12 @@ import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.neoforge.config.ConfigReward;
 import com.envyful.api.neoforge.config.ConfigRewardPool;
 import com.envyful.api.text.parse.SimplePlaceholder;
+import com.envyful.better.dex.rewards.forge.api.requirement.DexRewardRequirementConfig;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
+import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+
+import java.util.List;
 
 @ConfigSerializable
 public class DexCompletion extends AbstractYamlConfig implements SimplePlaceholder {
@@ -19,6 +23,7 @@ public class DexCompletion extends AbstractYamlConfig implements SimplePlacehold
     private RankComparator requiredDex;
     private ConfigRewardPool<ConfigReward> rewards;
     private String optionalAntiClaimPermission = null;
+    private List<DexRewardRequirementConfig> requirements = List.of();
 
     protected DexCompletion(Builder builder) {
         this.id = builder.id;
@@ -60,6 +65,18 @@ public class DexCompletion extends AbstractYamlConfig implements SimplePlacehold
 
     public String getOptionalAntiClaimPermission() {
         return this.optionalAntiClaimPermission;
+    }
+
+    public List<DexRewardRequirementConfig> getRequirements() {
+        return this.requirements == null ? List.of() : this.requirements;
+    }
+
+    public List<DexRewardRequirementConfig> getUnmetRequirements(ServerPlayer player) {
+        return this.getRequirements().stream().filter(requirement -> !requirement.meets(player)).toList();
+    }
+
+    public boolean meetsRequirements(ServerPlayer player) {
+        return this.getRequirements().stream().allMatch(requirement -> requirement.meets(player));
     }
 
     public int getPage() {
