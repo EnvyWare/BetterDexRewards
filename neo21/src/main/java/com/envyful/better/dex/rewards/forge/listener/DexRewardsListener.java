@@ -45,6 +45,11 @@ public class DexRewardsListener {
         UtilConcurrency.runAsync(() -> {
             var player = BetterDexRewards.getPlayerManager().getPlayer(event.getPlayerUUID());
             var attribute = player.getAttributeNow(DexRewardsAttribute.class);
+
+            if (attribute == null) {
+                return;
+            }
+
             var nextStage = attribute.findNextStage();
 
             if (nextStage != null) {
