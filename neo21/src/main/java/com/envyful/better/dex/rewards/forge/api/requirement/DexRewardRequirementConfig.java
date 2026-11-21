@@ -38,16 +38,26 @@ public class DexRewardRequirementConfig {
      *
      */
     public boolean meets(ServerPlayer player) {
-        var requirement = DexRewardRequirementRegistry.get(this.type);
+        return meets(player, this.type, this.data);
+    }
+
+    /**
+     *
+     * Shared with stage bonuses, which name a type and data the same way, so an unknown type is
+     * treated the same there: the bonus counts as unmet.
+     *
+     */
+    public static boolean meets(ServerPlayer player, String type, String data) {
+        var requirement = DexRewardRequirementRegistry.get(String.valueOf(type));
 
         if (requirement.isEmpty()) {
-            if (WARNED_TYPES.add(String.valueOf(this.type))) {
-                BetterDexRewards.getLogger().warn("Dex reward requirement type `{}` is not registered, so rewards using it can't be claimed", this.type);
+            if (WARNED_TYPES.add(String.valueOf(type))) {
+                BetterDexRewards.getLogger().warn("Dex reward requirement type `{}` is not registered, so rewards and bonuses using it can't be claimed", type);
             }
 
             return false;
         }
 
-        return requirement.get().meets(player, this.data);
+        return requirement.get().meets(player, data);
     }
 }

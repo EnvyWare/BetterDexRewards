@@ -43,6 +43,9 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
             "&c&l(!) &cYou do not have enough dex percentage to claim this"
     );
 
+    @Comment("The lines %bonuses% expands to in a stage item's lore, one per bonus. %description% and %reduction% are the bonus's")
+    private BonusLines bonusLines = new BonusLines();
+
     private Map<String, RewardReminder> rewardReminders = ImmutableMap.of(
             "one", new RewardReminder(5, "message %player% You're 5 Pokemon away from %next%!")
     );
@@ -61,8 +64,11 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                                 .positions(Pair.of(2, 2))
                                 .lore(
                                         "&7&m---------------------",
+                                        "&e&l* &e&lRequired: &e%required_dex%%",
                                         "&e&l* &e&lRewards:",
                                         "&e&l* &e&l- &e&l1x Diamond",
+                                        "&e&l* &e&lBonuses:",
+                                        "%bonuses%",
                                         "&7&m---------------------"
                                 )
                                 .build())
@@ -78,8 +84,11 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                                 .positions(Pair.of(2, 2))
                                 .lore(
                                         "&7&m---------------------",
+                                        "&e&l* &e&lRequired: &e%required_dex%%",
                                         "&e&l* &e&lRewards:",
                                         "&e&l* &e&l- &e&l1x Diamond",
+                                        "&e&l* &e&lBonuses:",
+                                        "%bonuses%",
                                         "&7&m---------------------"
                                 )
                                 .build())
@@ -87,6 +96,17 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
                                 .commands(Lists.newArrayList("give %player% minecraft:diamond 1"))
                                 .messages(Lists.newArrayList("&e&l(!) &eYou've claimed your Dex reward!"))
                                 .build()).build())
+                        .bonuses(new DexRewardBonus(
+                                "example",
+                                "permission",
+                                "betterdexrewards.bonus.example",
+                                5,
+                                ConfigRewardPool.builder(ConfigReward.builder()
+                                        .commands(Lists.newArrayList("give %player% minecraft:emerald 1"))
+                                        .messages(Lists.newArrayList("&e&l(!) &eYou've claimed a Dex reward bonus!"))
+                                        .build()).build(),
+                                "&eHave the example permission"
+                        ))
                         .build()
                 ))));
     }
@@ -119,6 +139,10 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         return this.insufficientPercentage;
     }
 
+    public BonusLines getBonusLines() {
+        return this.bonusLines == null ? new BonusLines() : this.bonusLines;
+    }
+
     public RewardReminder findReminder(int distance) {
         for (var value : this.rewardReminders.values()) {
             if (value.getDistanceFromNext() == distance) {
@@ -127,6 +151,32 @@ public class BetterDexRewardsConfig extends AbstractYamlConfig {
         }
 
         return null;
+    }
+
+    @ConfigSerializable
+    public static class BonusLines {
+
+        @Comment("A bonus the player meets and has not been paid yet")
+        private String met = "&a✔ %description% &7(-%reduction%)";
+        @Comment("A bonus the player does not meet")
+        private String unmet = "&c✘ %description% &7(-%reduction%)";
+        @Comment("A bonus already paid")
+        private String claimed = "&7✔ %description% &8(claimed)";
+
+        public BonusLines() {
+        }
+
+        public String getMet() {
+            return this.met == null ? "" : this.met;
+        }
+
+        public String getUnmet() {
+            return this.unmet == null ? "" : this.unmet;
+        }
+
+        public String getClaimed() {
+            return this.claimed == null ? "" : this.claimed;
+        }
     }
 
     @ConfigSerializable
