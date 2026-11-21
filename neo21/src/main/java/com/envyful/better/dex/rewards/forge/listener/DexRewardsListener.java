@@ -1,13 +1,11 @@
 package com.envyful.better.dex.rewards.forge.listener;
 
 import com.envyful.api.concurrency.UtilConcurrency;
-import com.envyful.api.neoforge.player.ForgeEnvyPlayer;
 import com.envyful.api.neoforge.player.util.UtilPlayer;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.api.text.Placeholder;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
 import com.envyful.better.dex.rewards.forge.api.event.PlayerRankupEvent;
-import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokedex.event.PokedexEvent;
@@ -53,7 +51,7 @@ public class DexRewardsListener {
             var nextStage = attribute.findNextStage();
 
             if (nextStage != null) {
-                var distance = nextStage.getRequiredDex().distance(player);
+                var distance = nextStage.getDexDistance(player);
                 var reminder = BetterDexRewards.getConfig().findReminder(distance);
 
                 if (reminder != null) {
@@ -64,31 +62,19 @@ public class DexRewardsListener {
                 }
             }
 
-            var reward = this.findClaimableReward(player, attribute);
+            var reward = attribute.findClaimableStage();
 
             if (reward == null) {
                 return;
             }
 
-            NeoForge.EVENT_BUS.post(new PlayerRankupEvent(player.getParent(), reward));
+            // A pending bonus on a stage already claimed is not a rank up, so only the reminder is sent
+            if (!attribute.hasClaimed(reward)) {
+                NeoForge.EVENT_BUS.post(new PlayerRankupEvent(player.getParent(), reward));
+            }
 
             attribute.setLastReminder(System.currentTimeMillis());
             PlatformProxy.sendMessage(player, this.mod.getConfig().getClaimReminderMessage(), reward);
         });
-    }
-
-    private DexCompletion findClaimableReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
-        for (var entry : BetterDexRewards.getConfig().getRewardStages()) {
-            if (entry.getOptionalAntiClaimPermission() != null &&
-                    PlatformProxy.hasPermission(player, entry.getOptionalAntiClaimPermission())) {
-                continue;
-            }
-
-            if (!attribute.hasClaimed(entry) && entry.getRequiredDex().test(player) && entry.meetsRequirements(player.getParent())) {
-                return entry;
-            }
-        }
-
-        return null;
     }
 }

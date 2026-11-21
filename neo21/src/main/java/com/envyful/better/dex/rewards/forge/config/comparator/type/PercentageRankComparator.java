@@ -24,14 +24,33 @@ public class PercentageRankComparator implements RankComparator {
     }
 
     @Override
+    public double getRequired() {
+        return this.percentage;
+    }
+
+    @Override
     public boolean test(ForgeEnvyPlayer player) {
-        return  player.getParent().getPokedexNow().getPercentage(PokedexRegistrationStatus.CAUGHT) >= this.percentage;
+        return this.test(player, 0);
     }
 
     @Override
     public int distance(ForgeEnvyPlayer player) {
+        return this.distance(player, 0);
+    }
+
+    @Override
+    public boolean test(ForgeEnvyPlayer player, double reduction) {
+        return player.getParent().getPokedexNow().getPercentage(PokedexRegistrationStatus.CAUGHT) >= this.required(reduction);
+    }
+
+    @Override
+    public int distance(ForgeEnvyPlayer player, double reduction) {
         var caught = player.getParent().getPokedexNow().countCaught();
-        var percentage = (this.percentage / 100.0F) * PixelmonSpecies.getAll().size();
+        var percentage = (this.required(reduction) / 100.0F) * PixelmonSpecies.getAll().size();
         return (int) Math.max(0, percentage - caught);
+    }
+
+    private double required(double reduction) {
+        return Math.max(0, this.percentage - reduction);
     }
 }

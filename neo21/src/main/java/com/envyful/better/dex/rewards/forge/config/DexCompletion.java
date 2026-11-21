@@ -4,11 +4,13 @@ import com.envyful.api.config.type.ExtendedConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.neoforge.config.ConfigReward;
 import com.envyful.api.neoforge.config.ConfigRewardPool;
+import com.envyful.api.neoforge.player.ForgeEnvyPlayer;
 import com.envyful.api.text.parse.SimplePlaceholder;
 import com.envyful.better.dex.rewards.forge.api.requirement.DexRewardRequirementConfig;
 import com.envyful.better.dex.rewards.forge.config.comparator.RankComparator;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.util.List;
 
@@ -24,6 +26,10 @@ public class DexCompletion extends AbstractYamlConfig implements SimplePlacehold
     private ConfigRewardPool<ConfigReward> rewards;
     private String optionalAntiClaimPermission = null;
     private List<DexRewardRequirementConfig> requirements = List.of();
+    @Comment("Optional bonuses. While the player meets one (type + data, as for requirements), the stage needs " +
+            "dex-reduction less dex (a count for `count`, percentage points for `percentage`), and its rewards " +
+            "are paid once: with the stage claim, or by clicking the claimed stage if it is met later.")
+    private List<DexRewardBonus> bonuses = List.of();
 
     protected DexCompletion(Builder builder) {
         this.id = builder.id;
@@ -34,6 +40,7 @@ public class DexCompletion extends AbstractYamlConfig implements SimplePlacehold
         this.requiredDex = builder.requiredDex;
         this.rewards = builder.rewards;
         this.optionalAntiClaimPermission = builder.optionalAntiClaimPermission;
+        this.bonuses = builder.bonuses;
     }
 
     public DexCompletion() {
@@ -79,6 +86,61 @@ public class DexCompletion extends AbstractYamlConfig implements SimplePlacehold
         return this.getRequirements().stream().allMatch(requirement -> requirement.meets(player));
     }
 
+    public List<DexRewardBonus> getBonuses() {
+        return this.bonuses == null ? List.of() : this.bonuses;
+    }
+
+    public List<DexRewardBonus> getMetBonuses(ServerPlayer player) {
+        return this.getBonuses().stream().filter(bonus -> bonus.meets(player)).toList();
+    }
+
+    /**
+     *
+     * The id a bonus claim is stored under, in the same claims table as the stage ids. The `#` keeps it
+     * from ever equalling a stage id, so a bonus claim can't be read as a claim of a stage.
+     *
+     */
+    public String getBonusClaimId(DexRewardBonus bonus) {
+        return this.id + "#" + bonus.getId();
+    }
+
+    /**
+     *
+     * The sum of `dex-reduction` over the bonuses the player meets right now.
+     *
+     */
+    public double getDexReduction(ServerPlayer player) {
+        return this.getMetBonuses(player).stream().mapToDouble(DexRewardBonus::getDexReduction).sum();
+    }
+
+    /**
+     *
+     * The stage's threshold as written in the config, in the comparator's own unit.
+     *
+     */
+    public double getBaseRequiredDex() {
+        return this.requiredDex == null ? 0 : this.requiredDex.getRequired();
+    }
+
+    /**
+     *
+     * The threshold this player has to reach for this stage: the configured one less the reduction of
+     * every bonus they meet now, never below zero. In the comparator's own unit, so a count for
+     * `count` stages and percentage points for `percentage` stages.
+     *
+     */
+    public double getEffectiveRequiredDex(ServerPlayer player) {
+        return Math.max(0, this.getBaseRequiredDex() - this.getDexReduction(player));
+    }
+
+    public boolean meetsRequiredDex(ForgeEnvyPlayer player) {
+        return this.requiredDex.test(player, this.getDexReduction(player.getParent()));
+    }
+
+    public int getDexDistance(ForgeEnvyPlayer player) {
+        return this.requiredDex.distance(player, this.getDexReduction(player.getParent()));
+    }
+
     public int getPage() {
         return this.page;
     }
@@ -102,6 +164,7 @@ public class DexCompletion extends AbstractYamlConfig implements SimplePlacehold
         private RankComparator requiredDex;
         private ConfigRewardPool<ConfigReward> rewards;
         private String optionalAntiClaimPermission;
+        private List<DexRewardBonus> bonuses = List.of();
 
         public Builder() {
             super();
@@ -144,6 +207,11 @@ public class DexCompletion extends AbstractYamlConfig implements SimplePlacehold
 
         public Builder optionalAntiClaimPermission(String optionalAntiClaimPermission) {
             this.optionalAntiClaimPermission = optionalAntiClaimPermission;
+            return this;
+        }
+
+        public Builder bonuses(DexRewardBonus... bonuses) {
+            this.bonuses = List.of(bonuses);
             return this;
         }
 

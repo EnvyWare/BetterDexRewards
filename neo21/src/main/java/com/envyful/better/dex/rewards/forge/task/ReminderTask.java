@@ -3,7 +3,6 @@ package com.envyful.better.dex.rewards.forge.task;
 import com.envyful.api.neoforge.player.ForgeEnvyPlayer;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.better.dex.rewards.forge.BetterDexRewards;
-import com.envyful.better.dex.rewards.forge.config.DexCompletion;
 import com.envyful.better.dex.rewards.forge.player.DexRewardsAttribute;
 
 import java.util.concurrent.TimeUnit;
@@ -30,7 +29,7 @@ public class ReminderTask implements Runnable {
                 continue;
             }
 
-            var claimableReward = this.findClaimableReward(onlinePlayer, attribute);
+            var claimableReward = attribute.findClaimableStage();
 
             if (claimableReward == null) {
                 continue;
@@ -39,20 +38,5 @@ public class ReminderTask implements Runnable {
             attribute.setLastReminder(System.currentTimeMillis());
             PlatformProxy.sendMessage(onlinePlayer, this.mod.getConfig().getClaimReminderMessage(), claimableReward);
         }
-    }
-
-    private DexCompletion findClaimableReward(ForgeEnvyPlayer player, DexRewardsAttribute attribute) {
-        for (var entry : this.mod.getConfig().getRewardStages()) {
-            if (entry.getOptionalAntiClaimPermission() != null &&
-                    PlatformProxy.hasPermission(player, entry.getOptionalAntiClaimPermission())) {
-                continue;
-            }
-
-            if (!attribute.hasClaimed(entry) && entry.getRequiredDex().test(player) && entry.meetsRequirements(player.getParent())) {
-                return entry;
-            }
-        }
-
-        return null;
     }
 }

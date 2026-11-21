@@ -118,3 +118,31 @@ You should also update the following with each tier you create
 
 # Note about 1.16
 Damage is no longer used in 1.16 so you will need to update the `display-item`, `complete-item`, and `to-claim-item`. This can simply be fixed by removing the damage line entirely and then adding the color you want before stained_glass_pane. For example, `red_stained_glass_pane`
+
+# Requirements and bonuses (1.21.1)
+Each reward stage is its own file in `config/BetterDexRewards/rewards/`. On top of `required-dex`, a stage can list:
+
+- `requirements`: hard gates. Every one must be met to claim the stage, and `failed-message` is sent for each that isn't.
+- `bonuses`: optional extras. While the player meets one, the stage needs `dex-reduction` less dex (a count for `id: count` stages, percentage points for `id: percentage` stages, never below 0), and its `rewards` are paid once: with the stage claim, or later by clicking the claimed stage again once the bonus is met.
+
+Both use `type` and `data` the same way: `permission` is built in (data is the permission node), and other mods can register more (StardustCORE registers `gym`). An unknown type is never met.
+
+```yaml
+required-dex:
+  id: count
+  count: 150.0
+bonuses:
+- id: agni
+  type: gym
+  data: agni
+  dex-reduction: 10.0
+  description: '&eBeat the Agni gym'
+  rewards: # same shape as the stage's own rewards
+    guaranteed-reward:
+      commands:
+      - give %player% minecraft:emerald 1
+      messages:
+      - '&e&l(!) &eYou earned the Agni bonus!'
+```
+
+Stage items can use `%required_dex%` (the threshold after the player's bonuses), `%base_dex%` (as configured) and `%bonuses%`, which must be a lore line of its own and becomes one line per bonus, formatted by `bonus-lines` in `config.yml`.
